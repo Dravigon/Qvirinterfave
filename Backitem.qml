@@ -2,7 +2,6 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 
-
 Rectangle{
         id:load
         anchors.fill: parent
@@ -63,7 +62,6 @@ Rectangle{
             Button{
                 id:back_button3
                 text: qsTr("back")
-
                 anchors.top:parent.top
                 anchors.left: parent.left
                 onClicked: flipable.flipped = !flipable.flipped;
