@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>Login.qml</file>
+        <file>Dashboard.qml</file>
+        <file>Terminal.qml</file>
+        <file>Terminal_button.qml</file>
+        <file>Errormessage.qml</file>
+        <file>icons/Exclamation.gif</file>
+        <file>Vmlist.qml</file>
+        <file>DashboardFront.qml</file>
+        <file>CreateVm.qml</file>
+        <file>Backitem.qml</file>
+        <file>VmlistDelegate.qml</file>
+        <file>NetworkList.qml</file>
+        <file>NetworklistDelegate.qml</file>
+    </qresource>
+</RCC>
