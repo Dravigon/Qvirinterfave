@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     db.setHostName("localhost");
     db.setDatabaseName("smartgrid");
     db.setUserName("root");
-    db.setPassword("spyman007");
+    db.setPassword("password");
     db.open();
 
     //create a sqlQueryModel object with 0 as qobject
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     engine.addImportPath("/home/dravigon/qt/Qvirinterface" );
 
     //create the qml instance
-    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+    engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
 
     return app.exec();
 }
