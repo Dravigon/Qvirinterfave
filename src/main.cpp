@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     db.setHostName("localhost");
     db.setDatabaseName("smartgrid");
     db.setUserName("root");
-    db.setPassword("spyman007");
+    db.setPassword("pssssword");
     db.open();
 
     //create a sqlQueryModel object with 0 as qobject
