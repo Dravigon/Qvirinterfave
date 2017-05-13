@@ -300,6 +300,7 @@ DIST          = ../src/requirments \
 		/usr/lib/qt/mkspecs/features/qt_config.prf \
 		/usr/lib/qt/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/qt/mkspecs/features/spec_post.prf \
+		../src/.qmake.stash \
 		/usr/lib/qt/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/qt/mkspecs/features/toolchain.prf \
 		/usr/lib/qt/mkspecs/features/default_pre.prf \
@@ -569,6 +570,7 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 		/usr/lib/qt/mkspecs/features/qt_config.prf \
 		/usr/lib/qt/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/qt/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/qt/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/qt/mkspecs/features/toolchain.prf \
 		/usr/lib/qt/mkspecs/features/default_pre.prf \
@@ -829,6 +831,7 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 /usr/lib/qt/mkspecs/features/qt_config.prf:
 /usr/lib/qt/mkspecs/linux-g++/qmake.conf:
 /usr/lib/qt/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/qt/mkspecs/features/exclusive_builds.prf:
 /usr/lib/qt/mkspecs/features/toolchain.prf:
 /usr/lib/qt/mkspecs/features/default_pre.prf:
@@ -914,6 +917,8 @@ qrc_qml.cpp: ../src/qml.qrc \
 		../src/qml/Backitem.qml \
 		../src/qml/NetworklistDelegate.qml \
 		../src/qml/CreateVm.qml \
+		../src/qml/CustomButton.qml \
+		../src/qml/qtquickcontrols2.conf \
 		../src/qml/Login.qml \
 		../src/qml/Terminal.qml \
 		../src/qml/Terminal_button.qml \

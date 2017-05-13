@@ -170,7 +170,6 @@ Component {
             State {
                 name: "expanded"
 
-//                PropertyChanges {target: statetimer; running:!statetimer.running}
                 PropertyChanges { target: wrapper; height: listView.height }
                 PropertyChanges { target: preview; width: listView.width; height: listView.width; anchors.rightMargin: 0; anchors.topMargin: rt.height }
                 PropertyChanges { target: factsView; opacity: 1 }

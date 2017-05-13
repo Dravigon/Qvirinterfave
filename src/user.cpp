@@ -18,7 +18,7 @@ static int authCreds[] = {
   VIR_CRED_AUTHNAME,
   VIR_CRED_PASSPHRASE,
 };
-int User:: authCb(virConnectCredentialPtr cred, unsigned int ncred, void *cbdata)
+int User:: authCb(virConnectCredentialPtr cred, unsigned int ncred, void *cbdata=NULL)
 {
   unsigned int i;
   for (i = 0; i < ncred; i++) {

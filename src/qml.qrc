@@ -15,5 +15,6 @@
         <file>qml/VmlistDelegate.qml</file>
         <file>qml/NetworkList.qml</file>
         <file>qml/NetworklistDelegate.qml</file>
+        <file>qml/CustomButton.qml</file>
     </qresource>
 </RCC>

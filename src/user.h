@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <libvirt/libvirt.h>
 #include <libvirt/virterror.h>
-#include <error.h>
 
 
 class User : public QObject

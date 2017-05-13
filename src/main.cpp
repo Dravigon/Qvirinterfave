@@ -43,8 +43,6 @@ int main(int argc, char *argv[])
     //make the created objects available to qml as qml objects
     QQmlApplicationEngine engine;
 
-    QQmlDebuggingEnabler enabler;
-
     engine.rootContext()->setContextProperty("applicationDirPath", QGuiApplication::applicationDirPath());
     engine.rootContext()->setContextProperty("host",&user);
     engine.rootContext()->setContextProperty("domain_list",QVariant::fromValue(&dom_list));

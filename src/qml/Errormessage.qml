@@ -18,7 +18,6 @@ Popup{
         Row{
             width:100
             height: 50
-            y:30
             anchors.horizontalCenter: parent.horizontalCenter
             id: img
             spacing: 10
