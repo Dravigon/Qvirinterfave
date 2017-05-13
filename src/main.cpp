@@ -23,9 +23,9 @@ int main(int argc, char *argv[])
     //create a sql object
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("localhost");
-    db.setDatabaseName("smartgrid");
+    db.setDatabaseName("local");
     db.setUserName("root");
-    db.setPassword("pssssword");
+    db.setPassword("password");
     db.open();
 
     //create a sqlQueryModel object with 0 as qobject
