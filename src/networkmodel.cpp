@@ -1,10 +1,29 @@
 #include "networkmodel.h"
+#include <QBuffer>
 
 
 Network::Network(const int &id,virNetworkPtr dom)
     : m_net(dom),m_id(id)
 {
+    char *xml;
     m_name=QString(virNetworkGetName(m_net));
+    if((xml=virNetworkGetXMLDesc(dom,VIR_NETWORK_XML_INACTIVE))!=NULL){
+    QByteArray xml_buffer;
+    xml_buffer.append(xml);
+    delete [] xml;
+    QBuffer buffer(&xml_buffer);
+    buffer.open(QIODevice::ReadWrite);
+
+    netxml=new networkxml(&buffer);
+    if(netxml->read())
+        editable=true;
+    }
+}
+
+Network::~Network()
+{
+    if(editable)
+        delete netxml;
 }
 
 int Network::id() const
@@ -113,5 +132,4 @@ QHash<int, QByteArray> NetworkModel::roleNames() const {
     roles[NameRole] = "name";
     return roles;
 }
-
 

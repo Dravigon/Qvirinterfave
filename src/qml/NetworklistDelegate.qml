@@ -95,6 +95,11 @@ Component {
             anchors.rightMargin: 2
             anchors.topMargin: 2
             color: "black"
+            Text {
+                anchors.centerIn: parent
+                id: name_da
+                //text: network_list_data.at(index).name()
+            }
 
             Image {
                 anchors.fill: parent
