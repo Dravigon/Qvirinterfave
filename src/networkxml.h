@@ -15,7 +15,7 @@ struct Nat{
 struct Forward{
     QString mode;
     QString dev=NULL;
-    bool defineNat=false;
+    bool natExist=false;
     Nat nat;
 };
 struct Bridge{
@@ -71,7 +71,7 @@ class networkxml
 {
 public:
     QString name;
-    bool isforwardEnabled;
+    bool isforwardExist;
     Forward forward;
     Bridge bridge;
     bw bandwidth;

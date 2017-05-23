@@ -3,7 +3,7 @@
 networkxml::networkxml(QIODevice *dev)
 {
     device=dev;
-    isforwardEnabled=false;
+    isforwardExist=false;
     bridge.exist=false;
     bandwidth.exist=false;
 
@@ -24,7 +24,7 @@ int networkxml::read(){
                 bridge.delay=stream1.attributes().value("delay").toString()!=""?stream1.attributes().value("stp").toString():"0";
             }
             else if(stream1.name()=="forward"){
-                isforwardEnabled=true;
+                isforwardExist=true;
                 forward.mode=stream1.attributes().value("mode").toString();
                 forward.dev=stream1.attributes().value("dev").toString()!=""?stream1.attributes().value("dev").toString():NULL;
                 if((forward.mode=="nat")&&(!stream1.isEndElement())){
@@ -33,7 +33,7 @@ int networkxml::read(){
                     if(!stream1.isEndElement()){
                         stream1.readNextStartElement();
                         qDebug()<<stream1.name();
-                        forward.defineNat=true;
+                        forward.natExist=true;
                         forward.nat.start=stream1.attributes().value("start").toString();
                         forward.nat.end=stream1.attributes().value("end").toString();
                     }
@@ -169,12 +169,12 @@ int networkxml::write(){
         stream.writeEndElement();
     }
 
-    if(isforwardEnabled){
+    if(isforwardExist){
         stream.writeStartElement("forward");
         stream.writeAttribute("mode", forward.mode);
         if(forward.dev!=NULL)
             stream.writeAttribute("dev", forward.dev);
-        if(forward.defineNat){
+        if(forward.natExist){
             stream.writeStartElement("nat");
             stream.writeEmptyElement("port");
             stream.writeAttribute("start", forward.nat.start);

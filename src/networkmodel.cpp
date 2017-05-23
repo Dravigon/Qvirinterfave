@@ -96,6 +96,36 @@ QVariant NetworkModel::data(const QModelIndex & index, int role) const {
         return network.id();
     else if (role == NameRole)
         return network.name();
+    else if (role == ForwardExistRole)
+        return network.netxml->isforwardExist;
+    else if (role == ForwardModeRole)
+        return network.netxml->forward.mode;
+    else if (role == ForwardDevRole) {
+        return network.netxml->forward.dev;
+    }
+    else if ( role == NatDefinedRole) {
+        return network.netxml->forward.natExist;
+    }
+    else if (role == NatStartRole)
+        return network.netxml->forward.nat.start;
+    else if (role ==NatEndRole) {
+        return network.netxml->forward.nat.end;
+    }
+    else if (role == BridgeExistRole) {
+        return network.netxml->bridge.exist;
+    }
+    else if (role == BridgeNameRole)
+        return network.netxml->bridge.name;
+    else if (role== BridgeStpRole)
+        return network.netxml->bridge.stp;
+    else if (role == BridgeDelayRole)
+        return  network.netxml->bridge.delay;
+    else if ( role == BandwidthExistRole) {
+        return  network.netxml->bandwidth.exist;
+    }
+    /*TODO
+     *Add furthure roles
+     */
     return QVariant();
 }
 
@@ -130,6 +160,41 @@ QHash<int, QByteArray> NetworkModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[IdRole] = "id";
     roles[NameRole] = "name";
+    roles[ForwardExistRole]="forwardExist";
+    roles[ForwardModeRole]="forwardMode";
+    roles[ForwardDevRole]="forwardDev";
+    roles[NatDefinedRole]="natDefined";
+    roles[NatStartRole]="natStart";
+    roles[NatEndRole]="natEnd";
+    roles[BridgeExistRole]="bridgeExist";
+    roles[BridgeNameRole]="bridgeName";
+    roles[BridgeStpRole]="bridgeStp";
+    roles[BridgeDelayRole]="bridgeDelay";
+    roles[BandwidthExistRole]="bandwidthExist";
+    roles[BandWidthInboundAverageRole]="bandwidthInboundAverage";
+    roles[BandWidthInboundPeakRole]="bandwidthInboundPeak";
+    roles[BandwidthInboundBurstRole]="bandwidthInboundBurst";
+    roles[BandWidthOutboundAverageRole]="bandwidthOutboundAverage";
+    roles[BandWidthOutboundPeakRole]="bandwidthOutboundPeak";
+    roles[BandwidthOutboundBurstRole]="bandwidthOutboundBurst";
+    roles[IpSizeRole]="ipSize";
+    roles[IpFamilyRole]="ipFamily";
+    roles[IpAddressRole]="ipAddress";
+    roles[IpPrefixRole]="ipPrefix";
+    roles[IpNetmaskRole]="ipNetwask";
+    roles[IpIndexRole]="ipIndex";
+    roles[IpHasDhcpRole]="ipDhcpExist";
+    roles[DhcpRangeExistRole]="dhcpRangeExist";
+    roles[DhcpRangeStartRole]="dhcpRangeStart";
+    roles[DhcpRangeEndRole]="dhcpRangeEnd";
+    roles[DhcpHasHostRole]="dhcpHasHost";
+    roles[DhcpHostSizeRole]="dhcpHostSize";
+    roles[DhcpHostIndex]="dhcpHostIndex";
+    roles[DhcpIdRole]="dhcpId";
+    roles[DhcpMacRole]="dhcpMac";
+    roles[DhcpNameRole]="dhcpName";
+    roles[DhcpIpRole]="dhcpIp";
+
     return roles;
 }
 

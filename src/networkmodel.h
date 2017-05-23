@@ -42,7 +42,7 @@ public:
       NatDefinedRole=Qt::UserRole + 1,
       NatStartRole=Qt::UserRole + 1,
       NatEndRole=Qt::UserRole + 1,
-      BridgeExisRole=Qt::UserRole + 1,
+      BridgeExistRole=Qt::UserRole + 1,
       BridgeNameRole=Qt::UserRole + 1,
       BridgeStpRole=Qt::UserRole + 1,
       BridgeDelayRole=Qt::UserRole + 1,
@@ -58,8 +58,18 @@ public:
       IpAddressRole=Qt::UserRole + 1,
       IpPrefixRole=Qt::UserRole + 1,
       IpNetmaskRole=Qt::UserRole + 1,
-      IpCurrentIndexRole=Qt::UserRole + 1,
+      IpIndexRole=Qt::UserRole + 1,
       IpHasDhcpRole=Qt::UserRole + 1,
+      DhcpRangeExistRole=Qt::UserRole + 1,
+      DhcpRangeStartRole=Qt::UserRole + 1,
+      DhcpRangeEndRole=Qt::UserRole + 1,
+      DhcpHasHostRole=Qt::UserRole + 1,
+      DhcpHostSizeRole=Qt::UserRole + 1,
+      DhcpHostIndex=Qt::UserRole + 1,
+      DhcpIdRole=Qt::UserRole + 1,
+      DhcpMacRole=Qt::UserRole + 1,
+      DhcpNameRole=Qt::UserRole + 1,
+      DhcpIpRole=Qt::UserRole + 1,
 
   };
 
@@ -79,7 +89,7 @@ protected:
 
 private:
   QList<Network> m_network;
-  int m_IpCurrentIndexRole=0;
+  int m_IpIndexRole=0;
   User *usr;
 
 signals:
