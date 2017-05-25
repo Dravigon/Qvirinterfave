@@ -16,7 +16,7 @@ Component {
         height: 80
 
 
-        Timer {
+        Timer {//for dynamically getting the State of the VM
             id:statetimer
             interval: 1000; running: true; repeat: true
             onTriggered:{ if(i>0)wrapper.state=domain_list.task("state",index);
@@ -51,7 +51,7 @@ Component {
                     color: '#fff'
                     text: name
                 }
-                RowLayout{
+                RowLayout{//for start stop and pause button
                     z:1
                     Button{
                         id:start
@@ -101,8 +101,8 @@ Component {
                 }
             }
         }
-
-        Rectangle {
+//unimplimented>
+        Rectangle {//for the details with last running display image of the vm
             id: preview
             width: 26
             height: rt.height
@@ -118,10 +118,10 @@ Component {
                 //source: imageSource
             }
         }
+//<unimplimented
 
-
-
-        Item {
+//planned>
+        Item {//details of the vm and to edit vm
             id: factsView
 
             anchors.top: preview.bottom
@@ -155,7 +155,7 @@ Component {
                 }
             }
         }
-
+//<planned
         Rectangle {
             id: closeButton
 

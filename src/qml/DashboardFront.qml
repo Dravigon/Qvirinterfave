@@ -15,8 +15,8 @@ Item {
         State {
             name: "image_clicked"
             PropertyChanges {
-                target: user_details
-                height:parent.parent.height
+                target: actions
+                height:0
             }
         }
     ]
@@ -36,6 +36,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
+        anchors.bottom: parent.bottom
         height: parent.height/2;
         Image {
             id: bg2
@@ -57,23 +58,25 @@ Item {
             anchors.fill: parent
             source: "file:///"+applicationDirPath + "/background/dashbord2.jpg"
         }
-        anchors.top: user_details.bottom
+        height: user_details.height/2
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        GridLayout{
-            anchors.margins: 50
+        Grid{
+            opacity: 0.75
+
             anchors.centerIn: parent
-            columnSpacing: parent.width/2
-            rowSpacing: parent.height/4
+            columnSpacing:5
+            rowSpacing: 5
             columns: 2
 
             Button{
                 id:list_button
                 text: qsTr("Your Pcs")
                 Material.foreground: Material.Purple
-                width: parent.parent.width/2
+                width: actions.width/2-5
+                height: actions.height/2-5
                 onClicked: {listClicked();
                     domain_list.refresh();
                 }
@@ -82,7 +85,8 @@ Item {
                 id:network_button
                 text: qsTr("Networking")
                 Material.foreground: Material.Purple
-
+                width: actions.width/2-5
+                height: actions.height/2-5
 
                 onClicked: {netlistClicked();
                     network_list.refresh();
@@ -90,13 +94,16 @@ Item {
             }
             Button{
                 id:new_button
-                text: qsTr("    New    ")
-                width: 100
+                text: qsTr("New")
+                width: actions.width/2-5
+                height: actions.height/2-5
                 Material.foreground: Material.Purple
                 onClicked: newvmClicked()
             }
             Terminal_button {
                 id: terminal_button2
+                width: actions.width/2-5
+                height: actions.height/2-5
                 Material.foreground: Material.Purple
             }
         }

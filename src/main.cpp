@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     //create a sql object
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("localhost");
-    db.setDatabaseName("smartgrid");
+    db.setDatabaseName("local");
     db.setUserName("root");
     db.setPassword("password");
     db.open();
@@ -42,8 +42,6 @@ int main(int argc, char *argv[])
     net_list.refresh();
     //make the created objects available to qml as qml objects
     QQmlApplicationEngine engine;
-
-    QQmlDebuggingEnabler enabler;
 
     engine.rootContext()->setContextProperty("applicationDirPath", QGuiApplication::applicationDirPath());
     engine.rootContext()->setContextProperty("host",&user);

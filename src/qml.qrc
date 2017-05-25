@@ -15,5 +15,10 @@
         <file>qml/VmlistDelegate.qml</file>
         <file>qml/NetworkList.qml</file>
         <file>qml/NetworklistDelegate.qml</file>
+        <file>qml/CustomButton.qml</file>
+        <file>qml/VmPreview.qml</file>
+        <file>qml/NetworkPreview.qml</file>
+        <file>qml/ForwardElement.qml</file>
+        <file>qml/BridgeElement.qml</file>
     </qresource>
 </RCC>

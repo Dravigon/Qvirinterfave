@@ -53,13 +53,13 @@ Item {
             spacing: 10
             anchors.centerIn: parent
 
-            TextField {
+            TextInput {
                 id: username_textbox
                 width: loginscreen.width/4
                 text: qsTr("dravigon")
             }
 
-            TextField {
+            TextInput {
                 id: password_textbox
                 width: loginscreen.width/4
                 echoMode: "Password"
@@ -67,10 +67,12 @@ Item {
                 Keys.onReturnPressed: clicked()
             }
 
-            Button {
+            CustomButton {
                 id:log
                 text: qsTr("Login")
+
                 Material.foreground: Material.Purple
+                height: 30
                width: loginscreen.width/4
                 anchors.horizontalCenter:parent.horizontalCenter
                 onClicked: {
@@ -84,6 +86,8 @@ Item {
         ComboBox {
             id: selectBox
             anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: 20
             textRole: "name"
             model:ListModel {
                 id: host_list_model
@@ -103,6 +107,7 @@ Item {
             visible: selectBox.currentText=="Remote Host"?true:false;
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
+            anchors.margins: 20
             model:address_list
             textRole: "user_name"//this sets the role to be displayed as text
         }

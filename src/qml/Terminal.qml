@@ -8,15 +8,13 @@ import QtQuick.Controls.Material 2.0
 
 Popup{
     id:popup
-    width: 640
-    height: 400
+    width: parent.width/2
+    height:parent.height/2
     modal: true
     focus: true
     Rectangle{
         anchors.fill: parent
         visible: parent.visible
-        width: 640
-        height: 400
         Shortcut{
             sequence: "Ctrl+Shift+C"
             onActivated:terminal.copyClipboard();

@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls.Material 2.0
-
+/*this is list menue for all VMs
+  *the delegate is a custom delegate
+  */
 
 Item {
     signal errorm();
