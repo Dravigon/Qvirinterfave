@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_NetworkModel_t {
-    QByteArrayData data[5];
-    char stringdata0[33];
+    QByteArrayData data[7];
+    char stringdata0[51];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,10 +35,13 @@ QT_MOC_LITERAL(0, 0, 12), // "NetworkModel"
 QT_MOC_LITERAL(1, 13, 4), // "task"
 QT_MOC_LITERAL(2, 18, 0), // ""
 QT_MOC_LITERAL(3, 19, 5), // "index"
-QT_MOC_LITERAL(4, 25, 7) // "refresh"
+QT_MOC_LITERAL(4, 25, 7), // "refresh"
+QT_MOC_LITERAL(5, 33, 7), // "ipIndex"
+QT_MOC_LITERAL(6, 41, 9) // "dhcpIndex"
 
     },
-    "NetworkModel\0task\0\0index\0refresh"
+    "NetworkModel\0task\0\0index\0refresh\0"
+    "ipIndex\0dhcpIndex"
 };
 #undef QT_MOC_LITERAL
 
@@ -49,7 +52,7 @@ static const uint qt_meta_data_NetworkModel[] = {
        0,       // classname
        0,    0, // classinfo
        2,   14, // methods
-       0,    0, // properties
+       2,   30, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
@@ -62,6 +65,10 @@ static const uint qt_meta_data_NetworkModel[] = {
  // methods: parameters
     QMetaType::QString, QMetaType::QString, QMetaType::Int,    1,    3,
     QMetaType::Void,
+
+ // properties: name, type, flags
+       5, QMetaType::Int, 0x00095103,
+       6, QMetaType::Int, 0x00095103,
 
        0        // eod
 };
@@ -78,6 +85,28 @@ void NetworkModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         default: ;
         }
     }
+#ifndef QT_NO_PROPERTIES
+    else if (_c == QMetaObject::ReadProperty) {
+        NetworkModel *_t = static_cast<NetworkModel *>(_o);
+        Q_UNUSED(_t)
+        void *_v = _a[0];
+        switch (_id) {
+        case 0: *reinterpret_cast< int*>(_v) = _t->ipIndex(); break;
+        case 1: *reinterpret_cast< int*>(_v) = _t->dhcpIndex(); break;
+        default: break;
+        }
+    } else if (_c == QMetaObject::WriteProperty) {
+        NetworkModel *_t = static_cast<NetworkModel *>(_o);
+        Q_UNUSED(_t)
+        void *_v = _a[0];
+        switch (_id) {
+        case 0: _t->setIpIndex(*reinterpret_cast< int*>(_v)); break;
+        case 1: _t->setDhcpIndex(*reinterpret_cast< int*>(_v)); break;
+        default: break;
+        }
+    } else if (_c == QMetaObject::ResetProperty) {
+    }
+#endif // QT_NO_PROPERTIES
 }
 
 const QMetaObject NetworkModel::staticMetaObject = {
@@ -113,6 +142,23 @@ int NetworkModel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
             *reinterpret_cast<int*>(_a[0]) = -1;
         _id -= 2;
     }
+#ifndef QT_NO_PROPERTIES
+   else if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
+            || _c == QMetaObject::ResetProperty || _c == QMetaObject::RegisterPropertyMetaType) {
+        qt_static_metacall(this, _c, _id, _a);
+        _id -= 2;
+    } else if (_c == QMetaObject::QueryPropertyDesignable) {
+        _id -= 2;
+    } else if (_c == QMetaObject::QueryPropertyScriptable) {
+        _id -= 2;
+    } else if (_c == QMetaObject::QueryPropertyStored) {
+        _id -= 2;
+    } else if (_c == QMetaObject::QueryPropertyEditable) {
+        _id -= 2;
+    } else if (_c == QMetaObject::QueryPropertyUser) {
+        _id -= 2;
+    }
+#endif // QT_NO_PROPERTIES
     return _id;
 }
 QT_WARNING_POP

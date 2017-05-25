@@ -43,7 +43,7 @@ struct HOST{
 struct Dhcp{
     struct Range{
         bool exist=false;
-        QString start;
+        QString start=NULL;
         QString end;
     }range;
     bool hasHost;
@@ -80,6 +80,10 @@ public:
 
     QIODevice *device;
 public:
+    networkxml(){
+
+    }
+    void setnet(networkxml temp);
     networkxml(QIODevice *dev);
     int read();
     int write();

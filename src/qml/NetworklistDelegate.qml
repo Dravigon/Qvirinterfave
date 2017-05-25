@@ -7,6 +7,7 @@ import QtQuick.Controls.Material 2.0
 Component {
     id: detailsDelegate
 
+
     Item {
         id: wrapper
 
@@ -14,14 +15,15 @@ Component {
         width: listView.width
         height: 80
 
-        Timer {
+
+        Timer {//for dynamically getting the State of the VM
             id:statetimer
-             interval: 1000; running: true; repeat: true
-             onTriggered:{ if(i>0)wrapper.state=network_list.task("state",index);
-                 i++;
-             }
-             onRunningChanged: i=0;
-         }
+            interval: 1000; running: true; repeat: true
+            onTriggered:{ if(i>0)wrapper.state=network_list.task("state",index);
+                i++;
+            }
+            onRunningChanged: i=0;
+        }
 
 
         Rectangle {
@@ -49,7 +51,7 @@ Component {
                     color: '#fff'
                     text: name
                 }
-                RowLayout{
+                RowLayout{//for start stop and pause button
                     z:1
                     Button{
                         id:start
@@ -58,15 +60,14 @@ Component {
                             anchors.centerIn: parent
                             text: qsTr(">")
                         }
-                        onClicked:{ if(network_list.task("start",index)==='ok'){
-                                       wrapper.state = "started";
-                                       console.log(network_list.task("xml",index));
-                                   }
+                        onClicked: {if(network_list.task("start",index)==='ok'){
+                                wrapper.state = "started";
+                               // console.log(domain_list.task("xml",index));
+                            }
                             else
                                 errorm();
                         }
                     }
-
                     Button{
                         id:stop
                         width: 0
@@ -75,7 +76,7 @@ Component {
                             anchors.centerIn: parent
                             text: qsTr("#")
                         }
-                        onClicked: {if(network_list.task("stop",index)==='ok'){
+                        onClicked:{ if(network_list.task("stop",index)==='ok'){
                                        wrapper.state = "stopped";
                                    }
                             else
@@ -86,7 +87,9 @@ Component {
             }
         }
 
-        Rectangle {
+    //for the details with last running display image of the vm
+
+        NetworkPreview{
             id: preview
             width: 26
             height: rt.height
@@ -94,23 +97,13 @@ Component {
             anchors.top: parent.top
             anchors.rightMargin: 2
             anchors.topMargin: 2
-            color: "black"
-            Text {
-                anchors.centerIn: parent
-                id: name_da
-                //text: network_list_data.at(index).name()
-            }
-
-            Image {
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectFit
-                //source: imageSource
-            }
-        }
+    }
 
 
+//<unimplimented
 
-        Item {
+//planned>
+        Item {//details of the vm and to edit vm
             id: factsView
 
             anchors.top: preview.bottom
@@ -144,7 +137,7 @@ Component {
                 }
             }
         }
-
+//<planned
         Rectangle {
             id: closeButton
 
@@ -175,6 +168,7 @@ Component {
             State {
                 name: "expanded"
 
+                PropertyChanges {target: statetimer; running:!statetimer.running}
                 PropertyChanges { target: wrapper; height: listView.height }
                 PropertyChanges { target: preview; width: listView.width; height: listView.width; anchors.rightMargin: 0; anchors.topMargin: rt.height }
                 PropertyChanges { target: factsView; opacity: 1 }
@@ -195,11 +189,17 @@ Component {
                 PropertyChanges{target:domname;color:"#fff"}
                 PropertyChanges {target: start;width:50}
                 PropertyChanges{target: start;visible:true}
-
                 PropertyChanges {target: stop;width:0}
                 PropertyChanges {target:stop;x:50}
-
                 PropertyChanges {target: stop;visible:false}
+            },
+            State {
+                name: "nil"
+                PropertyChanges {
+                    target: virterr
+                    visible:true
+                    opened:true
+                }
             }
         ]
 

@@ -56,7 +56,8 @@ QString User::authenticate(QString zone){
       m_hostaddress=zone;
       qDebug()<<"remote host select";
     }
-  host_uri="qemu+libssh2://"+name+"@"+m_hostaddress+"/system";
+ // host_uri="qemu+libssh2://"+name+"@"+m_hostaddress+"/system";
+  host_uri="qemu:///system";
   auth.credtype = authCreds;
   auth.ncredtype = sizeof(authCreds)/sizeof(int);
   auth.cb = authCb;

@@ -1,5 +1,18 @@
 #include "networkxml.h"
 
+void networkxml::setnet(networkxml temp)
+{
+    name=temp.name;
+    isforwardExist=temp.isforwardExist;
+    forward=temp.forward;
+    bridge=temp.bridge;
+    bandwidth=temp.bandwidth;
+    ip=temp.ip;
+    route=temp.route;
+
+    device=temp.device;
+}
+
 networkxml::networkxml(QIODevice *dev)
 {
     device=dev;
