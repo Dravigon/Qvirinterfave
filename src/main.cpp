@@ -9,6 +9,7 @@
 //classes
 #include "domainmodel.h"//<--- user class included there
 #include "networkmodel.h"
+
 #include  "sqlquerymodel.h"
 #include <QQmlDebuggingEnabler>
 

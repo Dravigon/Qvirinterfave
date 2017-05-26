@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 
+
 Rectangle{
     id:forward
 
@@ -32,6 +33,9 @@ Rectangle{
                         TextField{
                             id: forward_mode_text
                             text: forwardMode
+                            onTextChanged:{
+                            console.log(forward_mode_text.text+ "index "+index+"but actual text "+forwardMode+"return on setdata "+network_list.set_data(index,forward_mode_text.text,"forwardMode"))
+                            }
                         }
                     }
                 }
