@@ -110,7 +110,11 @@ public:
 
   QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
+  bool setData(const QModelIndex & index, const QVariant & value, int role) ;
+
   Q_INVOKABLE QString task(QString task,int index);
+
+  Q_INVOKABLE bool set_data(int index,QVariant value,QString role);
 
   Q_INVOKABLE void refresh();
   Q_PROPERTY(int ipIndex READ ipIndex WRITE setIpIndex )

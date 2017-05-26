@@ -39,7 +39,12 @@ Component {
             MouseArea {
                 z:0
                 anchors.fill: rt
-                onClicked: wrapper.state = "expanded"
+                onClicked: {
+                    if((network_list.task("stop",index)==="stopped")||(network_list.task("state",index)==="stopped")){
+                    wrapper.state = "expanded"
+                    }
+                    preview.setIndex();
+                }
             }
 
             ColumnLayout{
@@ -60,7 +65,7 @@ Component {
                             anchors.centerIn: parent
                             text: qsTr(">")
                         }
-                        onClicked: {if(network_list.task("start",index)==='ok'){
+                        onClicked: {if(network_list.task("start",index)==="started"){
                                 wrapper.state = "started";
                                // console.log(domain_list.task("xml",index));
                             }
@@ -76,7 +81,7 @@ Component {
                             anchors.centerIn: parent
                             text: qsTr("#")
                         }
-                        onClicked:{ if(network_list.task("stop",index)==='ok'){
+                        onClicked:{ if(network_list.task("stop",index)==="stopped"){
                                        wrapper.state = "stopped";
                                    }
                             else

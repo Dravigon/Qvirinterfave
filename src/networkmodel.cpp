@@ -200,6 +200,87 @@ QVariant NetworkModel::data(const QModelIndex & index, int role) const {
     return QVariant();
 }
 
+bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+       qDebug()<<"\ncalled set data before and index recived "<<index.row()<<"\ncount is "<<m_network.count()<<"value recieved"<<value.toString()<<" role is "<<roleNames()[role];
+    if (index.row() < 0 || index.row() > m_network.count())
+        return false;
+    qDebug()<<"\ncalled set data \n";
+     Network network = m_network[index.row()];
+    if (role == IdRole)
+        return network.id();
+    else if (role == NameRole)
+        network.netxml.name=value.toString();
+    else if (role == ForwardExistRole)
+        network.netxml.isforwardExist=value.toBool();
+    else if (role == ForwardModeRole)
+        network.netxml.forward.mode=value.toString();
+    else if (role == ForwardDevRole)
+        network.netxml.forward.dev=value.toString();
+    else if ( role == NatDefinedRole)
+        network.netxml.forward.natExist=value.toBool();
+    else if (role == NatStartRole)
+         network.netxml.forward.nat.start=value.toString();
+    else if (role ==NatEndRole)
+         network.netxml.forward.nat.end=value.toString();
+    else if (role == BridgeExistRole)
+         network.netxml.bridge.exist=value.toBool();
+    else if (role == BridgeNameRole)
+         network.netxml.bridge.name=value.toString();
+    else if (role== BridgeStpRole)
+         network.netxml.bridge.stp=value.toString();
+    else if (role == BridgeDelayRole)
+          network.netxml.bridge.delay=value.toString();
+    else if ( role == BandwidthExistRole)
+          network.netxml.bandwidth.exist=value.toBool();
+
+    else if (role == BandWidthInboundAverageRole)
+         network.netxml.bandwidth.inbound.average=value.toString();
+    else if (role == BandWidthInboundPeakRole)
+         network.netxml.bandwidth.inbound.peak=value.toString();
+    else if (role == BandwidthInboundBurstRole)
+         network.netxml.bandwidth.inbound.peak=value.toString();
+    else if (role == BandWidthOutboundAverageRole)
+         network.netxml.bandwidth.outbound.average=value.toString();
+    else if (role == BandWidthOutboundPeakRole)
+         network.netxml.bandwidth.outbound.peak=value.toString();
+    else if (role == BandwidthOutboundBurstRole)
+         network.netxml.bandwidth.outbound.peak=value.toString();
+    else if( role == IpSizeRole)
+         return false;
+    else if(role == IpFamilyRole)
+         network.netxml.ip[m_IpIndex].family=value.toString();
+    else if(role == IpAddressRole)
+         network.netxml.ip[m_IpIndex].address=value.toString();
+    else if(role == IpPrefixRole)
+         network.netxml.ip[m_IpIndex].prefix=value.toString();
+    else if(role == IpNetmaskRole)
+         network.netxml.ip[m_IpIndex].netmask=value.toString();
+    else if(role == IpDhcpExistRole)
+         network.netxml.ip[m_IpIndex].hasDhcp=value.toBool();
+    else if(role == DhcpRangeExistRole)
+         network.netxml.ip[m_IpIndex].dhcp.range.exist=value.toBool();
+    else if(role == DhcpRangeStartRole)
+          network.netxml.ip[m_IpIndex].dhcp.range.start=value.toString();
+    else if(role == DhcpRangeEndRole)
+          network.netxml.ip[m_IpIndex].dhcp.range.end=value.toString();
+    else if(role == DhcpHasHostRole)
+         network.netxml.ip[m_IpIndex].dhcp.hasHost=value.toBool();
+    else if(role == DhcpHostSizeRole)
+        return false;
+    else if(role == DhcpIdRole)
+         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].id=value.toString();
+    else if(role == DhcpNameRole)
+         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].name=value.toString();
+    else if(role == DhcpMacRole)
+         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].mac=value.toString();
+    else if(role == DhcpIpRole)
+         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].ip=value.toString();
+    m_network[index.row()]=network;
+   // qDebug()<<"well name is"<<m_network[index.row()].netxml.forward.mode<<" name in temp is "<<network.netxml.forward.mode;
+    return true;
+}
+
 QString NetworkModel::task(QString task, int index)
 {
     QString ret="nil";
@@ -225,6 +306,15 @@ QString NetworkModel::task(QString task, int index)
 
     ////return doTask(task,index,m_network.at(index));
     return ret;
+}
+
+bool NetworkModel::set_data(int index, QVariant value, QString role)
+{
+    QModelIndex temp;
+    QByteArray t;
+    t=role.toUtf8();
+    temp=QAbstractItemModel::createIndex(index, 1);
+    return setData(temp,value,roleNames().key(t));
 }
 
 QHash<int, QByteArray> NetworkModel::roleNames() const {
