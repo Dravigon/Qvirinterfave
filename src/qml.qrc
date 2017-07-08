@@ -20,5 +20,8 @@
         <file>qml/NetworkPreview.qml</file>
         <file>qml/ForwardElement.qml</file>
         <file>qml/BridgeElement.qml</file>
+        <file>qml/BandwidthElement.qml</file>
+        <file>qml/IpElement.qml</file>
+        <file>qml/HostDelegateItem.qml</file>
     </qresource>
 </RCC>

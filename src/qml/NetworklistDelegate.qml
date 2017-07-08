@@ -8,10 +8,12 @@ Component {
     id: detailsDelegate
 
 
+
     Item {
         id: wrapper
 
         property int i
+            property int root_index: index
         width: listView.width
         height: 80
 
@@ -21,6 +23,7 @@ Component {
             interval: 1000; running: true; repeat: true
             onTriggered:{ if(i>0)wrapper.state=network_list.task("state",index);
                 i++;
+                console.log("host_size:"+ip4DhcpHostModel.size())
             }
             onRunningChanged: i=0;
         }

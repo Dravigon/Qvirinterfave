@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     task.cpp \
     networkmodel.cpp \
     task_network.cpp \
-    networkxml.cpp
+    networkxml.cpp \
+    host.cpp
 
 RESOURCES += qml.qrc \
 
@@ -46,7 +47,8 @@ HEADERS += \
     sqlquerymodel.h \
     networkmodel.h \
     task.h \
-    networkxml.h
+    networkxml.h \
+    host.h
 
 DISTFILES += \
     requirments \

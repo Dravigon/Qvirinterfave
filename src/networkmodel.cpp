@@ -2,20 +2,25 @@
 #include <QBuffer>
 
 
-Network::Network(const int &id,virNetworkPtr dom)
+Network::Network(const int &id, const virNetworkPtr &dom)
     : m_net(dom),m_id(id)
 {
     char *xml;
     m_name=QString(virNetworkGetName(m_net));
     if((xml=virNetworkGetXMLDesc(dom,VIR_NETWORK_XML_INACTIVE))!=NULL){
     QByteArray xml_buffer;
+
+//    qDebug()<<xml;
+    //for testing purposes
+   // QString x;
+    //x="<network>\n  <name>local6</name>\n  <bridge name='virbr1'/>\n  <forward mode='route' dev='eth1'/>\n  <ip address='192.168.122.1' netmask='255.255.255.0'>\n    <dhcp>\n      <range start='192.168.122.2' end='192.168.122.254'/>\n    </dhcp>\n  </ip>\n  <ip family='ipv6' address='2001:db8:ca2:2::1' prefix='64'>\n    <dhcp>\n      <host name='paul' ip='2001:db8:ca2:2:3::1'/>\n      <host id='0:1:0:1:18:aa:62:fe:0:16:3e:44:55:66' ip='2001:db8:ca2:2:3::2'/>\n      <host id='0:3:0:1:0:16:3e:11:22:33' name='ralph' ip='2001:db8:ca2:2:3::3'/>\n      <host id='0:4:7e:7d:f0:7d:a8:bc:c5:d2:13:32:11:ed:16:ea:84:63' name='badbob' ip='2001:db8:ca2:2:3::4'/>\n    </dhcp>\n  </ip>\n</network>\n";
+     //   xml_buffer.append(x);
     xml_buffer.append(xml);
     delete [] xml;
     QBuffer buffer(&xml_buffer);
     buffer.open(QIODevice::ReadWrite);
 
-    networkxml temp(&buffer);
-    netxml.setnet(temp);
+    netxml.setXml(&buffer);
     if(netxml.read())
         editable=true;
     }
@@ -31,43 +36,6 @@ QString Network::name() const
 {
     return m_name;
 }
-
-//bool Network::forwardExist() const
-//{
-//    return netxml.isforwardExist;
-//}
-
-//QString Network::forwardMode() const
-//{
-//    return netxml.forward.mode;
-//}
-
-//QString Network::forwardDev() const
-//{
-//    return netxml.forward.dev;
-//}
-
-//bool Network::natDefined() const
-//{
-//    return netxml.forward.natExist;
-//}
-
-//QString Network::natStart() const
-//{
-//    return netxml.forward.nat.start;
-
-//}
-//QString Network::natEnd() const
-//{
-//    return netxml.forward.nat.end;
-
-//}
-
-//bool Network::bridgeExist() const
-//{
-//    return netxml.bridge.exist;
-//}
-
 
 
 NetworkModel::NetworkModel(QObject *parent)
@@ -99,7 +67,8 @@ void NetworkModel::addNetworks()
         while(networks[i]){
             qDebug()<<i<<"network "<<virNetworkGetName(networks[i])<<"0.2"<<"\n row count="<<rowCount();
             if((i+1)>rowCount()){
-                qDebug()<<i<<">"<<rowCount();
+       //         qDebug()<<i<<">"<<rowCount();
+           //     qDebug()<<"\n\nxml:"<<QString::fromUtf8(virNetworkGetXMLDesc(networks[i],VIR_NETWORK_XML_INACTIVE));
                 beginInsertRows(QModelIndex(), rowCount(), rowCount());
                 m_network.append(*new Network(i,networks[i]));
                 endInsertRows();
@@ -167,36 +136,44 @@ QVariant NetworkModel::data(const QModelIndex & index, int role) const {
         return network.netxml.bandwidth.outbound.peak;
     else if (role == BandwidthOutboundBurstRole)
         return network.netxml.bandwidth.outbound.peak;
-    else if( role == IpSizeRole)
-        return network.netxml.ip.size();
-    else if(role == IpFamilyRole)
-        return network.netxml.ip.at(m_IpIndex).family;
-    else if(role == IpAddressRole)
-        return network.netxml.ip.at(m_IpIndex).address;
-    else if(role == IpPrefixRole)
-        return network.netxml.ip.at(m_IpIndex).prefix;
-    else if(role == IpNetmaskRole)
-        return network.netxml.ip.at(m_IpIndex).netmask;
-    else if(role == IpDhcpExistRole)
-        return network.netxml.ip.at(m_IpIndex).hasDhcp;
-    else if(role == DhcpRangeExistRole)
-        return network.netxml.ip.at(m_IpIndex).dhcp.range.exist;
-    else if(role == DhcpRangeStartRole)
-        return  network.netxml.ip.at(m_IpIndex).dhcp.range.start;
-    else if(role == DhcpRangeEndRole)
-        return  network.netxml.ip.at(m_IpIndex).dhcp.range.end;
-    else if(role == DhcpHasHostRole)
-        return network.netxml.ip.at(m_IpIndex).dhcp.hasHost;
-    else if(role == DhcpHostSizeRole)
-        return network.netxml.ip.at(m_IpIndex).dhcp.host.size();
-    else if(role == DhcpIdRole)
-        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).id;
-    else if(role == DhcpNameRole)
-        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).name;
-    else if(role == DhcpMacRole)
-        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).mac;
-    else if(role == DhcpIpRole)
-        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).ip;
+    else if( role == Ip4ExistRole)
+        return network.netxml.ip4.exist;
+    else if(role == Ip4FamilyRole)
+        return network.netxml.ip4.family;
+    else if(role == Ip4AddressRole)
+        return network.netxml.ip4.address;
+    else if(role == Ip4NetmaskRole)
+        return network.netxml.ip4.netmask;
+    else if(role == Ip4DhcpExistRole)
+        return network.netxml.ip4.hasDhcp;
+    else if( role == Ip6ExistRole)
+        return network.netxml.ip6.exist;
+    else if(role == Ip6FamilyRole)
+        return network.netxml.ip6.family;
+    else if(role == Ip6AddressRole)
+        return network.netxml.ip6.address;
+    else if(role == Ip6PrefixRole)
+        return network.netxml.ip6.prefix;
+    else if(role == Ip6DhcpExistRole)
+        return network.netxml.ip6.hasDhcp;
+    else if(role == Ip4DhcpRangeExistRole)
+        return network.netxml.ip4.dhcp.range.exist;
+    else if(role == Ip4DhcpRangeStartRole)
+        return  network.netxml.ip4.dhcp.range.start;
+    else if(role == Ip4DhcpRangeEndRole)
+        return  network.netxml.ip4.dhcp.range.end;
+    else if(role == Ip4DhcpHasHostRole)
+        return network.netxml.ip4.dhcp.hasHost;
+    else if(role == Ip4DhcpHostModelRole)
+        return QVariant::fromValue(network.netxml.ip4.dhcp.host);//testing
+//    else if(role == Ip4DhcpIdRole)
+//        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).id;
+//    else if(role == Ip4DhcpNameRole)
+//        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).name;
+//    else if(role == Ip4DhcpMacRole)
+//        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).mac;
+//    else if(role == Ip4DhcpIpRole)
+//        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).ip;
     return QVariant();
 }
 
@@ -246,36 +223,36 @@ bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int 
          network.netxml.bandwidth.outbound.peak=value.toString();
     else if (role == BandwidthOutboundBurstRole)
          network.netxml.bandwidth.outbound.peak=value.toString();
-    else if( role == IpSizeRole)
-         return false;
-    else if(role == IpFamilyRole)
-         network.netxml.ip[m_IpIndex].family=value.toString();
-    else if(role == IpAddressRole)
-         network.netxml.ip[m_IpIndex].address=value.toString();
-    else if(role == IpPrefixRole)
-         network.netxml.ip[m_IpIndex].prefix=value.toString();
-    else if(role == IpNetmaskRole)
-         network.netxml.ip[m_IpIndex].netmask=value.toString();
-    else if(role == IpDhcpExistRole)
-         network.netxml.ip[m_IpIndex].hasDhcp=value.toBool();
-    else if(role == DhcpRangeExistRole)
-         network.netxml.ip[m_IpIndex].dhcp.range.exist=value.toBool();
-    else if(role == DhcpRangeStartRole)
-          network.netxml.ip[m_IpIndex].dhcp.range.start=value.toString();
-    else if(role == DhcpRangeEndRole)
-          network.netxml.ip[m_IpIndex].dhcp.range.end=value.toString();
-    else if(role == DhcpHasHostRole)
-         network.netxml.ip[m_IpIndex].dhcp.hasHost=value.toBool();
-    else if(role == DhcpHostSizeRole)
-        return false;
-    else if(role == DhcpIdRole)
-         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].id=value.toString();
-    else if(role == DhcpNameRole)
-         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].name=value.toString();
-    else if(role == DhcpMacRole)
-         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].mac=value.toString();
-    else if(role == DhcpIpRole)
-         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].ip=value.toString();
+//    else if( role == IpSizeRole)
+//         return false;
+//    else if(role == IpFamilyRole)
+//         network.netxml.ip[m_IpIndex].family=value.toString();
+//    else if(role == IpAddressRole)
+//         network.netxml.ip[m_IpIndex].address=value.toString();
+//    else if(role == IpPrefixRole)
+//         network.netxml.ip[m_IpIndex].prefix=value.toString();
+//    else if(role == IpNetmaskRole)
+//         network.netxml.ip[m_IpIndex].netmask=value.toString();
+//    else if(role == IpDhcpExistRole)
+//         network.netxml.ip[m_IpIndex].hasDhcp=value.toBool();
+//    else if(role == DhcpRangeExistRole)
+//         network.netxml.ip[m_IpIndex].dhcp.range.exist=value.toBool();
+//    else if(role == DhcpRangeStartRole)
+//          network.netxml.ip[m_IpIndex].dhcp.range.start=value.toString();
+//    else if(role == DhcpRangeEndRole)
+//          network.netxml.ip[m_IpIndex].dhcp.range.end=value.toString();
+//    else if(role == DhcpHasHostRole)
+//         network.netxml.ip[m_IpIndex].dhcp.hasHost=value.toBool();
+//    else if(role == DhcpHostSizeRole)
+//        return false;
+//    else if(role == DhcpIdRole)
+//         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].id=value.toString();
+//    else if(role == DhcpNameRole)
+//         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].name=value.toString();
+//    else if(role == DhcpMacRole)
+//         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].mac=value.toString();
+//    else if(role == DhcpIpRole)
+//         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].ip=value.toString();
     m_network[index.row()]=network;
    // qDebug()<<"well name is"<<m_network[index.row()].netxml.forward.mode<<" name in temp is "<<network.netxml.forward.mode;
     return true;
@@ -338,21 +315,36 @@ QHash<int, QByteArray> NetworkModel::roleNames() const {
     roles[BandWidthOutboundAverageRole]="bandwidthOutboundAverage";
     roles[BandWidthOutboundPeakRole]="bandwidthOutboundPeak";
     roles[BandwidthOutboundBurstRole]="bandwidthOutboundBurst";
-    roles[IpSizeRole]="ipSize";
-    roles[IpFamilyRole]="ipFamily";
-    roles[IpAddressRole]="ipAddress";
-    roles[IpPrefixRole]="ipPrefix";
-    roles[IpNetmaskRole]="ipNetwask";
-    roles[IpDhcpExistRole]="ipDhcpExist";
-    roles[DhcpRangeExistRole]="dhcpRangeExist";
-    roles[DhcpRangeStartRole]="dhcpRangeStart";
-    roles[DhcpRangeEndRole]="dhcpRangeEnd";
-    roles[DhcpHasHostRole]="dhcpHasHost";
-    roles[DhcpHostSizeRole]="dhcpHostSize";
-    roles[DhcpIdRole]="dhcpId";
-    roles[DhcpMacRole]="dhcpMac";
-    roles[DhcpNameRole]="dhcpName";
-    roles[DhcpIpRole]="dhcpIp";
+    roles[Ip4ExistRole]="ip4Exist";
+    roles[Ip4FamilyRole]="ip4Family";
+    roles[Ip4AddressRole]="ip4Address";
+    roles[Ip4NetmaskRole]="ip4Netmask";
+    roles[Ip4DhcpExistRole]="ip4DhcpExist";
+    roles[Ip6ExistRole]="ip6Exist";
+    roles[Ip6FamilyRole]="ip6Family";
+    roles[Ip6AddressRole]="ip6Address";
+    roles[Ip6PrefixRole]="ip6Prefix";
+    roles[Ip6DhcpExistRole]="ip6DhcpExist";
+    roles[Ip4DhcpRangeExistRole]="ip4DhcpRangeExist";
+    roles[Ip4DhcpRangeStartRole]="ip4DhcpRangeStart";
+    roles[Ip4DhcpRangeEndRole]="ip4DhcpRangeEnd";
+    roles[Ip4DhcpHasHostRole]="ip4DhcpHasHost";
+    roles[Ip4DhcpHostModelRole]="ip4DhcpHostModel";
+
+    //    roles[Ip4DhcpHostSizeRole]="ip4DhcpHostSize";
+//    roles[Ip4DhcpIdRole]="ip4DhcpId";
+//    roles[Ip4DhcpMacRole]="ip4DhcpMac";
+//    roles[Ip4DhcpNameRole]="ip4DhcpName";
+//    roles[Ip4DhcpIpRole]="ip4DhcpIp";
+//    roles[Ip6DhcpRangeExistRole]="ip6DhcpRangeExist";
+//    roles[Ip6DhcpRangeStartRole]="ip6DhcpRangeStart";
+//    roles[Ip6DhcpRangeEndRole]="ip6DhcpRangeEnd";
+//    roles[Ip6DhcpHasHostRole]="ip6DhcpHasHost";
+//    roles[Ip6DhcpHostSizeRole]="ip6DhcpHostSize";
+//    roles[Ip6DhcpIdRole]="ip6DhcpId";
+//    roles[Ip6DhcpMacRole]="ip6DhcpMac";
+//    roles[Ip6DhcpNameRole]="ip6DhcpName";
+//    roles[Ip6DhcpIpRole]="ip6DhcpIp";
 
     return roles;
 }

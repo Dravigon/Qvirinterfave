@@ -7,10 +7,18 @@ void networkxml::setnet(networkxml temp)
     forward=temp.forward;
     bridge=temp.bridge;
     bandwidth=temp.bandwidth;
-    ip=temp.ip;
+    ip4=temp.ip4;
+    ip6=temp.ip6;
     route=temp.route;
 
     device=temp.device;
+}
+
+void networkxml::setXml(QIODevice *dev)
+{
+    //    qDebug()<<"__Network_:"<<dev->readAll();
+    //    qDebug()<<"____________";
+    device=dev;
 }
 
 networkxml::networkxml(QIODevice *dev)
@@ -23,13 +31,19 @@ networkxml::networkxml(QIODevice *dev)
 }
 int networkxml::read(){
     QXmlStreamReader stream1(device);
+    // qDebug()<<device->readAll();
     while (!stream1.atEnd()) {
+        if(stream1.isEndElement()){
+            qDebug()<<"reached end element";
+            stream1.readNext();
+            continue;
+        }
         if(stream1.isStartElement()){
+
             if(stream1.name()=="name"){
                 stream1.readNext();
                 name=stream1.text().toString();
             }
-
             else if(stream1.name()=="bridge"){
                 bridge.exist=true;
                 bridge.name=stream1.attributes().value("name").toString();
@@ -71,70 +85,139 @@ int networkxml::read(){
                 }
             }
             else if(stream1.name()=="ip"){
-                IP temp;
+                IP4 temp;
+                IP6 temp1;
                 temp.hasDhcp=false;
                 temp.dhcp.range.exist=false;
+                temp1.hasDhcp=false;
+                temp1.dhcp.range.exist=false;
                 while(stream1.isEndElement()){
                     stream1.readNextStartElement();
                     qDebug()<<"end string"<<stream1.attributes().value("family").toString();
                 }
                 qDebug()<<stream1.attributes().value("family").toString();
 
+
+                if((stream1.attributes().value("family").toString()=="ipv4")||(stream1.attributes().value("family").toString()=="")){
+                    temp.exist=true;
+                    qDebug()<<"true ip4";
+                }
+                else if(stream1.attributes().value("family").toString()=="ipv6"){
+                    temp1.exist=true;
+                }
+
+
                 if(stream1.attributes().value("family").toString()=="ipv6"){
                     qDebug()<<"ip6";
-                    qDebug()<<(temp.family=stream1.attributes().value("family").toString());
-                    qDebug()<<(temp.prefix=stream1.attributes().value("prefix").toString());
-                }
-                if((stream1.attributes().value("family").toString()=="ipv4")||(stream1.attributes().value("family").toString()=="")){
-                    qDebug()<<"ip";
-                    qDebug()<<(temp.family=stream1.attributes().value("family").toString());
-                    qDebug()<<(temp.netmask=stream1.attributes().value("netmask").toString());
-                }
-                if(stream1.attributes().value("address").toString()!=""){
-                    temp.address=stream1.attributes().value("address").toString();
-                }
-                stream1.readNextStartElement();
-                if(stream1.name()=="dhcp"){
-                    qDebug()<<stream1.name();
-                    temp.hasDhcp=true;
+                    ip6.exist=true;
+                    qDebug()<<"family:"<<(temp1.family=stream1.attributes().value("family").toString());
+                    qDebug()<<"prefix:"<<(temp1.prefix=stream1.attributes().value("prefix").toString());
+                    if(stream1.attributes().value("address").toString()!=""){
+                        temp1.address=stream1.attributes().value("address").toString();
+                        qDebug()<<"address:"<<(temp1.prefix=stream1.attributes().value("address").toString());
+                    }
                     stream1.readNextStartElement();
-                    if(stream1.name()=="range"){
-                        temp.dhcp.range.exist=true;
-                        temp.dhcp.range.start=stream1.attributes().value("start").toString();
-                        temp.dhcp.range.end=stream1.attributes().value("end").toString();
-                    }
-
-                    while ((stream1.name()=="host")&&(stream1.name()!="")&&(!stream1.atEnd())) {
-
-                        temp.dhcp.hasHost=true;
-                        bool flag=false;
-                        HOST htemp;
-                        if((temp.family=="ipv4")||(temp.family=="")){
-                            htemp.mac=stream1.attributes().value("mac").toString();
-                            flag=true;
-                        }
-                        if(stream1.attributes().value("id").toString()!=""){
-                            htemp.id=stream1.attributes().value("id").toString();
-                            flag=true;
-                        }
-                        if(stream1.attributes().value("name").toString()!=""){
-                            htemp.name=stream1.attributes().value("name").toString();
-                            flag=true;
-                        }
-                        if(stream1.attributes().value("ip").toString()!=""){
-                            htemp.ip=stream1.attributes().value("ip").toString();
-                            flag=true;
-                        }
-                        if(flag){
-                            temp.dhcp.host.append(htemp);
-                            qDebug()<<stream1.name()<<" name:"<<stream1.attributes().value("name").toString();
-                        }
+                    if(stream1.name()=="dhcp"){
+                        qDebug()<<stream1.name();
+                        temp1.hasDhcp=true;
                         stream1.readNextStartElement();
-                        while(stream1.isEndElement())
+                        if(stream1.name()=="range"){
+                            temp1.dhcp.range.exist=true;
+                            temp1.dhcp.range.start=stream1.attributes().value("start").toString();
+                            temp1.dhcp.range.end=stream1.attributes().value("end").toString();
+                        }
+
+                        while ((stream1.name()=="host")&&(stream1.name()!="")&&(!stream1.atEnd())) {
+
+                            temp.dhcp.hasHost=true;
+                            bool flag=false;
+                            //HOST *htemp=new HOST();
+                            QString ip,mac,id,name;
+                            if((temp1.family=="ipv4")||(temp1.family=="")){
+                                mac=(stream1.attributes().value("mac").toString());
+                                flag=true;
+                            }
+                            if(stream1.attributes().value("id").toString()!=""){
+                                id=(stream1.attributes().value("id").toString());
+                                flag=true;
+                            }
+                            if(stream1.attributes().value("name").toString()!=""){
+                                name=(stream1.attributes().value("name").toString());
+                                flag=true;
+                            }
+                            if(stream1.attributes().value("ip").toString()!=""){
+                                ip=(stream1.attributes().value("ip").toString());
+                                flag=true;
+                            }
+                            if(flag){
+                                temp1.dhcp.host->addHost(HOST(id,mac,name,ip));
+                                qDebug()<<stream1.name()<<" name:"<<stream1.attributes().value("name").toString();
+                            }
                             stream1.readNextStartElement();
+                            while(stream1.isEndElement())
+                                stream1.readNextStartElement();
+                        }
                     }
+                    ip6=temp1;
+                    qDebug()<<ip6.dhcp.host->data(0,"name");
+                    qDebug()<<ip6.dhcp.host->data(1,"name");
+                    qDebug()<<ip6.dhcp.host->data(2,"name");
+                    qDebug()<<"size is:"<<ip6.dhcp.host->size();
                 }
-                ip.append(temp);
+                else if((stream1.attributes().value("family").toString()=="ipv4")||(stream1.attributes().value("family").toString()=="")){
+                    temp.exist=true;
+                    qDebug()<<"ip \n \n ip4 \n \n"<<ip4.exist;
+                    qDebug()<<"family:"<<(temp.family=stream1.attributes().value("family").toString());
+                    qDebug()<<"netmask"<<(temp.netmask=stream1.attributes().value("netmask").toString());
+                    if(stream1.attributes().value("address").toString()!=""){
+                        temp.address=stream1.attributes().value("address").toString();
+                        qDebug()<<"address"<<(temp.netmask=stream1.attributes().value("address").toString());
+                    }
+                    stream1.readNextStartElement();
+                    if(stream1.name()=="dhcp"){
+                        qDebug()<<stream1.name();
+                        temp.hasDhcp=true;
+                        stream1.readNextStartElement();
+                        if(stream1.name()=="range"){
+                            temp.dhcp.range.exist=true;
+                            temp.dhcp.range.start=stream1.attributes().value("start").toString();
+                            temp.dhcp.range.end=stream1.attributes().value("end").toString();
+                        }
+
+                        while ((stream1.name()=="host")&&(stream1.name()!="")&&(!stream1.atEnd())) {
+
+                            temp.dhcp.hasHost=true;
+                            bool flag=false;
+                            QString id,name,mac,ip;
+
+                            if((temp.family=="ipv4")||(temp.family=="")){
+                                mac=(stream1.attributes().value("mac").toString());
+                                flag=true;
+                            }
+                            if(stream1.attributes().value("id").toString()!=""){
+                                id=(stream1.attributes().value("id").toString());
+                                flag=true;
+                            }
+                            if(stream1.attributes().value("name").toString()!=""){
+                                name=(stream1.attributes().value("name").toString());
+                                flag=true;
+                            }
+                            if(stream1.attributes().value("ip").toString()!=""){
+                                ip=(stream1.attributes().value("ip").toString());
+                                flag=true;
+                            }
+                            if(flag){
+                                //explicit HOST(QString &id,QString &mac,QString &name,QString &ip);
+                                temp.dhcp.host->addHost(HOST(id,mac,name,ip));
+                                qDebug()<<stream1.name()<<" name:"<<stream1.attributes().value("name").toString();
+                            }
+                            stream1.readNextStartElement();
+                            while(stream1.isEndElement())
+                                stream1.readNextStartElement();
+                        }
+                    }
+                    ip4=temp;
+                }
                 continue;
             }
             else if(stream1.name()=="route"){
@@ -157,7 +240,7 @@ int networkxml::read(){
                 route.append(temp);
             }
         }
-        stream1.readNextStartElement();
+        stream1.readNext();
 
     }
     device->close();
@@ -211,39 +294,46 @@ int networkxml::write(){
         stream.writeEndElement();
     }
     int i=0;
-    while (i<ip.size()){
-        qDebug()<<"i="<<i;
-        IP Ip=ip.at(i);
-        if(Ip.hasDhcp){
-            qDebug()<<Ip.hasDhcp;
-            stream.writeStartElement("ip");
-            if(Ip.family!=NULL)
-                stream.writeAttribute("family", Ip.family);
-            stream.writeAttribute("address", Ip.address);
-            if(Ip.prefix!=NULL)
-                stream.writeAttribute("prefix", Ip.prefix);
-            if(Ip.netmask!=NULL)
-                stream.writeAttribute("netmask", Ip.netmask);
 
+    qDebug()<<"i="<<i;
+
+    if(ip4.exist){
+        //      IP4 Ip=*ip4;
+
+        qDebug()<<ip4.hasDhcp;
+        stream.writeStartElement("ip");
+        if(ip4.family!=NULL)
+            stream.writeAttribute("family", ip4.family);
+        stream.writeAttribute("address", ip4.address);
+        //            if(Ip.prefix!=NULL)
+        //                stream.writeAttribute("prefix", Ip.prefix);
+        if(ip4.netmask!=NULL)
+            stream.writeAttribute("netmask", ip4.netmask);
+        if(ip4.hasDhcp){
             stream.writeStartElement("dhcp");
-            if(Ip.dhcp.range.exist){
+            if(ip4.dhcp.range.exist){
                 stream.writeEmptyElement("range");
-                stream.writeAttribute("start", Ip.dhcp.range.start);
-                stream.writeAttribute("end", Ip.dhcp.range.end);
+                stream.writeAttribute("start", ip4.dhcp.range.start);
+                stream.writeAttribute("end", ip4.dhcp.range.end);
             }
-            if (Ip.dhcp.hasHost) {
+            if (ip4.dhcp.hasHost) {
                 int k=0;
-                while (Ip.dhcp.host.size()>k) {
-                    HOST Host=Ip.dhcp.host.at(k);
+                while (ip4.dhcp.host->rowCount()>k) {
+                    QString id,ip,name,mac;
+                    id=ip4.dhcp.host->data(k,"id");
+                    ip=ip4.dhcp.host->data(k,"ip");
+                    name=ip4.dhcp.host->data(k,"name");
+                    mac=ip4.dhcp.host->data(k,"mac");
+                    // HOST *Host=new HOST(id,name,mac,ip);
                     stream.writeEmptyElement("host");
-                    if(Host.id!=NULL)
-                        stream.writeAttribute("id", Host.id);
-                    if(Host.mac!=NULL)
-                        stream.writeAttribute("mac", Host.mac);
-                    if(Host.name!=NULL)
-                        stream.writeAttribute("name", Host.name);
-                    if(Host.ip!=NULL)
-                        stream.writeAttribute("ip", Host.ip);
+                    if(id!=NULL)
+                        stream.writeAttribute("id", id);
+                    if(mac!=NULL)
+                        stream.writeAttribute("mac",mac);
+                    if(name!=NULL)
+                        stream.writeAttribute("name", name);
+                    if(ip!=NULL)
+                        stream.writeAttribute("ip",ip);
                     k++;
                 }
 
@@ -252,18 +342,76 @@ int networkxml::write(){
             stream.writeEndElement();
         }
         else{
-            qDebug()<<Ip.hasDhcp;
+            qDebug()<<ip4.hasDhcp;
             stream.writeEmptyElement("ip");
-            if(Ip.family!=NULL)
-                stream.writeAttribute("family", Ip.family);
-            stream.writeAttribute("address", Ip.address);
-            if(Ip.prefix!=NULL)
-                stream.writeAttribute("prefix", Ip.prefix);
-            if(Ip.netmask!=NULL)
-                stream.writeAttribute("netmask", Ip.netmask);
+            if(ip4.family!=NULL)
+                stream.writeAttribute("family", ip4.family);
+            stream.writeAttribute("address", ip4.address);
+            //            if(Ip.prefix!=NULL)
+            //                stream.writeAttribute("prefix", Ip.prefix);
+            if(ip4.netmask!=NULL)
+                stream.writeAttribute("netmask", ip4.netmask);
         }
-        i++;
     }
+
+    if(ip6.exist){
+        //   IP6 Ip=ip6;
+
+        qDebug()<<ip6.hasDhcp;
+        stream.writeStartElement("ip");
+        if(ip6.family!=NULL)
+            stream.writeAttribute("family", ip6.family);
+        stream.writeAttribute("address", ip6.address);
+        if(ip6.prefix!=NULL)
+            stream.writeAttribute("prefix", ip6.prefix);
+        //            if(ip6.netmask!=NULL)
+        //                stream.writeAttribute("netmask", ip6.netmask);
+        if(ip6.hasDhcp){
+            stream.writeStartElement("dhcp");
+            if(ip6.dhcp.range.exist){
+                stream.writeEmptyElement("range");
+                stream.writeAttribute("start", ip6.dhcp.range.start);
+                stream.writeAttribute("end", ip6.dhcp.range.end);
+            }
+            if (ip6.dhcp.hasHost) {
+                int k=0;
+
+                while (ip6.dhcp.host->rowCount()>k) {
+                    QString id,ip,name,mac;
+                    id=ip6.dhcp.host->data(k,"id");
+                    ip=ip6.dhcp.host->data(k,"ip");
+                    name=ip6.dhcp.host->data(k,"name");
+                    mac=ip6.dhcp.host->data(k,"mac");
+                    stream.writeEmptyElement("host");
+                    if(id!=NULL)
+                        stream.writeAttribute("id", id);
+                    if(mac!=NULL)
+                        stream.writeAttribute("mac",mac);
+                    if(name!=NULL)
+                        stream.writeAttribute("name", name);
+                    if(ip!=NULL)
+                        stream.writeAttribute("ip",ip);
+                    k++;
+                }
+
+            }
+            stream.writeEndElement();
+            stream.writeEndElement();
+        }
+        else{
+            qDebug()<<ip6.hasDhcp;
+            stream.writeEmptyElement("ip");
+            if(ip6.family!=NULL)
+                stream.writeAttribute("family", ip6.family);
+            stream.writeAttribute("address", ip6.address);
+            if(ip6.prefix!=NULL)
+                stream.writeAttribute("prefix", ip6.prefix);
+            //            if(ip6.netmask!=NULL)
+            //                stream.writeAttribute("netmask", ip6.netmask);
+        }
+    }
+
+
 
     i=0;
     while (route.size()>i){

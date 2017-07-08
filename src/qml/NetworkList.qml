@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls.Material 2.0
 
 
-Item {
+Rectangle {
     signal errorm();
     Rectangle {
         anchors.fill: parent
@@ -16,6 +16,7 @@ Item {
         id: listView
         anchors.topMargin: 50
         anchors.fill: parent
+        clip: true
 
         delegate: detailsDelegate
 

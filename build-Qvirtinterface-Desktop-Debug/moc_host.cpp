@@ -1,16 +1,16 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'sqlquerymodel.h'
+** Meta object code from reading C++ file 'host.h'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../src/sqlquerymodel.h"
+#include "../src/host.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'sqlquerymodel.h' doesn't include <QObject>."
+#error "The header file 'host.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.9.0. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -20,28 +20,27 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_SqlQueryModel_t {
-    QByteArrayData data[4];
-    char stringdata0[25];
+struct qt_meta_stringdata_HostModel_t {
+    QByteArrayData data[3];
+    char stringdata0[16];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_SqlQueryModel_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_HostModel_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_SqlQueryModel_t qt_meta_stringdata_SqlQueryModel = {
+static const qt_meta_stringdata_HostModel_t qt_meta_stringdata_HostModel = {
     {
-QT_MOC_LITERAL(0, 0, 13), // "SqlQueryModel"
-QT_MOC_LITERAL(1, 14, 3), // "get"
-QT_MOC_LITERAL(2, 18, 0), // ""
-QT_MOC_LITERAL(3, 19, 5) // "index"
+QT_MOC_LITERAL(0, 0, 9), // "HostModel"
+QT_MOC_LITERAL(1, 10, 4), // "size"
+QT_MOC_LITERAL(2, 15, 0) // ""
 
     },
-    "SqlQueryModel\0get\0\0index"
+    "HostModel\0size\0"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_SqlQueryModel[] = {
+static const uint qt_meta_data_HostModel[] = {
 
  // content:
        7,       // revision
@@ -55,49 +54,49 @@ static const uint qt_meta_data_SqlQueryModel[] = {
        0,       // signalCount
 
  // methods: name, argc, parameters, tag, flags
-       1,    1,   19,    2, 0x02 /* Public */,
+       1,    0,   19,    2, 0x02 /* Public */,
 
  // methods: parameters
-    QMetaType::QVariantMap, QMetaType::Int,    3,
+    QMetaType::QString,
 
        0        // eod
 };
 
-void SqlQueryModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void HostModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        SqlQueryModel *_t = static_cast<SqlQueryModel *>(_o);
+        HostModel *_t = static_cast<HostModel *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: { QVariantMap _r = _t->get((*reinterpret_cast< int(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< QVariantMap*>(_a[0]) = std::move(_r); }  break;
+        case 0: { QString _r = _t->size();
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
     }
 }
 
-const QMetaObject SqlQueryModel::staticMetaObject = {
-    { &QSqlQueryModel::staticMetaObject, qt_meta_stringdata_SqlQueryModel.data,
-      qt_meta_data_SqlQueryModel,  qt_static_metacall, nullptr, nullptr}
+const QMetaObject HostModel::staticMetaObject = {
+    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_HostModel.data,
+      qt_meta_data_HostModel,  qt_static_metacall, nullptr, nullptr}
 };
 
 
-const QMetaObject *SqlQueryModel::metaObject() const
+const QMetaObject *HostModel::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *SqlQueryModel::qt_metacast(const char *_clname)
+void *HostModel::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_SqlQueryModel.stringdata0))
-        return static_cast<void*>(const_cast< SqlQueryModel*>(this));
-    return QSqlQueryModel::qt_metacast(_clname);
+    if (!strcmp(_clname, qt_meta_stringdata_HostModel.stringdata0))
+        return static_cast<void*>(const_cast< HostModel*>(this));
+    return QAbstractListModel::qt_metacast(_clname);
 }
 
-int SqlQueryModel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int HostModel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QSqlQueryModel::qt_metacall(_c, _id, _a);
+    _id = QAbstractListModel::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
