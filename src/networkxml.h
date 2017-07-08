@@ -3,9 +3,10 @@
 
 #include <QDebug>
 #include <QString>
-#include <QVector>
+#include <QVariantList>
 #include <QIODevice>
 #include <QXmlStreamReader>
+#include <host.h>
 
 struct Nat{
     QString start;
@@ -34,29 +35,39 @@ struct bw{
     Qos inbound;
     Qos outbound;
 };
-struct HOST{
-    QString id=NULL;
-    QString mac=NULL;
-    QString name=NULL;
-    QString ip=NULL;
-};
+
 struct Dhcp{
     struct Range{
         bool exist=false;
-        QString start=NULL;
+        QString start;
         QString end;
     }range;
     bool hasHost;
-    QVector<HOST> host;
+    HostModel *host=new HostModel();
 };
-struct IP
+struct IP4
 {
+    bool exist=false;
     QString family=NULL;
     QString address;
-    QString prefix=NULL;
     QString netmask=NULL;
     bool hasDhcp;
     Dhcp dhcp;
+    IP4(){
+
+    }
+};
+struct IP6
+{
+    bool exist=false;
+    QString family=NULL;
+    QString address;
+    QString prefix=NULL;
+    bool hasDhcp;
+    Dhcp dhcp;
+    IP6(){
+
+    }
 };
 struct Route{
     QString family=NULL;
@@ -75,15 +86,32 @@ public:
     Forward forward;
     Bridge bridge;
     bw bandwidth;
-    QVector<IP>ip;
-    QVector<Route> route;
-
+    IP4 ip4;
+    IP6 ip6;
+    QList<Route> route;
     QIODevice *device;
 public:
-    networkxml(){
 
+
+    networkxml(networkxml const &temp){
+        name=temp.name;
+        isforwardExist=temp.isforwardExist;
+        forward=temp.forward;
+        bridge=temp.bridge;
+        bandwidth=temp.bandwidth;
+        ip4=temp.ip4;
+        ip6=temp.ip6;
+        route=temp.route;
+        device=temp.device;
     }
+    networkxml(){
+        isforwardExist=false;
+        bridge.exist=false;
+        bandwidth.exist=false;
+    }
+
     void setnet(networkxml temp);
+    void setXml(QIODevice *dev);
     networkxml(QIODevice *dev);
     int read();
     int write();

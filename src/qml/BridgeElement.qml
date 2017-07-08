@@ -18,7 +18,7 @@ Rectangle{
                     width: bridge.width/2
                     height: bridge.height/8
                     Row{
-                                            anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenter: parent.verticalCenter
                         spacing: 20
                         id: bridge_name
                         Text {
@@ -38,7 +38,7 @@ Rectangle{
                     width: bridge.width/2
                     height: bridge.height/8
                     Row{
-                                            anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenter: parent.verticalCenter
                         spacing: 20
                         id: bridge_stp
                         Text {
@@ -58,7 +58,7 @@ Rectangle{
             width: bridge.width/2
             height: bridge.height/8
             Row{
-                                    anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: parent.verticalCenter
                 spacing: 20
                 id: bridge_Delay
                 Text {

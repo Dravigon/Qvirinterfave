@@ -8,17 +8,17 @@ Rectangle{
         function showlist(){
             list.visible=true;
             newvm.visible=false;
-            list2.visible=false;
+            netlist.visible=false;
         }
         function showNetlist(){
-            list2.visible=true;
+            netlist.visible=true;
             list.visible=false;
             newvm.visible=false;
         }
         function shownewvm(){
             list.visible=false;
             newvm.visible=true;
-            list2.visible=false;
+            netlist.visible=false;
         }
         Errormessage{
             id:err
@@ -67,7 +67,8 @@ Rectangle{
                 onClicked: flipable.flipped = !flipable.flipped;
             }
             visible: false
-            id:list2
+            id:netlist
             anchors.fill: parent
+
         }
     }

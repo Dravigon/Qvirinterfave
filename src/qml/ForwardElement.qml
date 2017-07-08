@@ -22,7 +22,7 @@ Rectangle{
                     width: forward.width/2
                     height: forward.height/8
                     Row{
-                                            anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenter: parent.verticalCenter
                         spacing: 20
                         id: forward_mode
                         Text {
@@ -34,7 +34,8 @@ Rectangle{
                             id: forward_mode_text
                             text: forwardMode
                             onTextChanged:{
-                            console.log(forward_mode_text.text+ "index "+index+"but actual text "+forwardMode+"return on setdata "+network_list.set_data(index,forward_mode_text.text,"forwardMode"))
+                                //anyone who can find error in the below statement is a qml god
+                                //console.log(forward_mode_text.text+ "index "+index+"but actual text "+forwardMode+"return on setdata "+network_list.set_data(index,forward_mode_text.text,"forwardMode"))
                             }
                         }
                     }
@@ -45,7 +46,7 @@ Rectangle{
                     width: forward.width/2
                     height: forward.height/8
                     Row{
-                                            anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenter: parent.verticalCenter
                         spacing: 20
                         id: forward_dev
                         Text {
@@ -67,7 +68,7 @@ Rectangle{
             color: "yellow"
 
             Row{
-                                    anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: parent.verticalCenter
                 spacing: 20
                 id: nat
                 Column{
@@ -81,7 +82,7 @@ Rectangle{
                         spacing: 20
                         Text {
                             id: nat_port_id
-                          //  anchors.horizontalCenter: parent.horizontalCenter
+                            //  anchors.horizontalCenter: parent.horizontalCenter
                             text: qsTr("Port:")
                             font.pixelSize: 20
                         }
@@ -96,7 +97,6 @@ Rectangle{
                             }
                         }
                         Column{
-
                             Text {
                                 id: nat_port_end_id
                                 text: qsTr("end")

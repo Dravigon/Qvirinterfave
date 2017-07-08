@@ -11,47 +11,18 @@
 class Network//for objects for model
 {
 public:
-  networkxml netxml;
+networkxml netxml;
   virNetworkPtr m_net;
   bool editable=false;
-  Network(const int &id, virNetworkPtr dom);
+  Network(const int &id,const virNetworkPtr &dom);
   int id() const;//for indexing
   QString name() const;//for Network name
-//  bool forwardExist() const;
-//  QString forwardMode() const;
-//  QString forwardDev() const;
-//  bool natDefined() const;
-//  QString natStart() const;
-//  QString natEnd() const;
-//  bool bridgeExist() const;
-//  QString bridgeName() const;
-//  QString bridgeStp() const;
-//  QString bridgeDelay() const;
-//  bool bandwidthExist() const;
-//  QString bandwidthInboundAverage() const;
-//  QString bandwidthInboundPeak() const;
-//  QString bandwidthInboundBurst() const;
-//  QString bandwidthOutboundAverage() const;
-//  QString bandwidthOutboundPeak() const;
-//  QString bandwidthOutboundBurst() const;
-//  int ipSize() const;
-//  QString ipFamily() const;
-//  QString ipAddress() const;
-//  QString ipPrefix() const;
-//  QString ipNetwask() const;
-//  QString ipDhcpExist() const;
-//  bool dhcpRangeExist() const;
-//  QString dhcpRangeStart() const;
-//  QString dhcpRangeEnd() const;
-//  bool dhcpHasHost() const;
-//  int dhcpHostSize() const;
-//  QString dhcpId() const;
-//  QString dhcpMac() const;
-//  QString dhcpName() const;
-//  QString dhcpIp() const;
+
+
 private:
   int m_id;
   QString m_name=NULL;
+
 
 };
 
@@ -85,21 +56,35 @@ public:
       BandWidthOutboundAverageRole=Qt::UserRole + 16,
       BandWidthOutboundPeakRole=Qt::UserRole + 17,
       BandwidthOutboundBurstRole=Qt::UserRole + 18,
-      IpSizeRole=Qt::UserRole + 19,
-      IpFamilyRole=Qt::UserRole + 20,
-      IpAddressRole=Qt::UserRole + 21,
-      IpPrefixRole=Qt::UserRole + 22,
-      IpNetmaskRole=Qt::UserRole + 23,
-      IpDhcpExistRole=Qt::UserRole + 24,
-      DhcpRangeExistRole=Qt::UserRole + 25,
-      DhcpRangeStartRole=Qt::UserRole + 26,
-      DhcpRangeEndRole=Qt::UserRole + 27,
-      DhcpHasHostRole=Qt::UserRole + 28,
-      DhcpHostSizeRole=Qt::UserRole + 29,
-      DhcpIdRole=Qt::UserRole + 30,
-      DhcpMacRole=Qt::UserRole + 31,
-      DhcpNameRole=Qt::UserRole + 32,
-      DhcpIpRole=Qt::UserRole + 33,
+      Ip4ExistRole=Qt::UserRole + 19,
+      Ip4FamilyRole=Qt::UserRole + 20,
+      Ip4AddressRole=Qt::UserRole + 21,
+      Ip4NetmaskRole=Qt::UserRole + 23,
+      Ip4DhcpExistRole=Qt::UserRole + 24,
+      Ip6ExistRole=Qt::UserRole + 25,
+      Ip6FamilyRole=Qt::UserRole + 26,
+      Ip6AddressRole=Qt::UserRole + 27,
+      Ip6PrefixRole=Qt::UserRole + 28,
+      Ip6DhcpExistRole=Qt::UserRole + 29,
+      Ip4DhcpRangeExistRole=Qt::UserRole + 30,
+      Ip4DhcpRangeStartRole=Qt::UserRole + 31,
+      Ip4DhcpRangeEndRole=Qt::UserRole + 32,
+      Ip4DhcpHasHostRole=Qt::UserRole + 33,
+      Ip4DhcpHostModelRole=Qt::UserRole + 34,//      Ip4DhcpHostSizeRole=Qt::UserRole + 34,
+
+      Ip4DhcpIdRole=Qt::UserRole + 34,
+      Ip4DhcpMacRole=Qt::UserRole + 35,
+      Ip4DhcpNameRole=Qt::UserRole + 36,
+      Ip4DhcpIpRole=Qt::UserRole + 37,
+      Ip6DhcpRangeExistRole=Qt::UserRole + 38,
+      Ip6DhcpRangeStartRole=Qt::UserRole + 39,
+      Ip6DhcpRangeEndRole=Qt::UserRole + 40,
+      Ip6DhcpHasHostRole=Qt::UserRole + 41,
+      Ip6DhcpHostSizeRole=Qt::UserRole + 42,
+      Ip6DhcpIdRole=Qt::UserRole + 43,
+      Ip6DhcpMacRole=Qt::UserRole + 44,
+      Ip6DhcpNameRole=Qt::UserRole + 45,
+      Ip6DhcpIpRole=Qt::UserRole + 46,
 
   };
 

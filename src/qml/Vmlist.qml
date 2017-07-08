@@ -18,6 +18,7 @@ Item {
         id: listView
         anchors.topMargin: 50
         anchors.fill: parent
+        clip: true
 
         delegate: detailsDelegate
         model: domain_list
