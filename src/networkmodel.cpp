@@ -179,10 +179,11 @@ QVariant NetworkModel::data(const QModelIndex & index, int role) const {
 
 bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-       qDebug()<<"\ncalled set data before and index recived "<<index.row()<<"\ncount is "<<m_network.count()<<"value recieved"<<value.toString()<<" role is "<<roleNames()[role];
+       qDebug()<<"\ncalled set data before and index recived "<<index.row()<<"\ncount is "<<m_network.count()<<"value recieved"<<value.toString()<<" role is "<<role;
     if (index.row() < 0 || index.row() > m_network.count())
         return false;
     qDebug()<<"\ncalled set data \n";
+    qDebug()<<"role no of model is:"<<ForwardModeRole;
      Network network = m_network[index.row()];
     if (role == IdRole)
         return network.id();
@@ -190,8 +191,10 @@ bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int 
         network.netxml.name=value.toString();
     else if (role == ForwardExistRole)
         network.netxml.isforwardExist=value.toBool();
-    else if (role == ForwardModeRole)
+    else if (role == ForwardModeRole){
+        qDebug()<<"\ncalled set mode \n";
         network.netxml.forward.mode=value.toString();
+    }
     else if (role == ForwardDevRole)
         network.netxml.forward.dev=value.toString();
     else if ( role == NatDefinedRole)
@@ -225,16 +228,12 @@ bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int 
          network.netxml.bandwidth.outbound.peak=value.toString();
 //    else if( role == IpSizeRole)
 //         return false;
-//    else if(role == IpFamilyRole)
-//         network.netxml.ip[m_IpIndex].family=value.toString();
-//    else if(role == IpAddressRole)
-//         network.netxml.ip[m_IpIndex].address=value.toString();
-//    else if(role == IpPrefixRole)
-//         network.netxml.ip[m_IpIndex].prefix=value.toString();
-//    else if(role == IpNetmaskRole)
-//         network.netxml.ip[m_IpIndex].netmask=value.toString();
-//    else if(role == IpDhcpExistRole)
-//         network.netxml.ip[m_IpIndex].hasDhcp=value.toBool();
+    else if(role == Ip4AddressRole)
+         network.netxml.ip4.address=value.toString();
+    else if(role == Ip4NetmaskRole)
+         network.netxml.ip4.netmask=value.toString();
+    else if(role == Ip4DhcpExistRole)
+         network.netxml.ip4.hasDhcp=value.toBool();
 //    else if(role == DhcpRangeExistRole)
 //         network.netxml.ip[m_IpIndex].dhcp.range.exist=value.toBool();
 //    else if(role == DhcpRangeStartRole)
@@ -268,6 +267,7 @@ QString NetworkModel::task(QString task, int index)
         }
     }
     else if(task=="stop"){
+        qDebug()<<"OMG!!!!! "<<virNetworkGetName(m_network.at(index).m_net);
         if((virNetworkIsActive(m_network.at(index).m_net))){
             virNetworkDestroy(m_network.at(index).m_net);
             ret="stopped";
@@ -299,7 +299,7 @@ QHash<int, QByteArray> NetworkModel::roleNames() const {
     roles[IdRole] = "id";
     roles[NameRole] = "name";
     roles[ForwardExistRole]="forwardExist";
-    roles[ForwardModeRole]="forwardMode";
+   roles[ForwardModeRole]="forwardMode";
     roles[ForwardDevRole]="forwardDev";
     roles[NatDefinedRole]="natDefined";
     roles[NatStartRole]="natStart";

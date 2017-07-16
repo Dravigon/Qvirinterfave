@@ -34,6 +34,7 @@ Rectangle{
                             id: forward_mode_text
                             text: forwardMode
                             onTextChanged:{
+                                network_list.set_data(index,forward_mode_text.text,"forwardMode")
                                 //anyone who can find error in the below statement is a qml god
                                 //console.log(forward_mode_text.text+ "index "+index+"but actual text "+forwardMode+"return on setdata "+network_list.set_data(index,forward_mode_text.text,"forwardMode"))
                             }

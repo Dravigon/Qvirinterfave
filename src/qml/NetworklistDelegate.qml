@@ -18,12 +18,12 @@ Component {
         height: 80
 
 
-        Timer {//for dynamically getting the State of the VM
+        Timer {//for dynamically getting the State of the network
             id:statetimer
-            interval: 1000; running: true; repeat: true
+            interval: 5000; running: true; repeat: true
             onTriggered:{ if(i>0)wrapper.state=network_list.task("state",index);
                 i++;
-                console.log("host_size:"+ip4DhcpHostModel.size())
+        //        console.log("host_size:"+ip4DhcpHostModel.size())
             }
             onRunningChanged: i=0;
         }
@@ -168,7 +168,12 @@ Component {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: wrapper.state = ""
+                onClicked: {wrapper.state = ""
+                    if(!network_list.setXmlData(index)){
+                        err.errormessage=host.err()
+                        err.open();
+                    }
+                }
             }
         }
 

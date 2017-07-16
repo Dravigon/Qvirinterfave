@@ -2,6 +2,7 @@
 #define NETWORKXML_H
 
 #include <QDebug>
+#include <QBuffer>
 #include <QString>
 #include <QVariantList>
 #include <QIODevice>
@@ -90,9 +91,6 @@ public:
     IP6 ip6;
     QList<Route> route;
     QIODevice *device;
-public:
-
-
     networkxml(networkxml const &temp){
         name=temp.name;
         isforwardExist=temp.isforwardExist;
@@ -114,7 +112,7 @@ public:
     void setXml(QIODevice *dev);
     networkxml(QIODevice *dev);
     int read();
-    int write();
+    QString write();
 };
 
 #endif // NETWORKXML_H

@@ -68,7 +68,10 @@ Rectangle{
                 }
                 TextField{
                     id: bridge_delay_text
-                    text: bridgeStp
+                    text: bridgeDelay
+                    onTextChanged: {
+                        network_list.set_data(index,bridge_delay_text.text,"bridgeDelay")
+                    }
                 }
             }
         }

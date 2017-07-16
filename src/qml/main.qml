@@ -15,6 +15,9 @@ ApplicationWindow {
         id:err
         x:parent.width/2-160;
         y:parent.height/2-100;
+        onOpened: {
+            errormessage=host.err();
+        }
     }
 
     Login{

@@ -41,6 +41,10 @@ Rectangle {
                         TextField{
                             id: addr_textField
                             text: qsTr(ip4Address)
+                            onTextChanged: {
+                                console.log("blosck")
+                                network_list.set_data(index,addr_textField.text,"ip4Address")
+                            }
                         }
                     }
                     Row{
@@ -58,54 +62,52 @@ Rectangle {
 
                 Column{
                     spacing: 20
-                Row{
-                    visible: ip4DhcpExist
-                    spacing:20
-                    Text {
-                        id: dhcp_text
-                        text: qsTr("Dhcp:")
-                        font.pixelSize: 20
-                    }
-                    ColumnLayout{
-                        visible: ip4DhcpRangeExist
-
-                        Row{
-                            Text {
-                                id: ip4_dhcp_start
-                                text: qsTr("Range Start: ")
-                                font.pixelSize: 20
-
-                            }
-                            TextField{
-                                id:ip4_dhcp_start_text
-                                text:ip4DhcpRangeStart
-                            }
+                    Row{
+                        visible: ip4DhcpExist
+                        spacing:20
+                        Text {
+                            id: dhcp_text
+                            text: qsTr("Dhcp:")
+                            font.pixelSize: 20
                         }
+                        ColumnLayout{
+                            visible: ip4DhcpRangeExist
 
-                        Row{
-                            Text {
-                                id: ip4_dhcp_end
-                                text: qsTr("Range End: ")
-                                font.pixelSize: 20
+                            Row{
+                                Text {
+                                    id: ip4_dhcp_start
+                                    text: qsTr("Range Start: ")
+                                    font.pixelSize: 20
 
+                                }
+                                TextField{
+                                    id:ip4_dhcp_start_text
+                                    text:ip4DhcpRangeStart
+                                }
                             }
-                            TextField{
-                                id:ip4_dhcp_end_text
-                                text:ip4DhcpRangeEnd
+
+                            Row{
+                                Text {
+                                    id: ip4_dhcp_end
+                                    text: qsTr("Range End: ")
+                                    font.pixelSize: 20
+
+                                }
+                                TextField{
+                                    id:ip4_dhcp_end_text
+                                    text:ip4DhcpRangeEnd
+                                }
                             }
+
                         }
-
+                    }
+                    Button {
+                        visible: ip4DhcpHasHost
+                        id: button
+                        text: qsTr("Hosts")
+                        onClicked: hosts_popup.open()
                     }
                 }
-                Button {
-                    visible: ip4DhcpHasHost
-                    id: button
-                    text: qsTr("Hosts")
-                    onClicked: hosts_popup.open()
-                }
-
-                }
-
             }
         }
 
@@ -115,6 +117,7 @@ Rectangle {
             height: ip4DhcpHostModel.size()*50+20
             width: ip_root.width/1.4
             Rectangle{
+                visible: ip4DhcpHasHost
                 radius: 0.5
                 height: ip4DhcpHostModel.size()*50
                 width: ip_root.width/1.4-20
