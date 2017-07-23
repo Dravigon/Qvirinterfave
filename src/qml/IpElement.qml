@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.3
 Rectangle {
     id:ip_root
 
-
+//ip4 elements display
     Rectangle {
         height: parent.height
         anchors.margins: 20
@@ -20,6 +20,7 @@ Rectangle {
                 Column{
                     spacing:30
                     Row{
+                        //unneccesary from here
                         Text {
                             id: fam
                             text: qsTr("Family: ")
@@ -29,7 +30,11 @@ Rectangle {
                         TextField {
                             id: fam_textField
                             text: qsTr(ip4Family===""?"ip4":ip4Family)
+                            onTextChanged: {
+                                network_list.set_data(index,fam_textField.text,"ip4Family")
+                            }
                         }
+                        //till this since it is fixed for ip4
                     }
                     Row{
                         Text {
@@ -56,6 +61,9 @@ Rectangle {
                         TextField{
                             id: netmask_textField
                             text: ip4Netmask
+                            onTextChanged: {
+                                network_list.set_data(index,netmask_textField.text,"ip4Netmask")
+                            }
                         }
                     }
                 }
@@ -83,6 +91,9 @@ Rectangle {
                                 TextField{
                                     id:ip4_dhcp_start_text
                                     text:ip4DhcpRangeStart
+                                    onTextChanged: {
+                                        network_list.set_data(index,ip4_dhcp_start_text.text,"ip4DhcpRangeStart")
+                                    }
                                 }
                             }
 
@@ -96,6 +107,9 @@ Rectangle {
                                 TextField{
                                     id:ip4_dhcp_end_text
                                     text:ip4DhcpRangeEnd
+                                    onTextChanged: {
+                                        network_list.set_data(index,ip4_dhcp_end_text.text,"ip4DhcpRangeEnd")
+                                    }
                                 }
                             }
 
@@ -130,6 +144,9 @@ Rectangle {
                     anchors.fill: parent
                     model: ip4DhcpHostModel
                     delegate:HostDelegateItem{
+                    }
+                    onModelChanged: {
+                        network_list.set_data(index,listView.model,"ip4DhcpHostModel")
                     }
                 }
             }

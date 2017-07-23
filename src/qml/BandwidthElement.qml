@@ -38,6 +38,9 @@ Rectangle{
                         TextField{
                             id: inbound_bandwidth_average_text
                             text: bandwidthInboundAverage
+                            onTextChanged: {
+                                network_list.set_data(index,inbound_bandwidth_average_text.text,"bandwidthInboundAverage")
+                            }
                         }
                     }
                 }
@@ -58,6 +61,9 @@ Rectangle{
                         TextField{
                             id: inbound_bandwidth_peak_text
                             text: bandwidthInboundPeak
+                            onTextChanged: {
+                                network_list.set_data(index,inbound_bandwidth_peak_text.text,"bandwidthInboundPeak")
+                            }
                         }
                     }
                 }
@@ -78,6 +84,9 @@ Rectangle{
                         TextField{
                             id: inbound_bandwidth_burst_text
                             text: bandwidthInboundBurst
+                            onTextChanged: {
+                                network_list.set_data(index,inbound_bandwidth_burst_text.text,"bandwidthInboundBurst")
+                            }
                         }
                     }
                 }
@@ -114,6 +123,9 @@ Rectangle{
                         TextField{
                             id: outbound_bandwidth_average_text
                             text: bandwidthOutboundAverage
+                            onTextChanged: {
+                                network_list.set_data(index,outbound_bandwidth_average_text.text,"bandwidthOutboundAverage")
+                            }
                         }
                     }
                 }
@@ -134,6 +146,9 @@ Rectangle{
                         TextField{
                             id: outbound_bandwidth_peak_text
                             text: bandwidthOutboundPeak
+                            onTextChanged: {
+                                network_list.set_data(index,outbound_bandwidth_average_text.text,"bandwidthOutboundPeak")
+                            }
                         }
                     }
                 }
@@ -154,6 +169,9 @@ Rectangle{
                         TextField{
                             id: outbound_bandwidth_burst_text
                             text: bandwidthOutboundBurst
+                            onTextChanged: {
+                                network_list.set_data(index,outbound_bandwidth_burst_text.text,"bandwidthOutboundBurst")
+                            }
                         }
                     }
                 }

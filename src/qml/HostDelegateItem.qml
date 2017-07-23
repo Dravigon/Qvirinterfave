@@ -20,23 +20,36 @@ Component {
             Text {
                 id: host_mac
                 text: qsTr("Mac")
+
             }
             TextField{
+                id: host_mac_text
                 text: mac
+                onTextChanged:  {
+                    ip4DhcpHostModel.set_data(index,host_mac_text.text,"mac")
+                }
             }
             Text {
                 id: host_id
                 text: qsTr("Id")
             }
             TextField{
+                id: host_id_text
                 text: id
+                onTextChanged:  {
+                    ip4DhcpHostModel.set_data(index,host_id_text.text,"id")
+                }
             }
             Text {
                 id: host_ip
                 text: qsTr("IP")
             }
             TextField{
+                id: host_ip_text
                 text: ip
+                onTextChanged:  {
+                    ip4DhcpHostModel.set_data(index,host_ip_text.text,"id")
+                }
             }
         }
 

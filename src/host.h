@@ -41,6 +41,9 @@ public:
     };
 
     HostModel(QObject *parent = 0);
+    HostModel(const HostModel &parent){
+        this->m_hosts=parent.m_hosts;
+    }
 
     void addHost(const HOST &host);
 
@@ -52,10 +55,11 @@ public:
         return QString::number(m_hosts.length());
     }
 
+
 protected:
     QHash<int, QByteArray> roleNames() const;
 private:
     QList<HOST> m_hosts;
 };
-
+Q_DECLARE_METATYPE(HostModel)
 #endif // HOST_H

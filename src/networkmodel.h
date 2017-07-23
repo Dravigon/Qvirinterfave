@@ -19,18 +19,22 @@ public:
     QString name() const;//for Network name
     bool setXmlData() {
         virConnectPtr temp = virNetworkGetConnect(m_net);
-//        virNetworkDestroy(m_net);
-//        virNetworkFree(m_net);
+        virNetworkPtr netTemp=m_net;
         virNetworkUndefine(m_net);
-        qDebug()<<"WELL THIS IS"<<netxml.write().toStdString().c_str();
+      //  qDebug()<<"WELL THIS IS"<<netxml.write().toStdString().c_str();
         if(((m_net)=virNetworkDefineXML(temp,netxml.write().toStdString().c_str()))!=NULL){
 
             if(virNetworkCreate(m_net)==0){
-                qDebug()<<"name:"<<virNetworkGetName(m_net);
+        //        qDebug()<<"name:"<<virNetworkGetName(m_net);
+                if(virNetworkIsActive(m_net)){
+                    virNetworkDestroy(m_net);
+                }
                 return true;
             }
-            else
+            else{
+                virNetworkCreate(netTemp);
                 return false;
+            }
         }
         else
             return false;
@@ -74,7 +78,9 @@ public:
         BandWidthOutboundPeakRole=  17,
         BandwidthOutboundBurstRole=  18,
         Ip4ExistRole=  19,
+        //20 is not necessary
         Ip4FamilyRole=  20,
+        //remove 20
         Ip4AddressRole=  21,
         Ip4NetmaskRole=  23,
         Ip4DhcpExistRole=  24,
@@ -88,20 +94,12 @@ public:
         Ip4DhcpRangeEndRole=  32,
         Ip4DhcpHasHostRole=  33,
         Ip4DhcpHostModelRole=  34,//      Ip4DhcpHostSizeRole=  34,
+        Ip6DhcpRangeExistRole=  35,
+        Ip6DhcpRangeStartRole=  36,
+        Ip6DhcpRangeEndRole=  37,
+        Ip6DhcpHasHostRole=  38,
+        Ip6DhcpHostModelRole=39
 
-        Ip4DhcpIdRole=  34,
-        Ip4DhcpMacRole=  35,
-        Ip4DhcpNameRole=  36,
-        Ip4DhcpIpRole=  37,
-        Ip6DhcpRangeExistRole=  38,
-        Ip6DhcpRangeStartRole=  39,
-        Ip6DhcpRangeEndRole=  40,
-        Ip6DhcpHasHostRole=  41,
-        Ip6DhcpHostSizeRole=  42,
-        Ip6DhcpIdRole=  43,
-        Ip6DhcpMacRole=  44,
-        Ip6DhcpNameRole=  45,
-        Ip6DhcpIpRole=  46,
 
     };
 

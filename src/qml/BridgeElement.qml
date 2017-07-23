@@ -29,6 +29,9 @@ Rectangle{
                         TextField{
                             id: bridge_name_text
                             text: bridgeName
+                            onTextChanged: {
+                                network_list.set_data(index,bridge_name_text.text,"bridgeName")
+                            }
                         }
                     }
                 }
@@ -49,6 +52,9 @@ Rectangle{
                         TextField{
                             id: bridge_stp_text
                             text: bridgeStp
+                            onTextChanged: {
+                                network_list.set_data(index,bridge_stp_text.text,"bridgeStp")
+                            }
                         }
                     }
                 }

@@ -58,6 +58,9 @@ Rectangle{
                         TextField{
                             id: forward_dev_text
                             text: forwardDev
+                            onTextChanged: {
+                                network_list.set_data(index,forward_dev_text.text,"forwardDev")
+                            }
                         }
                     }
                 }
@@ -94,7 +97,11 @@ Rectangle{
                                 font.pixelSize: 20
                             }
                             TextField{
+                                id: nat_port_start_id_text
                                 text: natStart
+                                onTextChanged: {
+                                    network_list.set_data(index,nat_port_start_id_text.text,"natStart")
+                                }
                             }
                         }
                         Column{
@@ -104,7 +111,11 @@ Rectangle{
                                 font.pixelSize: 20
                             }
                             TextField{
+                                id: nat_port_end_id_text
                                 text: natEnd
+                                onTextChanged: {
+                                    network_list.set_data(index,nat_port_end_id_text.text,"natEnd")
+                                }
                             }
                         }
                     }

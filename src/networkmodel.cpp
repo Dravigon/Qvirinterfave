@@ -67,9 +67,7 @@ void NetworkModel::addNetworks()
         while(networks[i]){
             qDebug()<<i<<"network "<<virNetworkGetName(networks[i])<<"0.2"<<"\n row count="<<rowCount();
             if((i+1)>rowCount()){
-       //         qDebug()<<i<<">"<<rowCount();
-           //     qDebug()<<"\n\nxml:"<<QString::fromUtf8(virNetworkGetXMLDesc(networks[i],VIR_NETWORK_XML_INACTIVE));
-                beginInsertRows(QModelIndex(), rowCount(), rowCount());
+                       beginInsertRows(QModelIndex(), rowCount(), rowCount());
                 m_network.append(*new Network(i,networks[i]));
                 endInsertRows();
             }
@@ -166,6 +164,17 @@ QVariant NetworkModel::data(const QModelIndex & index, int role) const {
         return network.netxml.ip4.dhcp.hasHost;
     else if(role == Ip4DhcpHostModelRole)
         return QVariant::fromValue(network.netxml.ip4.dhcp.host);//testing
+
+    else if(role == Ip6DhcpRangeExistRole)
+        return network.netxml.ip6.dhcp.range.exist;
+    else if(role == Ip6DhcpRangeStartRole)
+        return  network.netxml.ip6.dhcp.range.start;
+    else if(role == Ip6DhcpRangeEndRole)
+        return  network.netxml.ip6.dhcp.range.end;
+    else if(role == Ip6DhcpHasHostRole)
+        return network.netxml.ip6.dhcp.hasHost;
+    else if(role == Ip6DhcpHostModelRole)
+        return QVariant::fromValue(network.netxml.ip6.dhcp.host);//testing
 //    else if(role == Ip4DhcpIdRole)
 //        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).id;
 //    else if(role == Ip4DhcpNameRole)
@@ -226,34 +235,55 @@ bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int 
          network.netxml.bandwidth.outbound.peak=value.toString();
     else if (role == BandwidthOutboundBurstRole)
          network.netxml.bandwidth.outbound.peak=value.toString();
-//    else if( role == IpSizeRole)
-//         return false;
+    else if(role == Ip4ExistRole)
+         network.netxml.ip4.exist=value.toBool();
     else if(role == Ip4AddressRole)
          network.netxml.ip4.address=value.toString();
     else if(role == Ip4NetmaskRole)
          network.netxml.ip4.netmask=value.toString();
     else if(role == Ip4DhcpExistRole)
          network.netxml.ip4.hasDhcp=value.toBool();
-//    else if(role == DhcpRangeExistRole)
-//         network.netxml.ip[m_IpIndex].dhcp.range.exist=value.toBool();
-//    else if(role == DhcpRangeStartRole)
-//          network.netxml.ip[m_IpIndex].dhcp.range.start=value.toString();
-//    else if(role == DhcpRangeEndRole)
-//          network.netxml.ip[m_IpIndex].dhcp.range.end=value.toString();
-//    else if(role == DhcpHasHostRole)
-//         network.netxml.ip[m_IpIndex].dhcp.hasHost=value.toBool();
-//    else if(role == DhcpHostSizeRole)
-//        return false;
-//    else if(role == DhcpIdRole)
-//         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].id=value.toString();
-//    else if(role == DhcpNameRole)
-//         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].name=value.toString();
-//    else if(role == DhcpMacRole)
-//         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].mac=value.toString();
-//    else if(role == DhcpIpRole)
-//         network.netxml.ip[m_IpIndex].dhcp.host[m_DhcpIndex].ip=value.toString();
+    else if(role == Ip4DhcpRangeExistRole)
+         network.netxml.ip4.dhcp.range.exist=value.toBool();
+    else if(role == Ip4DhcpRangeStartRole)
+          network.netxml.ip4.dhcp.range.start=value.toString();
+    else if(role == Ip4DhcpRangeEndRole)
+          network.netxml.ip4.dhcp.range.end=value.toString();
+    else if(role == Ip4DhcpHasHostRole)
+         network.netxml.ip4.dhcp.hasHost=value.toBool();
+    else if(role == Ip4DhcpHostModelRole)
+        //http://www.bogotobogo.com/Qt/Qt5_QVariant_meta_object_system_MetaType.php
+        //refer that for more info
+        network.netxml.ip4.dhcp.host=value.value<HostModel*>();
+
+    else if( role == Ip6ExistRole)
+         network.netxml.ip6.exist=value.toBool();
+    else if(role == Ip6FamilyRole)
+         network.netxml.ip6.family=value.toString();
+    else if(role == Ip6AddressRole)
+         network.netxml.ip6.address=value.toString();
+    else if(role == Ip6PrefixRole)
+         network.netxml.ip6.prefix=value.toString();
+    else if(role == Ip6DhcpExistRole)
+         network.netxml.ip6.hasDhcp=value.toBool();
+    else if(role == Ip6DhcpRangeExistRole)
+         network.netxml.ip6.dhcp.range.exist=value.toBool();
+    else if(role == Ip6DhcpRangeStartRole)
+          network.netxml.ip6.dhcp.range.start=value.toString();
+    else if(role == Ip6DhcpRangeEndRole)
+          network.netxml.ip6.dhcp.range.end=value.toString();
+    else if(role == Ip6DhcpHasHostRole)
+         network.netxml.ip6.dhcp.hasHost=value.toBool();
+    else if(role == Ip6DhcpHostModelRole)
+        //http://www.bogotobogo.com/Qt/Qt5_QVariant_meta_object_system_MetaType.php
+        //refer that for more info
+        network.netxml.ip6.dhcp.host=value.value<HostModel*>();
+
+
+    //this statement sets the data
     m_network[index.row()]=network;
    // qDebug()<<"well name is"<<m_network[index.row()].netxml.forward.mode<<" name in temp is "<<network.netxml.forward.mode;
+    emit dataChanged(index, index);
     return true;
 }
 
@@ -331,20 +361,13 @@ QHash<int, QByteArray> NetworkModel::roleNames() const {
     roles[Ip4DhcpHasHostRole]="ip4DhcpHasHost";
     roles[Ip4DhcpHostModelRole]="ip4DhcpHostModel";
 
-    //    roles[Ip4DhcpHostSizeRole]="ip4DhcpHostSize";
-//    roles[Ip4DhcpIdRole]="ip4DhcpId";
-//    roles[Ip4DhcpMacRole]="ip4DhcpMac";
-//    roles[Ip4DhcpNameRole]="ip4DhcpName";
-//    roles[Ip4DhcpIpRole]="ip4DhcpIp";
-//    roles[Ip6DhcpRangeExistRole]="ip6DhcpRangeExist";
-//    roles[Ip6DhcpRangeStartRole]="ip6DhcpRangeStart";
-//    roles[Ip6DhcpRangeEndRole]="ip6DhcpRangeEnd";
-//    roles[Ip6DhcpHasHostRole]="ip6DhcpHasHost";
-//    roles[Ip6DhcpHostSizeRole]="ip6DhcpHostSize";
-//    roles[Ip6DhcpIdRole]="ip6DhcpId";
-//    roles[Ip6DhcpMacRole]="ip6DhcpMac";
-//    roles[Ip6DhcpNameRole]="ip6DhcpName";
-//    roles[Ip6DhcpIpRole]="ip6DhcpIp";
+
+    roles[Ip6DhcpRangeExistRole]="ip6DhcpRangeExist";
+    roles[Ip6DhcpRangeStartRole]="ip6DhcpRangeStart";
+    roles[Ip6DhcpRangeEndRole]="ip6DhcpRangeEnd";
+    roles[Ip6DhcpHasHostRole]="ip6DhcpHasHost";
+    roles[Ip6DhcpHostModelRole]="ip4DhcpHostModel";
+
 
     return roles;
 }

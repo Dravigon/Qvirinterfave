@@ -9,7 +9,7 @@ Rectangle{
     function incrementdata(indx){
         for(i=0;i<indx;i++){
             tabBar.incrementCurrentIndex();
-            swipe.incrementCurrentIndex();
+            //swipe.incrementCurrentIndex();
         }
     }
 
