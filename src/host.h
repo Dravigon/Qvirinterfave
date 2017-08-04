@@ -1,6 +1,7 @@
 #ifndef HOST_H
 #define HOST_H
 #include <QObject>
+#include <QDebug>
 #include <QAbstractListModel>
 
 
@@ -51,6 +52,27 @@ public:
 
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
     QString data(const int & index, QString role) ;
+    Q_INVOKABLE void create(){
+        QString id=QString("1");
+        QString mac="215:5952:5555:200";
+        QString name="host_temp";
+        QString ip="192.168.1.10";
+        HOST host=*new HOST(id,mac,name,ip);
+        qDebug()<<"\n\nyeah\n\n";
+        addHost(host);
+        qDebug()<<"\n\n"+size()+"\n\n";
+
+    }
+
+    Q_INVOKABLE bool set_data(int index, QVariant value, QString role)
+    {
+        QModelIndex temp;
+        QByteArray t;
+        t=role.toUtf8();
+        temp=QAbstractItemModel::createIndex(index, 1);
+        return setData(temp,value,roleNames().key(t));
+    }
+
     Q_INVOKABLE QString size(){
         return QString::number(m_hosts.length());
     }

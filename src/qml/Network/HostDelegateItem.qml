@@ -48,7 +48,7 @@ Component {
                 id: host_ip_text
                 text: ip
                 onTextChanged:  {
-                    ip4DhcpHostModel.set_data(index,host_ip_text.text,"id")
+                    ip4DhcpHostModel.set_data(index,host_ip_text.text,"ip")
                 }
             }
         }

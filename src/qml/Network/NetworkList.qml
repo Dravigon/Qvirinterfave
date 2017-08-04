@@ -4,6 +4,16 @@ import QtQuick.Controls.Material 2.0
 
 Rectangle {
     signal errorm();
+
+
+    Timer {//for dynamically getting the State of the network
+        id:statetimer
+        interval: 2000; running: true; repeat: true
+        onTriggered:{
+            network_list.refresh();
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
         gradient: Gradient {

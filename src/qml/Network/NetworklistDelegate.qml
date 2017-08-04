@@ -20,9 +20,10 @@ Component {
 
         Timer {//for dynamically getting the State of the network
             id:statetimer
-            interval: 5000; running: true; repeat: true
+            interval: 2000; running: true; repeat: true
             onTriggered:{ if(i>0)wrapper.state=network_list.task("state",index);
                 i++;
+           //     network_list.refresh();
         //        console.log("host_size:"+ip4DhcpHostModel.size())
             }
             onRunningChanged: i=0;
@@ -39,14 +40,19 @@ Component {
 
             color: "#333"
             border.color: Qt.lighter(color, 1.2)
+            onHeightChanged: {
+                preview.height=height;
+            }
+
             MouseArea {
                 z:0
                 anchors.fill: rt
                 onClicked: {
+                    preview.setIndex();
                     if((network_list.task("stop",index)==="stopped")||(network_list.task("state",index)==="stopped")){
                     wrapper.state = "expanded"
                     }
-                    preview.setIndex();
+
                 }
             }
 
@@ -99,7 +105,7 @@ Component {
 
         NetworkPreview{
             id: preview
-            width: 26
+            width: 0
             height: rt.height
             anchors.right: parent.right
             anchors.top: parent.top

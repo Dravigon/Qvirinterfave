@@ -94,6 +94,8 @@ DIST          = ../src/requirments \
 		/usr/lib/qt/mkspecs/modules/qt_KArchive.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KAuth.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KBookmarks.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCddb.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCMUtils.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KCodecs.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KCompletion.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KConfigCore.pri \
@@ -102,6 +104,7 @@ DIST          = ../src/requirments \
 		/usr/lib/qt/mkspecs/modules/qt_KCoreAddons.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KCrash.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KDBusAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KDeclarative.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KGlobalAccel.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KGuiAddons.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KI18n.pri \
@@ -112,7 +115,10 @@ DIST          = ../src/requirments \
 		/usr/lib/qt/mkspecs/modules/qt_KIOWidgets.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KItemViews.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KJobWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNewStuff.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNewStuffCore.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KNotifications.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNotifyConfig.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KNTLM.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KService.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KTextWidgets.pri \
@@ -269,6 +275,7 @@ DIST          = ../src/requirments \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_phonon4qt5.pri \
+		/usr/lib/qt/mkspecs/modules/qt_QuickAddons.pri \
 		/usr/lib/qt/mkspecs/modules/qt_Solid.pri \
 		/usr/lib/qt/mkspecs/modules/qt_SonnetCore.pri \
 		/usr/lib/qt/mkspecs/modules/qt_SonnetUi.pri \
@@ -334,6 +341,8 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 		/usr/lib/qt/mkspecs/modules/qt_KArchive.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KAuth.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KBookmarks.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCddb.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCMUtils.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KCodecs.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KCompletion.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KConfigCore.pri \
@@ -342,6 +351,7 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 		/usr/lib/qt/mkspecs/modules/qt_KCoreAddons.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KCrash.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KDBusAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KDeclarative.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KGlobalAccel.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KGuiAddons.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KI18n.pri \
@@ -352,7 +362,10 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 		/usr/lib/qt/mkspecs/modules/qt_KIOWidgets.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KItemViews.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KJobWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNewStuff.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNewStuffCore.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KNotifications.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNotifyConfig.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KNTLM.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KService.pri \
 		/usr/lib/qt/mkspecs/modules/qt_KTextWidgets.pri \
@@ -509,6 +522,7 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_phonon4qt5.pri \
+		/usr/lib/qt/mkspecs/modules/qt_QuickAddons.pri \
 		/usr/lib/qt/mkspecs/modules/qt_Solid.pri \
 		/usr/lib/qt/mkspecs/modules/qt_SonnetCore.pri \
 		/usr/lib/qt/mkspecs/modules/qt_SonnetUi.pri \
@@ -561,6 +575,8 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 /usr/lib/qt/mkspecs/modules/qt_KArchive.pri:
 /usr/lib/qt/mkspecs/modules/qt_KAuth.pri:
 /usr/lib/qt/mkspecs/modules/qt_KBookmarks.pri:
+/usr/lib/qt/mkspecs/modules/qt_KCddb.pri:
+/usr/lib/qt/mkspecs/modules/qt_KCMUtils.pri:
 /usr/lib/qt/mkspecs/modules/qt_KCodecs.pri:
 /usr/lib/qt/mkspecs/modules/qt_KCompletion.pri:
 /usr/lib/qt/mkspecs/modules/qt_KConfigCore.pri:
@@ -569,6 +585,7 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 /usr/lib/qt/mkspecs/modules/qt_KCoreAddons.pri:
 /usr/lib/qt/mkspecs/modules/qt_KCrash.pri:
 /usr/lib/qt/mkspecs/modules/qt_KDBusAddons.pri:
+/usr/lib/qt/mkspecs/modules/qt_KDeclarative.pri:
 /usr/lib/qt/mkspecs/modules/qt_KGlobalAccel.pri:
 /usr/lib/qt/mkspecs/modules/qt_KGuiAddons.pri:
 /usr/lib/qt/mkspecs/modules/qt_KI18n.pri:
@@ -579,7 +596,10 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 /usr/lib/qt/mkspecs/modules/qt_KIOWidgets.pri:
 /usr/lib/qt/mkspecs/modules/qt_KItemViews.pri:
 /usr/lib/qt/mkspecs/modules/qt_KJobWidgets.pri:
+/usr/lib/qt/mkspecs/modules/qt_KNewStuff.pri:
+/usr/lib/qt/mkspecs/modules/qt_KNewStuffCore.pri:
 /usr/lib/qt/mkspecs/modules/qt_KNotifications.pri:
+/usr/lib/qt/mkspecs/modules/qt_KNotifyConfig.pri:
 /usr/lib/qt/mkspecs/modules/qt_KNTLM.pri:
 /usr/lib/qt/mkspecs/modules/qt_KService.pri:
 /usr/lib/qt/mkspecs/modules/qt_KTextWidgets.pri:
@@ -736,6 +756,7 @@ Makefile: ../src/Qvirtinterface.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /us
 /usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_phonon4qt5.pri:
+/usr/lib/qt/mkspecs/modules/qt_QuickAddons.pri:
 /usr/lib/qt/mkspecs/modules/qt_Solid.pri:
 /usr/lib/qt/mkspecs/modules/qt_SonnetCore.pri:
 /usr/lib/qt/mkspecs/modules/qt_SonnetUi.pri:
@@ -820,28 +841,28 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_qml.cpp
 qrc_qml.cpp: ../src/qml.qrc \
 		/usr/bin/rcc \
-		../src/qml/Dashboard.qml \
-		../src/qml/Terminal.qml \
-		../src/qml/qtquickcontrols2.conf \
-		../src/qml/IpElement.qml \
-		../src/qml/Terminal_button.qml \
-		../src/qml/Backitem.qml \
-		../src/qml/VmPreview.qml \
-		../src/qml/BandwidthElement.qml \
-		../src/qml/HostDelegateItem.qml \
-		../src/qml/CreateVm.qml \
-		../src/qml/NetworklistDelegate.qml \
-		../src/qml/NetworkPreview.qml \
-		../src/qml/ForwardElement.qml \
-		../src/qml/VmlistDelegate.qml \
 		../src/qml/DashboardFront.qml \
+		../src/qml/VmlistDelegate.qml \
+		../src/qml/VmPreview.qml \
 		../src/qml/Vmlist.qml \
-		../src/qml/main.qml \
-		../src/qml/BridgeElement.qml \
+		../src/qml/Dashboard.qml \
 		../src/qml/Errormessage.qml \
-		../src/qml/NetworkList.qml \
-		../src/qml/Login.qml \
+		../src/qml/Backitem.qml \
+		../src/qml/CreateVm.qml \
 		../src/qml/CustomButton.qml \
+		../src/qml/qtquickcontrols2.conf \
+		../src/qml/Login.qml \
+		../src/qml/Terminal.qml \
+		../src/qml/Terminal_button.qml \
+		../src/qml/main.qml \
+		../src/qml/Network/BridgeElement.qml \
+		../src/qml/Network/ForwardElement.qml \
+		../src/qml/Network/IpElement.qml \
+		../src/qml/Network/HostDelegateItem.qml \
+		../src/qml/Network/NetworklistDelegate.qml \
+		../src/qml/Network/NetworkList.qml \
+		../src/qml/Network/BandwidthElement.qml \
+		../src/qml/Network/NetworkPreview.qml \
 		../icons/Exclamation.gif
 	/usr/bin/rcc -name qml ../src/qml.qrc -o qrc_qml.cpp
 

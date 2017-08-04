@@ -159,9 +159,7 @@ int networkxml::read(){
                         }
                     }
                     ip6=temp1;
-                    qDebug()<<ip6.dhcp.host->data(0,"name");
-                    qDebug()<<ip6.dhcp.host->data(1,"name");
-                    qDebug()<<ip6.dhcp.host->data(2,"name");
+
                     qDebug()<<"size is:"<<ip6.dhcp.host->size();
                 }
                 else if((stream1.attributes().value("family").toString()=="ipv4")||(stream1.attributes().value("family").toString()=="")){

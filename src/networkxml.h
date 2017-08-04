@@ -43,7 +43,7 @@ struct Dhcp{
         QString start;
         QString end;
     }range;
-    bool hasHost;
+    bool hasHost=false;
     HostModel *host=new HostModel();
 };
 struct IP4
@@ -52,7 +52,7 @@ struct IP4
     QString family=NULL;
     QString address;
     QString netmask=NULL;
-    bool hasDhcp;
+    bool hasDhcp=false;
     Dhcp dhcp;
     IP4(){
 
@@ -64,7 +64,7 @@ struct IP6
     QString family=NULL;
     QString address;
     QString prefix=NULL;
-    bool hasDhcp;
+    bool hasDhcp=false;
     Dhcp dhcp;
     IP6(){
 
@@ -83,7 +83,7 @@ class networkxml
 {
 public:
     QString name;
-    bool isforwardExist;
+    bool isforwardExist=false;
     Forward forward;
     Bridge bridge;
     bw bandwidth;

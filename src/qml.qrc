@@ -13,15 +13,15 @@
         <file>qml/CreateVm.qml</file>
         <file>qml/Backitem.qml</file>
         <file>qml/VmlistDelegate.qml</file>
-        <file>qml/NetworkList.qml</file>
-        <file>qml/NetworklistDelegate.qml</file>
+        <file>qml/Network/NetworkList.qml</file>
+        <file>qml/Network/NetworklistDelegate.qml</file>
         <file>qml/CustomButton.qml</file>
         <file>qml/VmPreview.qml</file>
-        <file>qml/NetworkPreview.qml</file>
-        <file>qml/ForwardElement.qml</file>
-        <file>qml/BridgeElement.qml</file>
-        <file>qml/BandwidthElement.qml</file>
-        <file>qml/IpElement.qml</file>
-        <file>qml/HostDelegateItem.qml</file>
+        <file>qml/Network/NetworkPreview.qml</file>
+        <file>qml/Network/ForwardElement.qml</file>
+        <file>qml/Network/BridgeElement.qml</file>
+        <file>qml/Network/BandwidthElement.qml</file>
+        <file>qml/Network/IpElement.qml</file>
+        <file>qml/Network/HostDelegateItem.qml</file>
     </qresource>
 </RCC>
