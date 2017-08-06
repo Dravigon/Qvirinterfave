@@ -16,7 +16,6 @@ Rectangle {
         return false;
     }
     function addTabs(){
-        console.log("zOhh");
         if(ip4Exist)
             if(!tabExist("ip4"))
                 id_tab.addTab("ip4",rec_ip4);
@@ -37,23 +36,56 @@ Rectangle {
                 anchors.margins: 20
 
                 Button{
+                    id:ipAddButton
+                    width: 50
+                    height:50
+                    visible:!ip4DhcpExist||!ip4DhcpHasHost
+                    Image {
+                        id: ipAdd
+                        source: "qrc:/../icons/add.png"// This is available in all editors.
+                        anchors.fill: parent
+                    }
+                    z:2
                     anchors.right: parent.right
-                    anchors.top:parent.top
-                    text: "add_values"
-                    onClicked: ip4_add_values.open()
+                    anchors.top: parent.top
+                    onClicked:  {ip4_add_values.open();
+                    }
+                }
+                Button{
+                    id:ipRemoveButton
+                    visible:ip4DhcpExist||ip4DhcpHasHost
+                    anchors.top: ipAddButton.bottom
+                    anchors.right: parent.right
+                    width: 50
+                    height:50
+                    Image {
+                        id: ipremove
+                        source: "qrc:/../icons/remove.png"// This is available in all editors.
+                        anchors.fill: parent
+                    }
+                    z:2
+                    onClicked:  {ip4_remove_values.open()
+
+                    }
                 }
                 Popup{
                     id:ip4_add_values
                     Rectangle{
-                        anchors.fill: parent
+                        color: "gray"
+                        width:root_item.width-200
+                        height:login.height-500
                         opacity: 0.7
+
                         ColumnLayout{
+                            anchors.centerIn: parent
                             Button{
                                 text:"add DHCP"
                                 visible: (!ip4DhcpExist)
                                 onClicked: {ip4DhcpExist=true
                                     ip4_dhcp.visible=true;
-                                    ip6DhcpRangeExist=true;
+                                    ip4DhcpRangeExist=true;
+                                    ipAddButton.visible=(!ip4DhcpExist||!ip4DhcpHasHost);
+                                    ipRemoveButton.visible=ip4DhcpExist||ip4DhcpHasHost;
                                 }
                             }
                             Button{
@@ -61,6 +93,40 @@ Rectangle {
                                 visible: (!ip4DhcpHasHost)
                                 onClicked: {
                                     ip4DhcpHasHost=true
+                                    ipAddButton.visible=(!ip4DhcpExist||!ip4DhcpHasHost);
+                                    ipRemoveButton.visible=ip4DhcpExist||ip4DhcpHasHost;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Popup{
+                    id:ip4_remove_values
+                    Rectangle{
+                        color: "gray"
+                        width:root_item.width-200
+                        height:login.height-500
+                        opacity: 0.7
+                        ColumnLayout{
+                            anchors.centerIn: parent
+                            Button{
+                                text:"Remove DHCP"
+                                visible: (ip4DhcpExist)
+                                onClicked: {ip4DhcpExist=false;
+                                    ip4_dhcp.visible=false;
+                                    ip6DhcpRangeExist=false;
+                                    ipAddButton.visible=(!ip4DhcpExist||!ip4DhcpHasHost);
+                                    ipRemoveButton.visible=ip4DhcpExist||ip4DhcpHasHost;
+                                }
+                            }
+                            Button{
+                                text:"Remove Host"
+                                visible: (ip4DhcpHasHost)
+                                onClicked: {
+                                    ip4DhcpHasHost=false;
+                                    ipAddButton.visible=(!ip4DhcpExist||!ip4DhcpHasHost);
+                                    ipRemoveButton.visible=ip4DhcpExist||ip4DhcpHasHost;
                                 }
                             }
                         }
@@ -85,9 +151,12 @@ Rectangle {
                                 }
                                 TextField{
                                     id: addr_textField
+                                    validator: IpValidator{
+
+                                    }
+
                                     text: qsTr(ip4Address)
                                     onTextChanged: {
-                                        console.log("blosck")
                                         network_list.set_data(index,addr_textField.text,"ip4Address")
                                     }
                                 }
@@ -95,7 +164,7 @@ Rectangle {
                             Row{
                                 Text {
                                     id: netmask
-                                    text: qsTr("Device: ")
+                                    text: qsTr("Netmask: ")
                                     font.pixelSize: 20
                                 }
                                 TextField{
@@ -111,6 +180,7 @@ Rectangle {
                         Column{
                             spacing: 20
                             Row{
+                                id:ip4_dhcp
                                 visible: ip4DhcpExist
                                 spacing:20
                                 Text {
@@ -125,12 +195,15 @@ Rectangle {
                                         Text {
                                             id: ip4_dhcp_start
                                             text: qsTr("Range Start: ")
+
                                             font.pixelSize: 20
 
                                         }
                                         TextField{
                                             id:ip4_dhcp_start_text
                                             text:ip4DhcpRangeStart
+                                            validator: IpValidator{}
+
                                             onTextChanged: {
                                                 network_list.set_data(index,ip4_dhcp_start_text.text,"ip4DhcpRangeStart")
                                             }
@@ -147,6 +220,7 @@ Rectangle {
                                         TextField{
                                             id:ip4_dhcp_end_text
                                             text:ip4DhcpRangeEnd
+                                            validator: IpValidator{}
                                             onTextChanged: {
                                                 network_list.set_data(index,ip4_dhcp_end_text.text,"ip4DhcpRangeEnd")
                                             }
@@ -168,15 +242,47 @@ Rectangle {
 
                 Popup{
                     id:hosts_popup
-                    height: ip4DhcpHostModel.size()*50+20
+                    height: (ip4DhcpHostModel.size()*50+20)==20?120:ip4DhcpHostModel.size()*50+20;
                     width: ip_root.width/1.4
                     Rectangle{
                         visible: ip4DhcpHasHost
                         Button{
-                            text:"add_host"
+                            id:addButton
+                            width: 50
+                            height:50
+                            Image {
+                                id: add
+                                source: "qrc:/../icons/add.png"// This is available in all editors.
+                                anchors.fill: parent
+                            }
+                            z:2
                             anchors.right: parent.right
                             anchors.top: parent.top
-                            onClicked: ip4DhcpHostModel.create();
+                            onClicked: {
+                                ip4DhcpHostModel.create();
+                                parent.height=ip4DhcpHostModel.size()*50;
+                                hosts_popup.height=(ip4DhcpHostModel.size()*50+20)<120?120:ip4DhcpHostModel.size()*50+20;
+                                parent.width=ip_root.width/1.4-20;
+                            }
+                        }
+                        Button{
+                            id:removeButon
+                            anchors.top: addButton.bottom
+                            width: 50
+                            height:50
+                            Image {
+                                id: remove
+                                source: "qrc:/../icons/remove.png"// This is available in all editors.
+                                anchors.fill: parent
+                            }
+                            z:2
+                            anchors.right: parent.right
+                            onClicked: {
+                                ip4DhcpHostModel.remove();
+                                parent.height=ip4DhcpHostModel.size()*50;
+                                hosts_popup.height=(ip4DhcpHostModel.size()*50+20)<120?120:ip4DhcpHostModel.size()*50+20;
+                                parent.width=ip_root.width/1.4-20;
+                            }
                         }
                         radius: 0.5
                         height: ip4DhcpHostModel.size()*50
@@ -185,14 +291,11 @@ Rectangle {
                         opacity: 0.8
                         ListView{
                             id: listView
-                            z: 1
+                            z:1
                             clip: true
                             anchors.fill: parent
                             model: ip4DhcpHostModel
                             delegate:HostDelegateItem{
-                            }
-                            onModelChanged: {
-                                network_list.set_data(index,listView.model,"ip4DhcpHostModel")
                             }
                         }
                     }
@@ -271,7 +374,7 @@ Rectangle {
                             Row{
                                 Text {
                                     id: ip6_netmask
-                                    text: qsTr("Device: ")
+                                    text: qsTr("Netmask: ")
                                     font.pixelSize: 20
                                 }
                                 TextField{

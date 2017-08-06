@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     networkmodel.cpp \
     task_network.cpp \
     networkxml.cpp \
-    host.cpp
+    host.cpp \
+    contoller.cpp
 
 RESOURCES += qml.qrc \
 
@@ -48,7 +49,8 @@ HEADERS += \
     networkmodel.h \
     task.h \
     networkxml.h \
-    host.h
+    host.h \
+    contoller.h
 
 DISTFILES += \
     requirments \

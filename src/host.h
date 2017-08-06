@@ -22,6 +22,18 @@ public:
     QString ip() const{
         return m_ip;
     }
+    void setId(QString id){
+        m_id=id;
+    }
+    void setMac(QString mac){
+        m_mac=mac;
+    }
+    void setName(QString name){
+        m_name=name;
+    }
+    void setIp(QString ip){
+        m_ip=ip;
+    }
 
 private:
 
@@ -35,10 +47,10 @@ class HostModel:public QAbstractListModel{
     Q_OBJECT
 public:
     enum HostRoles {
-        IdRole = Qt::UserRole + 1,
-        MacRole,
-        NameRole,
-        IpRole
+        IdRole = 1,
+        MacRole=2,
+        NameRole=3,
+        IpRole=4
     };
 
     HostModel(QObject *parent = 0);
@@ -52,16 +64,49 @@ public:
 
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
     QString data(const int & index, QString role) ;
+
     Q_INVOKABLE void create(){
         QString id=QString("1");
-        QString mac="215:5952:5555:200";
+        QString mac="55:AE:36:1D:29:30";
         QString name="host_temp";
         QString ip="192.168.1.10";
         HOST host=*new HOST(id,mac,name,ip);
         qDebug()<<"\n\nyeah\n\n";
         addHost(host);
         qDebug()<<"\n\n"+size()+"\n\n";
+    }
 
+    Q_INVOKABLE bool remove(){
+
+        if(m_hosts.isEmpty()){
+            return false;
+        }
+        beginRemoveRows(QModelIndex(),rowCount(),rowCount());
+        m_hosts.pop_back();
+        endRemoveRows();
+        return true;
+
+    }
+
+    bool setData(const QModelIndex &index, const QVariant &value, int role)
+    {
+        if (index.row() < 0 || index.row() > m_hosts.count())
+            return false;
+
+         HOST host = m_hosts[index.row()];
+        if (role == IdRole)
+            host.setId(value.toString());
+        else if(role == NameRole)
+            host.setName(value.toString());
+        else if (role == MacRole) {
+            host.setMac(value.toString());
+        }
+        else if(role == IpRole)
+            host.setIp(value.toString());
+
+        m_hosts[index.row()]=host;
+        emit dataChanged(index, index);
+        return true;
     }
 
     Q_INVOKABLE bool set_data(int index, QVariant value, QString role)

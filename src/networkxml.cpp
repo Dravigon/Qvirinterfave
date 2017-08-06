@@ -251,7 +251,7 @@ QString networkxml::write(){
 
     QXmlStreamWriter stream(&xml);
     stream.setAutoFormatting(true);
-//    stream.writeStartDocument();
+    //    stream.writeStartDocument();
 
     stream.writeStartElement("network");
     stream.writeTextElement("name",name);
@@ -260,7 +260,7 @@ QString networkxml::write(){
         stream.writeStartElement("bridge");
         stream.writeAttribute("name", bridge.name);
         stream.writeAttribute("stp", bridge.stp);
-        stream.writeAttribute("delay",bridge.delay=="on"?"50":bridge.delay);
+        stream.writeAttribute("delay",bridge.delay);
         stream.writeEndElement();
     }
 
@@ -268,11 +268,18 @@ QString networkxml::write(){
         stream.writeStartElement("forward");
         stream.writeAttribute("mode", forward.mode);
         qDebug()<<"mode::"<< forward.mode;
+        if(forward.mode.toLower()=="nat"){
+            if((!forward.nat.start.isEmpty())&&(!forward.nat.end.isEmpty()))
+                forward.natExist=true;
+            else
+                forward.natExist=false;
+        }
         if(forward.dev!=NULL)
             stream.writeAttribute("dev", forward.dev);
         if(forward.natExist){
             stream.writeStartElement("nat");
             stream.writeEmptyElement("port");
+            qDebug()<<"\n \n Nat Start:"+forward.nat.start;
             stream.writeAttribute("start", forward.nat.start);
             stream.writeAttribute("end", forward.nat.end);
             stream.writeEndElement();
@@ -284,7 +291,6 @@ QString networkxml::write(){
     if(bandwidth.exist){
         stream.writeStartElement("bandwidth");
         stream.writeEmptyElement("inbound");
-
         stream.writeAttribute("average", bandwidth.inbound.average);
         stream.writeAttribute("peak", bandwidth.inbound.peak);
         stream.writeAttribute("burst", bandwidth.inbound.burst);
@@ -315,7 +321,7 @@ QString networkxml::write(){
                 stream.writeAttribute("start", ip4.dhcp.range.start);
                 stream.writeAttribute("end", ip4.dhcp.range.end);
             }
-            if (ip4.dhcp.hasHost) {
+            if (ip4.dhcp.hasHost&&(forward.mode.toLower()=="route")) {
                 int k=0;
                 while (ip4.dhcp.host->rowCount()>k) {
                     QString id,ip,name,mac;
@@ -346,8 +352,6 @@ QString networkxml::write(){
             if(ip4.family!=NULL)
                 stream.writeAttribute("family", ip4.family);
             stream.writeAttribute("address", ip4.address);
-            //            if(Ip.prefix!=NULL)
-            //                stream.writeAttribute("prefix", Ip.prefix);
             if(ip4.netmask!=NULL)
                 stream.writeAttribute("netmask", ip4.netmask);
         }
@@ -372,7 +376,7 @@ QString networkxml::write(){
                 stream.writeAttribute("start", ip6.dhcp.range.start);
                 stream.writeAttribute("end", ip6.dhcp.range.end);
             }
-            if (ip6.dhcp.hasHost) {
+            if (ip6.dhcp.hasHost&&(forward.mode.toLower()=="route")) {
                 int k=0;
 
                 while (ip6.dhcp.host->rowCount()>k) {
@@ -431,7 +435,7 @@ QString networkxml::write(){
 
 
     stream.writeEndElement();
-//    stream.writeEndDocument();
+    //    stream.writeEndDocument();
 
     qDebug()<<"this is war!!!!!"<<xml;
     return xml;

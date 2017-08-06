@@ -75,6 +75,8 @@ Rectangle{
                 TextField{
                     id: bridge_delay_text
                     text: bridgeDelay
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    validator: IntValidator { bottom:0;top:250 }
                     onTextChanged: {
                         network_list.set_data(index,bridge_delay_text.text,"bridgeDelay")
                     }

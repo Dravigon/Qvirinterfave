@@ -9,13 +9,48 @@ import QtQuick.Controls.Material 2.0
 Rectangle{
 
     id:root_item
+    anchors.margins: 20
+    onWidthChanged: {
+        addButton.width=removeButton.width=root_item.width<(login.width/2)?0:50
+    }
 
     Button{
-        anchors.right: parent.right
-        anchors.top:parent.top
-        text:"add"
-        onClicked: addTab.open();
+        id:addButton
+        width: 0
+        height:50
+        visible:!ip4DhcpExist||!ip4DhcpHasHost
+        anchors.margins: 20
+        Image {
+            id: add
+            source: "qrc:/../icons/add.png"// This is available in all editors.
+            anchors.fill: parent
+        }
+        z:2
+        anchors.right: removeButton.left
+        anchors.top: parent.top
+        onClicked:  {addTab.open();
+        }
     }
+    Button{
+        id:removeButton
+        visible:ip4DhcpExist||ip4DhcpHasHost
+        anchors.top: parent.top
+        anchors.right: parent.right
+        width: 0
+        height:50
+        anchors.margins: 20
+        Image {
+            id: remove
+            source: "qrc:/../icons/remove.png"// This is available in all editors.
+            anchors.fill: parent
+        }
+        z:2
+        onClicked:  {removeTab.open()
+        }
+    }
+
+
+
 
     function tabExist(tabName){
         for(i=0;i<netTab.count;i++)
@@ -50,6 +85,7 @@ Rectangle{
         Rectangle {
             visible: forwardExist
             anchors.fill: parent
+            anchors.margins: 20
             ForwardElement{
                 visible:forwardExist
                 anchors.fill: parent
@@ -61,6 +97,7 @@ Rectangle{
         Rectangle {
             visible: bridgeExist
             anchors.fill: parent
+            anchors.margins: 20
             BridgeElement{
                 visible: bridgeExist
                 anchors.fill: parent
@@ -72,6 +109,7 @@ Rectangle{
         Rectangle {
             visible: bandwidthExist
             anchors.fill: parent
+            anchors.margins: 20
             BandwidthElement{
                 visible: bandwidthExist
                 anchors.fill: parent
@@ -89,6 +127,7 @@ Rectangle{
             }
             visible: ip4Exist||ip6Exist
             anchors.fill: parent
+            anchors.margins: 20
             IpElement{
                 id:ip_element
                 visible: ip4Exist||ip6Exist
@@ -103,8 +142,6 @@ Rectangle{
 
     Popup{
         id:addTab
-
-
         Rectangle{
             color: "gray"
             width:root_item.width
@@ -175,12 +212,65 @@ Rectangle{
     }
 
 
+    Popup{
+        id:removeTab
+        Rectangle{
+            color: "gray"
+            width:root_item.width
+            height:login.height-50
+            opacity: 0.7
+            // anchors.centerIn: root_item
+            ColumnLayout{
+                anchors.horizontalCenter:  parent.horizontalCenter
+                anchors.verticalCenter:   parent.verticalCenter
+
+
+                Button{
+                    visible: bandwidthExist
+                    text:"Bandwidth"
+                    onClicked: {
+                        bandwidthExist=false;
+                        for(i=0;i<netTab.count;i++)
+                            if(netTab.getTab(i).title==="Bandwidth")
+                                netTab.removeTab(i);
+                    }
+                }
+
+                Button{
+                    visible: (ip4Exist&&ip6Exist)
+                    text:"Ip4"
+                    onClicked: {
+                        ip4Exist=false;
+                        console.log("called");
+
+                        for(i=0;i<netTab.count;i++)
+                            if(netTab.getTab(i).title==="IP")
+                                netTab.removeTab(i);
+                        setIndex();
+                    }
+                }
+                Button{
+                    visible: (ip4Exist&&ip6Exist)
+                    text:"Ip6"
+                    onClicked: {
+                        ip6Exist=false;
+                        console.log("called");
+                        for(i=0;i<netTab.count;i++)
+                            if(netTab.getTab(i).title==="IP")
+                                netTab.removeTab(i);
+                        setIndex();
+                    }
+                }
+            }
+        }
+    }
+
+
 
     TabView {
         id: netTab
-        width: root_item.width
-        height: root_item.height
-
+        anchors.fill: parent
+        anchors.margins: 20
     }
 
 

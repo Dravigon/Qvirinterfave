@@ -23,5 +23,8 @@
         <file>qml/Network/BandwidthElement.qml</file>
         <file>qml/Network/IpElement.qml</file>
         <file>qml/Network/HostDelegateItem.qml</file>
+        <file>../icons/add.png</file>
+        <file>../icons/remove.png</file>
+        <file>qml/Network/IpValidator.qml</file>
     </qresource>
 </RCC>

@@ -25,6 +25,7 @@ Component {
             TextField{
                 id: host_mac_text
                 text: mac
+                inputMask: "HH:HH:HH:HH:HH:HH;_"
                 onTextChanged:  {
                     ip4DhcpHostModel.set_data(index,host_mac_text.text,"mac")
                 }
@@ -47,6 +48,7 @@ Component {
             TextField{
                 id: host_ip_text
                 text: ip
+                validator: IpValidator{}
                 onTextChanged:  {
                     ip4DhcpHostModel.set_data(index,host_ip_text.text,"ip")
                 }

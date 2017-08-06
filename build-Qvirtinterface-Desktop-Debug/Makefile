@@ -58,12 +58,14 @@ SOURCES       = ../src/main.cpp \
 		../src/networkmodel.cpp \
 		../src/task_network.cpp \
 		../src/networkxml.cpp \
-		../src/host.cpp qrc_qml.cpp \
+		../src/host.cpp \
+		../src/contoller.cpp qrc_qml.cpp \
 		moc_domainmodel.cpp \
 		moc_user.cpp \
 		moc_sqlquerymodel.cpp \
 		moc_networkmodel.cpp \
-		moc_host.cpp
+		moc_host.cpp \
+		moc_contoller.cpp
 OBJECTS       = main.o \
 		domainmodel.o \
 		user.o \
@@ -72,12 +74,14 @@ OBJECTS       = main.o \
 		task_network.o \
 		networkxml.o \
 		host.o \
+		contoller.o \
 		qrc_qml.o \
 		moc_domainmodel.o \
 		moc_user.o \
 		moc_sqlquerymodel.o \
 		moc_networkmodel.o \
-		moc_host.o
+		moc_host.o \
+		moc_contoller.o
 DIST          = ../src/requirments \
 		../LICENSE \
 		../README.md \
@@ -309,14 +313,16 @@ DIST          = ../src/requirments \
 		../src/networkmodel.h \
 		../src/task.h \
 		../src/networkxml.h \
-		../src/host.h ../src/main.cpp \
+		../src/host.h \
+		../src/contoller.h ../src/main.cpp \
 		../src/domainmodel.cpp \
 		../src/user.cpp \
 		../src/sqlquerymodel.cpp \
 		../src/networkmodel.cpp \
 		../src/task_network.cpp \
 		../src/networkxml.cpp \
-		../src/host.cpp
+		../src/host.cpp \
+		../src/contoller.cpp
 QMAKE_TARGET  = Qvirtinterface
 DESTDIR       = 
 TARGET        = Qvirtinterface
@@ -811,8 +817,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../src/qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/domainmodel.h ../src/user.h ../src/sqlquerymodel.h ../src/networkmodel.h ../src/task.h ../src/networkxml.h ../src/host.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/main.cpp ../src/domainmodel.cpp ../src/user.cpp ../src/sqlquerymodel.cpp ../src/networkmodel.cpp ../src/task_network.cpp ../src/networkxml.cpp ../src/host.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/domainmodel.h ../src/user.h ../src/sqlquerymodel.h ../src/networkmodel.h ../src/task.h ../src/networkxml.h ../src/host.h ../src/contoller.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/main.cpp ../src/domainmodel.cpp ../src/user.cpp ../src/sqlquerymodel.cpp ../src/networkmodel.cpp ../src/task_network.cpp ../src/networkxml.cpp ../src/host.cpp ../src/contoller.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -858,12 +864,15 @@ qrc_qml.cpp: ../src/qml.qrc \
 		../src/qml/Network/BridgeElement.qml \
 		../src/qml/Network/ForwardElement.qml \
 		../src/qml/Network/IpElement.qml \
+		../src/qml/Network/IpValidator.qml \
 		../src/qml/Network/HostDelegateItem.qml \
 		../src/qml/Network/NetworklistDelegate.qml \
 		../src/qml/Network/NetworkList.qml \
 		../src/qml/Network/BandwidthElement.qml \
 		../src/qml/Network/NetworkPreview.qml \
-		../icons/Exclamation.gif
+		../icons/Exclamation.gif \
+		../icons/add.png \
+		../icons/remove.png
 	/usr/bin/rcc -name qml ../src/qml.qrc -o qrc_qml.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
@@ -872,9 +881,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/qt/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /usr/lib/qt/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_domainmodel.cpp moc_user.cpp moc_sqlquerymodel.cpp moc_networkmodel.cpp moc_host.cpp
+compiler_moc_header_make_all: moc_domainmodel.cpp moc_user.cpp moc_sqlquerymodel.cpp moc_networkmodel.cpp moc_host.cpp moc_contoller.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_domainmodel.cpp moc_user.cpp moc_sqlquerymodel.cpp moc_networkmodel.cpp moc_host.cpp
+	-$(DEL_FILE) moc_domainmodel.cpp moc_user.cpp moc_sqlquerymodel.cpp moc_networkmodel.cpp moc_host.cpp moc_contoller.cpp
 moc_domainmodel.cpp: ../src/user.h \
 		../src/domainmodel.h \
 		moc_predefs.h \
@@ -904,6 +913,11 @@ moc_host.cpp: ../src/host.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/dravigon/development/Qvirinterfave/src -I/usr/include/qt -I/usr/include/qt/QtQuick -I/usr/include/qt/QtDesigner -I/usr/include/qt/QtUiPlugin -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtQml -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtSql -I/usr/include/qt/QtXml -I/usr/include/qt/QtCore -I. -I/usr/include/c++/6.3.1 -I/usr/include/c++/6.3.1/x86_64-pc-linux-gnu -I/usr/include/c++/6.3.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.3.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.3.1/include-fixed -I/usr/include -I/usr/include/c++/7.1.1 -I/usr/include/c++/7.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/7.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed -I/usr/include ../src/host.h -o moc_host.cpp
 
+moc_contoller.cpp: ../src/contoller.h \
+		moc_predefs.h \
+		/usr/bin/moc
+	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/dravigon/development/Qvirinterfave/src -I/usr/include/qt -I/usr/include/qt/QtQuick -I/usr/include/qt/QtDesigner -I/usr/include/qt/QtUiPlugin -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtQml -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtSql -I/usr/include/qt/QtXml -I/usr/include/qt/QtCore -I. -I/usr/include/c++/6.3.1 -I/usr/include/c++/6.3.1/x86_64-pc-linux-gnu -I/usr/include/c++/6.3.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.3.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.3.1/include-fixed -I/usr/include -I/usr/include/c++/7.1.1 -I/usr/include/c++/7.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/7.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed -I/usr/include ../src/contoller.h -o moc_contoller.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all:
@@ -923,6 +937,7 @@ main.o: ../src/main.cpp ../src/domainmodel.h \
 		../src/networkmodel.h \
 		../src/networkxml.h \
 		../src/host.h \
+		../src/contoller.h \
 		../src/sqlquerymodel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../src/main.cpp
 
@@ -954,6 +969,9 @@ networkxml.o: ../src/networkxml.cpp ../src/networkxml.h \
 host.o: ../src/host.cpp ../src/host.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o host.o ../src/host.cpp
 
+contoller.o: ../src/contoller.cpp ../src/contoller.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o contoller.o ../src/contoller.cpp
+
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp
 
@@ -971,6 +989,9 @@ moc_networkmodel.o: moc_networkmodel.cpp
 
 moc_host.o: moc_host.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_host.o moc_host.cpp
+
+moc_contoller.o: moc_contoller.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_contoller.o moc_contoller.cpp
 
 ####### Install
 

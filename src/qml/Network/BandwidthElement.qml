@@ -38,6 +38,8 @@ Rectangle{
                             TextField{
                                 id: inbound_bandwidth_average_text
                                 text: bandwidthInboundAverage===""?"50":bandwidthInboundAverage
+                                validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
+                                inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
                                     network_list.set_data(index,inbound_bandwidth_average_text.text,"bandwidthInboundAverage")
                                 }
@@ -60,6 +62,8 @@ Rectangle{
                             TextField{
                                 id: inbound_bandwidth_peak_text
                                 text: bandwidthInboundPeak===""?"50":bandwidthInboundPeak
+                                validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
+                                inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
                                     network_list.set_data(index, inbound_bandwidth_peak_text.text,"bandwidthInboundPeak")
                                 }
@@ -85,6 +89,8 @@ Rectangle{
                             TextField{
                                 id: inbound_bandwidth_burst_text
                                 text: bandwidthInboundBurst===""?"50":bandwidthInboundBurst
+                                validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
+                                inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
                                     network_list.set_data(index,inbound_bandwidth_burst_text.text,"bandwidthInboundBurst")
                                 }
@@ -124,6 +130,8 @@ Rectangle{
                             TextField{
                                 id: outbound_bandwidth_average_text
                                 text: bandwidthOutboundAverage===""?"50":bandwidthOutboundAverage
+                                validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
+                                inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
                                     network_list.set_data(index,outbound_bandwidth_average_text.text,"bandwidthOutboundAverage")
                                 }
@@ -147,6 +155,8 @@ Rectangle{
                             TextField{
                                 id: outbound_bandwidth_peak_text
                                 text: bandwidthOutboundPeak===""?"50":bandwidthOutboundPeak
+                                validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
+                                inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
                                     network_list.set_data(index,outbound_bandwidth_peak_text.text,"bandwidthOutboundPeak")
                                 }
@@ -172,6 +182,8 @@ Rectangle{
                             TextField{
                                 id: outbound_bandwidth_burst_text
                                 text: bandwidthOutboundBurst===""?"50":bandwidthOutboundBurst
+                                validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
+                                inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
                                     network_list.set_data(index,outbound_bandwidth_burst_text.text,"bandwidthOutboundBurst")
                                 }

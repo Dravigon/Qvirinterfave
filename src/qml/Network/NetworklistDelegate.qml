@@ -40,9 +40,10 @@ Component {
 
             color: "#333"
             border.color: Qt.lighter(color, 1.2)
-            onHeightChanged: {
-                preview.height=height;
-            }
+//NOTE dont know why i added this incase somthing is wrong with preview uncomment this
+            //            onHeightChanged: {
+//               // preview.height=height;
+//            }
 
             MouseArea {
                 z:0
@@ -52,7 +53,6 @@ Component {
                     if((network_list.task("stop",index)==="stopped")||(network_list.task("state",index)==="stopped")){
                     wrapper.state = "expanded"
                     }
-
                 }
             }
 
@@ -189,7 +189,7 @@ Component {
 
                 PropertyChanges {target: statetimer; running:!statetimer.running}
                 PropertyChanges { target: wrapper; height: listView.height }
-                PropertyChanges { target: preview; width: listView.width; height: listView.width; anchors.rightMargin: 0; anchors.topMargin: rt.height }
+                PropertyChanges { target: preview; width: listView.width; height: parent.height-80; anchors.rightMargin: 0; anchors.topMargin: rt.height }
                 PropertyChanges { target: factsView; opacity: 1 }
                 PropertyChanges { target: closeButton; opacity: 1 }
                 PropertyChanges { target: wrapper.ListView.view; contentY: wrapper.y; interactive: false }
