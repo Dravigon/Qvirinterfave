@@ -1,4 +1,4 @@
-QT += qml quick sql designer
+QT += 3dcore 3drender 3dquick 3dinput 3dextras qml quick 3dquickextras sql designer
 
 
 CONFIG += c++11
@@ -8,11 +8,14 @@ SOURCES += main.cpp \
     user.cpp \
     sqlquerymodel.cpp \
     task.cpp \
-    networkmodel.cpp \
-    task_network.cpp \
-    networkxml.cpp \
-    host.cpp \
-    contoller.cpp
+    contoller.cpp \
+    ./Network/host.cpp \
+    ./Network/networkmodel.cpp \
+    ./Network/networkxml.cpp \
+    ./Network/task_network.cpp \
+    Network/dns.cpp \
+    CustomLibrary/vstandarditemmodel.cpp \
+    Network/networkattributes.cpp
 
 RESOURCES += qml.qrc \
 
@@ -46,11 +49,14 @@ HEADERS += \
     domainmodel.h \
     user.h \
     sqlquerymodel.h \
-    networkmodel.h \
     task.h \
-    networkxml.h \
-    host.h \
-    contoller.h
+    contoller.h \
+    ./Network/host.h \
+    ./Network/networkmodel.h \
+    ./Network/networkxml.h \
+    Network/dns.h \
+    CustomLibrary/vstandarditemmodel.h \
+    Network/networkattributes.h
 
 DISTFILES += \
     requirments \

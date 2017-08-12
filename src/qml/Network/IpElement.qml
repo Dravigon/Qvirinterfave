@@ -8,6 +8,9 @@ import QtQuick.Controls.Material 2.0
 
 Rectangle {
     id:ip_root
+    onWidthChanged: {
+        visible=(root_item.width<(login.width/2)?false:true)
+    }
     function tabExist(tabName){
         for(i=0;i<id_tab.count;i++)
             if(id_tab.getTab(i).title===tabName)
@@ -188,6 +191,10 @@ Rectangle {
                                     text: qsTr("Dhcp:")
                                     font.pixelSize: 20
                                 }
+                                onVisibleChanged: {
+                                    console.log("ip4DhcpRangeExist = "+ip4DhcpRangeExist);
+                                }
+
                                 ColumnLayout{
                                     visible: ip4DhcpRangeExist
 
@@ -195,7 +202,6 @@ Rectangle {
                                         Text {
                                             id: ip4_dhcp_start
                                             text: qsTr("Range Start: ")
-
                                             font.pixelSize: 20
 
                                         }

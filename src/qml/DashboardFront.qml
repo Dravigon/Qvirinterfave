@@ -1,4 +1,4 @@
-
+import "./background"
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
@@ -32,17 +32,14 @@ Item {
 
     Rectangle{
         id:user_details
-        color: "purple"
+        color: "blue"
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         height: parent.height/2;
-//        Image {
-//            id: bg2
-//            anchors.fill: parent
-//            source: "file:///"+applicationDirPath + "/background/dashbord.png"
-//        }
+        BackGroundWave{
+        }
         MouseArea{
             id:user_area
             anchors.fill: parent
@@ -53,11 +50,11 @@ Item {
     Rectangle{
         id:actions
         color: "green"
-//        Image {
-//            id: bg
-//            anchors.fill: parent
-//            source: "file:///"+applicationDirPath + "/background/dashbord2.jpg"
-//        }
+        //        Image {
+        //            id: bg
+        //            anchors.fill: parent
+        //            source: "file:///"+applicationDirPath + "/background/dashbord2.jpg"
+        //        }
         height: user_details.height/2
         anchors.left: parent.left
         anchors.right: parent.right

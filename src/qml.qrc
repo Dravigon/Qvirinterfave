@@ -27,5 +27,20 @@
         <file>../icons/remove.png</file>
         <file>qml/Network/IpValidator.qml</file>
         <file>DefaultXml/NetworkXml.xml</file>
+        <file>qml/background/Background.qml</file>
+        <file>qml/background/BackgroundEffect.qml</file>
+        <file>qml/background/BasicCamera.qml</file>
+        <file>qml/background/Wave.qml</file>
+        <file>qml/background/WaveEffect.qml</file>
+        <file>qml/background/WaveForwardRenderer.qml</file>
+        <file>qml/background/WaveMaterial.qml</file>
+        <file>qml/background/BgMain.qml</file>
+        <file>shaders/background.frag</file>
+        <file>shaders/background.vert</file>
+        <file>shaders/ribbon.frag</file>
+        <file>shaders/ribbon.vert</file>
+        <file>shaders/ribbonwireframe.frag</file>
+        <file>shaders/robustwireframe.geom</file>
+        <file>qml/background/BackGroundWave.qml</file>
     </qresource>
 </RCC>

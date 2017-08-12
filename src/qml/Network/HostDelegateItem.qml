@@ -27,7 +27,7 @@ Component {
                 text: mac
                 inputMask: "HH:HH:HH:HH:HH:HH;_"
                 onTextChanged:  {
-                    ip4DhcpHostModel.set_data(index,host_mac_text.text,"mac")
+                    ip4DhcpHostModel.set_data(index,host_id_text.text,"id");
                 }
             }
             Text {
@@ -38,7 +38,7 @@ Component {
                 id: host_id_text
                 text: id
                 onTextChanged:  {
-                    ip4DhcpHostModel.set_data(index,host_id_text.text,"id")
+                    ip4DhcpHostModel.set_data(index,host_id_text.text,"id");
                 }
             }
             Text {
@@ -47,10 +47,12 @@ Component {
             }
             TextField{
                 id: host_ip_text
-                text: ip
+                text: qsTr(ip)
                 validator: IpValidator{}
                 onTextChanged:  {
-                    ip4DhcpHostModel.set_data(index,host_ip_text.text,"ip")
+                    ip4DhcpHostModel.roleis(mac);
+                    ip4DhcpHostModel.roleis(ip);
+                    ip4DhcpHostModel.set_data(index,host_ip_text.text,"ip");
                 }
             }
         }

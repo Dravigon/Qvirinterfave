@@ -1,18 +1,18 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'networkmodel.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.0)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.3)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../src/networkmodel.h"
+#include "../src/Network/networkmodel.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'networkmodel.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.9.0. It"
+#error "This file was generated using the moc from 5.9.3. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -119,7 +119,7 @@ void *NetworkModel::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_NetworkModel.stringdata0))
-        return static_cast<void*>(const_cast< NetworkModel*>(this));
+        return static_cast<void*>(this);
     return QAbstractListModel::qt_metacast(_clname);
 }
 

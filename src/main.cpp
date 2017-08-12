@@ -1,14 +1,17 @@
-#include <QQuickView>
-#include <QQmlContext>
-//#include <QApplication>
 
+#include <Qt3DQuickExtras/qt3dquickwindow.h>
+#include <Qt3DQuick/QQmlAspectEngine>
+#include <QGuiApplication>
 #include <QApplication>
-#include <QQmlApplicationEngine>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QOpenGLContext>
 
-//#include <QSqlTableModel>
+#include <QQuickView>
+
 //classes
 #include "domainmodel.h"//<--- user class included there
-#include "networkmodel.h"
+#include "Network/networkmodel.h"
 
 #include "contoller.h"
 
@@ -46,19 +49,22 @@ int main(int argc, char *argv[])
 
     Contoller contoller;
     //make the created objects available to qml as qml objects
-    QQmlApplicationEngine engine;
+     Qt3DExtras::Quick::Qt3DQuickWindow  view;
 
             qRegisterMetaType<HostModel*>("HostModel*" );
-    engine.rootContext()->setContextProperty("applicationDirPath", QGuiApplication::applicationDirPath());
-    engine.rootContext()->setContextProperty("host",&user);
-    engine.rootContext()->setContextProperty("contoller",QVariant::fromValue(&contoller));
-    engine.rootContext()->setContextProperty("domain_list",QVariant::fromValue(&dom_list));
-    engine.rootContext()->setContextProperty("network_list",QVariant::fromValue(&net_list));
-    engine.rootContext()->setContextProperty("address_list",QVariant::fromValue(someSqlModel));
-    engine.addImportPath("/home/dravigon/qt/Qvirinterface" );
+    view.engine()->qmlEngine()->rootContext()->setContextProperty("applicationDirPath", QGuiApplication::applicationDirPath());
+    view.engine()->qmlEngine()->rootContext()->setContextProperty("host",&user);
+    view.engine()->qmlEngine()->rootContext()->setContextProperty("contoller",QVariant::fromValue(&contoller));
+    view.engine()->qmlEngine()->rootContext()->setContextProperty("domain_list",QVariant::fromValue(&dom_list));
+    view.engine()->qmlEngine()->rootContext()->setContextProperty("network_list",QVariant::fromValue(&net_list));
+    view.engine()->qmlEngine()->rootContext()->setContextProperty("address_list",QVariant::fromValue(someSqlModel));
+    view.engine()->qmlEngine()->addImportPath("/home/dravigon/qt/Qvirinterface" );
 
     //create the qml instance
-    engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
+    view.setSource(QUrl(QLatin1String("qrc:/qml/main.qml")));
+    view.show();
+
 
     return app.exec();
+
 }

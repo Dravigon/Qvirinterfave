@@ -1,5 +1,5 @@
 #include "networkmodel.h"
-#include <QBuffer>
+#include <QtCore/QBuffer>
 #include <QFile>
 
 
@@ -8,7 +8,7 @@ Network::Network(const int &id, const virNetworkPtr &dom)
 {
     char *xml;
     m_name=QString(virNetworkGetName(m_net));
-    if((xml=virNetworkGetXMLDesc(dom,VIR_NETWORK_XML_INACTIVE))!=NULL){
+    if((xml=virNetworkGetXMLDesc(dom,VIR_NETWORK_XML_INACTIVE))!=nullptr){
         QByteArray xml_buffer;
 
         //    qDebug()<<xml;
@@ -51,13 +51,13 @@ NetworkModel::NetworkModel(User *user)
 
 void NetworkModel::addNetworks(){
 
-    virNetworkPtr *networks=NULL;
+    virNetworkPtr *networks=nullptr;
     virConnectPtr conn=usr->getConn();
     QString username=usr->username();
     int ret;
     unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE|
             VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    if(conn!=NULL){
+    if(conn!=nullptr){
         ret = virConnectListAllNetworks(conn, &networks, flags);
         if (ret < 0)
             qDebug()<<"error";
@@ -77,18 +77,18 @@ void NetworkModel::addNetworks(){
             addNetworks();
         }
     }
-    if(networks!=NULL)
+    if(networks!=nullptr)
         delete [] networks;
 }
 
 void NetworkModel::removeNetworks(){
-    virNetworkPtr *networks=NULL;
+    virNetworkPtr *networks=nullptr;
     virConnectPtr conn=usr->getConn();
     QString username=usr->username();
     int ret;
     unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE|
             VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    if(conn!=NULL){
+    if(conn!=nullptr){
         ret = virConnectListAllNetworks(conn, &networks, flags);
         if (ret < 0)
             qDebug()<<"error";
@@ -118,7 +118,7 @@ void NetworkModel::removeNetworks(){
             endRemoveRows();
         }
     }
-    if(networks!=NULL)
+    if(networks!=nullptr)
         delete [] networks;
 }
 
@@ -163,81 +163,89 @@ QVariant NetworkModel::data(const QModelIndex & index, int role) const {
     else if (role == ForwardExistRole)
         return network.netxml.isforwardExist;
     else if (role == ForwardModeRole)
-        return network.netxml.forward.mode;
-    else if (role == ForwardDevRole)
-        return network.netxml.forward.dev;
+        return network.netxml.forward.getMode();
+    else if (role == ForwardDevRole){
+       // qDebug()<<"this is the returned dev value"<<network.netxml.forward.getDev();
+        return network.netxml.forward.getDev();
+      }
     else if ( role == NatDefinedRole)
-        return network.netxml.forward.natExist;
-    else if (role == NatStartRole)
-        return network.netxml.forward.nat.start;
+        return network.netxml.forward.isNat();
+    else if (role == NatStartRole){
+        //qDebug()<<"this is the returned value"<<network.netxml.forward.getNat().getStart();
+        return network.netxml.forward.getNat()->getStart();
+        }
     else if (role ==NatEndRole)
-        return network.netxml.forward.nat.end;
-
+        return network.netxml.forward.getNat()->getEnd();
     else if (role == BridgeExistRole) {
         return network.netxml.bridge.exist;
     }
     else if (role == BridgeNameRole)
-        return network.netxml.bridge.name;
+        return network.netxml.bridge.getName();
     else if (role== BridgeStpRole)
-        return network.netxml.bridge.stp;
+        return network.netxml.bridge.getStp();
     else if (role == BridgeDelayRole)
-        return  network.netxml.bridge.delay;
+        return  network.netxml.bridge.getDelay();
     else if ( role == BandwidthExistRole) {
         return  network.netxml.bandwidth.exist;
     }
     else if (role == BandWidthInboundAverageRole)
-        return network.netxml.bandwidth.inbound.average;
+        return network.netxml.bandwidth.getInbound()->getAverage();
     else if (role == BandWidthInboundPeakRole)
-        return network.netxml.bandwidth.inbound.peak;
+        return network.netxml.bandwidth.getInbound()->getPeak();
     else if (role == BandwidthInboundBurstRole)
-        return network.netxml.bandwidth.inbound.burst;
+        return network.netxml.bandwidth.getInbound()->getBurst();
     else if (role == BandWidthOutboundAverageRole)
-        return network.netxml.bandwidth.outbound.average;
+        return network.netxml.bandwidth.getOutbound()->getAverage();
     else if (role == BandWidthOutboundPeakRole)
-        return network.netxml.bandwidth.outbound.peak;
+        return network.netxml.bandwidth.getOutbound()->getPeak();
     else if (role == BandwidthOutboundBurstRole)
-        return network.netxml.bandwidth.outbound.burst;
+        return network.netxml.bandwidth.getOutbound()->getBurst();
     else if( role == Ip4ExistRole)
-        return network.netxml.ip4.exist;
+        return network.netxml.ip4.getExist();
     else if(role == Ip4FamilyRole)
-        return network.netxml.ip4.family;
+        return network.netxml.ip4.getFamily();
     else if(role == Ip4AddressRole)
-        return network.netxml.ip4.address;
+        return network.netxml.ip4.getAddress();
     else if(role == Ip4NetmaskRole)
-        return network.netxml.ip4.netmask;
+        return network.netxml.ip4.getNetmask();
     else if(role == Ip4DhcpExistRole)
-        return network.netxml.ip4.hasDhcp;
+        return network.netxml.ip4.getHasDhcp();
     else if( role == Ip6ExistRole)
-        return network.netxml.ip6.exist;
+        return network.netxml.ip6.getExist();
     else if(role == Ip6FamilyRole)
-        return network.netxml.ip6.family;
+        return network.netxml.ip6.getFamily();
     else if(role == Ip6AddressRole)
-        return network.netxml.ip6.address;
+        return network.netxml.ip6.getAddress();
     else if(role == Ip6PrefixRole)
-        return network.netxml.ip6.prefix;
+        return network.netxml.ip6.getPrefix();
     else if(role == Ip6DhcpExistRole)
-        return network.netxml.ip6.hasDhcp;
+        return network.netxml.ip6.getHasDhcp();
     else if(role == Ip4DhcpRangeExistRole)
-        return network.netxml.ip4.dhcp.range.exist;
+        return network.netxml.ip4.getDhcp().rangeExist();
     else if(role == Ip4DhcpRangeStartRole)
-        return  network.netxml.ip4.dhcp.range.start;
+        return  network.netxml.ip4.getDhcp().getRange()->start;
     else if(role == Ip4DhcpRangeEndRole)
-        return  network.netxml.ip4.dhcp.range.end;
+        return  network.netxml.ip4.getDhcp().getRange()->end;
     else if(role == Ip4DhcpHasHostRole)
-        return network.netxml.ip4.dhcp.hasHost;
+        return network.netxml.ip4.getDhcp().hasHost;
     else if(role == Ip4DhcpHostModelRole)
-        return QVariant::fromValue(network.netxml.ip4.dhcp.host);//testing
+        return QVariant::fromValue(network.netxml.ip4.getDhcp().getHost());//testing
 
-    else if(role == Ip6DhcpRangeExistRole)
-        return network.netxml.ip6.dhcp.range.exist;
-    else if(role == Ip6DhcpRangeStartRole)
-        return  network.netxml.ip6.dhcp.range.start;
-    else if(role == Ip6DhcpRangeEndRole)
-        return  network.netxml.ip6.dhcp.range.end;
-    else if(role == Ip6DhcpHasHostRole)
-        return network.netxml.ip6.dhcp.hasHost;
-    else if(role == Ip6DhcpHostModelRole)
-        return QVariant::fromValue(network.netxml.ip6.dhcp.host);//testing
+    else if(role == Ip6DhcpRangeExistRole){
+        return network.netxml.ip6.getDhcp().rangeExist();
+      }
+    else if(role == Ip6DhcpRangeStartRole) {
+        return  network.netxml.ip6.getDhcp().getRange()->start;
+      }
+    else if(role == Ip6DhcpRangeEndRole) {
+        return  network.netxml.ip6.getDhcp().getRange()->end;
+      }
+    else if(role == Ip6DhcpHasHostRole) {
+        return network.netxml.ip6.getDhcp().hasHost;
+      }
+    else if(role == Ip6DhcpHostModelRole) {
+        return QVariant::fromValue(network.netxml.ip6.getDhcp().getHost());
+      }//testing
     //    else if(role == Ip4DhcpIdRole)
     //        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).id;
     //    else if(role == Ip4DhcpNameRole)
@@ -251,6 +259,7 @@ QVariant NetworkModel::data(const QModelIndex & index, int role) const {
 
 bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    qDebug()<<"see:"<<value;
     //       qDebug()<<"\ncalled set data before and index recived "<<index.row()<<"\ncount is "<<m_network.count()<<"value recieved"<<value.toString()<<" role is "<<role;
     if (index.row() < 0 || index.row() > m_network.count())
         return false;
@@ -265,82 +274,84 @@ bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int 
         network.netxml.isforwardExist=value.toBool();
     else if (role == ForwardModeRole){
         //        qDebug()<<"\ncalled set mode \n";
-        network.netxml.forward.mode=value.toString();
+        network.netxml.forward.setMode(value.toString());
     }
     else if (role == ForwardDevRole)
-        network.netxml.forward.dev=value.toString();
-    else if ( role == NatDefinedRole)
-        network.netxml.forward.natExist=value.toBool();
-    else if (role == NatStartRole)
-        network.netxml.forward.nat.start=value.toString();
+        network.netxml.forward.setDev(value.toString());
+//    else if ( role == NatDefinedRole)
+//        network.netxml.forward.getNat().set(value.toBool());
+    else if (role == NatStartRole){
+        network.netxml.forward.getNat()->setStart(value.toString());
+        qDebug()<<"this is start"<<network.netxml.forward.getNat()->getStart();
+      }
     else if (role ==NatEndRole)
-        network.netxml.forward.nat.end=value.toString();
+        network.netxml.forward.getNat()->setEnd(value.toString());
     else if (role == BridgeExistRole)
         network.netxml.bridge.exist=value.toBool();
     else if (role == BridgeNameRole)
-        network.netxml.bridge.name=value.toString();
+        network.netxml.bridge.setName(value.toString());
     else if (role== BridgeStpRole)
-        network.netxml.bridge.stp=value.toString();
+        network.netxml.bridge.setStp(value.toString());
     else if (role == BridgeDelayRole)
-        network.netxml.bridge.delay=value.toString();
+        network.netxml.bridge.setDelay(value.toString());
     else if ( role == BandwidthExistRole)
         network.netxml.bandwidth.exist=value.toBool();
 
     else if (role == BandWidthInboundAverageRole)
-        network.netxml.bandwidth.inbound.average=value.toString();
+        network.netxml.bandwidth.getInbound()->setAverage(value.toString());
     else if (role == BandWidthInboundPeakRole)
-        network.netxml.bandwidth.inbound.peak=value.toString();
+        network.netxml.bandwidth.getInbound()->setPeak(value.toString());
     else if (role == BandwidthInboundBurstRole)
-        network.netxml.bandwidth.inbound.burst=value.toString();
+        network.netxml.bandwidth.getInbound()->setBurst(value.toString());
     else if (role == BandWidthOutboundAverageRole)
-        network.netxml.bandwidth.outbound.average=value.toString();
+        network.netxml.bandwidth.getOutbound()->setAverage(value.toString());
     else if (role == BandWidthOutboundPeakRole)
-        network.netxml.bandwidth.outbound.peak=value.toString();
+        network.netxml.bandwidth.getOutbound()->setPeak(value.toString());
     else if (role == BandwidthOutboundBurstRole)
-        network.netxml.bandwidth.outbound.burst=value.toString();
+        network.netxml.bandwidth.getOutbound()->setBurst(value.toString());
     else if(role == Ip4ExistRole)
-        network.netxml.ip4.exist=value.toBool();
+        network.netxml.ip4.setExist(value.toBool());
     else if(role == Ip4AddressRole)
-        network.netxml.ip4.address=value.toString();
+        network.netxml.ip4.setAddress(value.toString());
     else if(role == Ip4NetmaskRole)
-        network.netxml.ip4.netmask=value.toString();
+        network.netxml.ip4.setNetmask(value.toString());
     else if(role == Ip4DhcpExistRole)
-        network.netxml.ip4.hasDhcp=value.toBool();
+        network.netxml.ip4.setHasDhcp(value.toBool());
     else if(role == Ip4DhcpRangeExistRole)
-        network.netxml.ip4.dhcp.range.exist=value.toBool();
+        network.netxml.ip4.getDhcp().rangeExist(value.toBool());
     else if(role == Ip4DhcpRangeStartRole)
-        network.netxml.ip4.dhcp.range.start=value.toString();
+        network.netxml.ip4.getDhcp().getRange()->start=value.toString();
     else if(role == Ip4DhcpRangeEndRole)
-        network.netxml.ip4.dhcp.range.end=value.toString();
+        network.netxml.ip4.getDhcp().getRange()->end=value.toString();
     else if(role == Ip4DhcpHasHostRole)
-        network.netxml.ip4.dhcp.hasHost=value.toBool();
+        network.netxml.ip4.getDhcp().setHasHost(value.toBool());
     else if(role == Ip4DhcpHostModelRole)
         //http://www.bogotobogo.com/Qt/Qt5_QVariant_meta_object_system_MetaType.php
         //refer that for more info
-        network.netxml.ip4.dhcp.host=value.value<HostModel*>();
+        network.netxml.ip4.getDhcp().setHost(value.value<HostModel*>());
 
     else if( role == Ip6ExistRole)
-        network.netxml.ip6.exist=value.toBool();
+        network.netxml.ip6.setExist(value.toBool());
     else if(role == Ip6FamilyRole)
-        network.netxml.ip6.family=value.toString();
+        network.netxml.ip6.setFamily(value.toString());
     else if(role == Ip6AddressRole)
-        network.netxml.ip6.address=value.toString();
+        network.netxml.ip6.setAddress(value.toString());
     else if(role == Ip6PrefixRole)
-        network.netxml.ip6.prefix=value.toString();
+        network.netxml.ip6.setPrefix(value.toString());
     else if(role == Ip6DhcpExistRole)
-        network.netxml.ip6.hasDhcp=value.toBool();
+        network.netxml.ip6.setHasDhcp(value.toBool());
     else if(role == Ip6DhcpRangeExistRole)
-        network.netxml.ip6.dhcp.range.exist=value.toBool();
+        network.netxml.ip6.getDhcp().rangeExist(value.toBool());
     else if(role == Ip6DhcpRangeStartRole)
-        network.netxml.ip6.dhcp.range.start=value.toString();
+        network.netxml.ip6.getDhcp().getRange()->start=value.toString();
     else if(role == Ip6DhcpRangeEndRole)
-        network.netxml.ip6.dhcp.range.end=value.toString();
+        network.netxml.ip6.getDhcp().getRange()->end=value.toString();
     else if(role == Ip6DhcpHasHostRole)
-        network.netxml.ip6.dhcp.hasHost=value.toBool();
+        network.netxml.ip6.getDhcp().setHasHost(value.toBool());
     else if(role == Ip6DhcpHostModelRole)
         //http://www.bogotobogo.com/Qt/Qt5_QVariant_meta_object_system_MetaType.php
         //refer that for more info
-        network.netxml.ip6.dhcp.host=value.value<HostModel*>();
+        network.netxml.ip6.getDhcp().setHost(value.value<HostModel*>());
 
 
     //this statement sets the data
