@@ -11,7 +11,8 @@ Rectangle{
     id:root_item
     anchors.margins: 20
     onWidthChanged: {
-        addButton.width=removeButton.width=root_item.width<(login.width/2)?0:50
+        addButton.width=(root_item.width<(login.width/2)?0:50)
+        removeButton.width=(root_item.width<(login.width/2)?0:50)
     }
 
     Button{

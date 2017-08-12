@@ -8,6 +8,9 @@ import QtQuick.Controls.Material 2.0
 
 Rectangle {
     id:ip_root
+    onWidthChanged: {
+        visible=(root_item.width<(login.width/2)?false:true)
+    }
     function tabExist(tabName){
         for(i=0;i<id_tab.count;i++)
             if(id_tab.getTab(i).title===tabName)
