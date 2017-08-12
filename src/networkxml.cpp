@@ -305,11 +305,10 @@ QString networkxml::write(){
     qDebug()<<"i="<<i;
 
     if(ip4.exist){
-
         qDebug()<<ip4.hasDhcp;
         stream.writeStartElement("ip");
         if(ip4.family!=NULL)
-            stream.writeAttribute("family", ip4.family);
+            stream.writeAttribute("family", "ip4");
         stream.writeAttribute("address", ip4.address);
         qDebug()<<"Address:"<<ip4.address;
         if(ip4.netmask!=NULL)
@@ -344,7 +343,6 @@ QString networkxml::write(){
 
             }
             stream.writeEndElement();
-            stream.writeEndElement();
         }
         else{
             qDebug()<<ip4.hasDhcp;
@@ -355,6 +353,7 @@ QString networkxml::write(){
             if(ip4.netmask!=NULL)
                 stream.writeAttribute("netmask", ip4.netmask);
         }
+        stream.writeEndElement();
     }
 
     if(ip6.exist){
@@ -399,7 +398,7 @@ QString networkxml::write(){
 
             }
             stream.writeEndElement();
-            stream.writeEndElement();
+
         }
         else{
             qDebug()<<ip6.hasDhcp;
@@ -412,6 +411,7 @@ QString networkxml::write(){
             //            if(ip6.netmask!=NULL)
             //                stream.writeAttribute("netmask", ip6.netmask);
         }
+        stream.writeEndElement();
     }
 
 

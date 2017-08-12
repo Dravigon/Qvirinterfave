@@ -37,7 +37,7 @@ Rectangle{
                             }
                             TextField{
                                 id: inbound_bandwidth_average_text
-                                text: bandwidthInboundAverage===""?"50":bandwidthInboundAverage
+                                text: bandwidthInboundAverage
                                 validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
                                 inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
@@ -61,7 +61,7 @@ Rectangle{
                             }
                             TextField{
                                 id: inbound_bandwidth_peak_text
-                                text: bandwidthInboundPeak===""?"50":bandwidthInboundPeak
+                                text: bandwidthInboundPeak
                                 validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
                                 inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
@@ -88,7 +88,7 @@ Rectangle{
                             }
                             TextField{
                                 id: inbound_bandwidth_burst_text
-                                text: bandwidthInboundBurst===""?"50":bandwidthInboundBurst
+                                text: bandwidthInboundBurst
                                 validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
                                 inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
@@ -129,7 +129,7 @@ Rectangle{
                             }
                             TextField{
                                 id: outbound_bandwidth_average_text
-                                text: bandwidthOutboundAverage===""?"50":bandwidthOutboundAverage
+                                text: bandwidthOutboundAverage
                                 validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
                                 inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
@@ -154,7 +154,7 @@ Rectangle{
                             }
                             TextField{
                                 id: outbound_bandwidth_peak_text
-                                text: bandwidthOutboundPeak===""?"50":bandwidthOutboundPeak
+                                text: bandwidthOutboundPeak
                                 validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
                                 inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {
@@ -181,7 +181,7 @@ Rectangle{
                             }
                             TextField{
                                 id: outbound_bandwidth_burst_text
-                                text: bandwidthOutboundBurst===""?"50":bandwidthOutboundBurst
+                                text: bandwidthOutboundBurst
                                 validator: IntValidator { bottom:0; top: contoller.maxBandwidth() }
                                 inputMethodHints: Qt.ImhDigitsOnly
                                 onTextChanged: {

@@ -13,6 +13,7 @@ class Network//for objects for model
 public:
     networkxml netxml;
     virNetworkPtr m_net;
+
     bool editable=false;
     Network(const int &id, const virNetworkPtr &dom);
     int id() const;//for indexing
@@ -105,6 +106,7 @@ public:
 
 
     void addNetworks();
+    void removeNetworks();
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
 
@@ -117,8 +119,9 @@ public:
     Q_INVOKABLE bool set_data(int index,QVariant value,QString role);
 
     Q_INVOKABLE void refresh();
-    Q_PROPERTY(int ipIndex READ ipIndex WRITE setIpIndex )
-    Q_PROPERTY(int dhcpIndex READ dhcpIndex WRITE setDhcpIndex )
+
+    Q_INVOKABLE void addNewNetwork(QString name);
+
     int dhcpIndex() const{
         return m_DhcpIndex;
     }
@@ -141,7 +144,15 @@ public:
         qDebug()<<"das fa:"<<m_network.at(index).netxml.bridge.delay;
         return ret;
     }
-
+    Q_INVOKABLE void removeIndex(int i){
+        beginRemoveRows(QModelIndex(), i, i);
+        if((virNetworkIsActive(m_network.at(i).m_net))){
+            virNetworkDestroy(m_network.at(i).m_net);
+        }
+        virNetworkUndefine(m_network.at(i).m_net);
+        m_network.removeAt(i);
+        endRemoveRows();
+    }
 
 
 protected:
@@ -152,6 +163,7 @@ private:
     int m_IpIndex=0;
     int m_DhcpIndex=0;
     User *usr;
+
 
 signals:
 

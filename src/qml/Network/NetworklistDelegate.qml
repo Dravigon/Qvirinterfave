@@ -7,13 +7,13 @@ import QtQuick.Controls.Material 2.0
 Component {
     id: detailsDelegate
 
-
-
     Item {
         id: wrapper
 
         property int i
-            property int root_index: index
+        property int root_index: index
+        property bool toggle: false
+
         width: listView.width
         height: 80
 
@@ -23,8 +23,8 @@ Component {
             interval: 2000; running: true; repeat: true
             onTriggered:{ if(i>0)wrapper.state=network_list.task("state",index);
                 i++;
-           //     network_list.refresh();
-        //        console.log("host_size:"+ip4DhcpHostModel.size())
+                //     network_list.refresh();
+                //        console.log("host_size:"+ip4DhcpHostModel.size())
             }
             onRunningChanged: i=0;
         }
@@ -40,18 +40,81 @@ Component {
 
             color: "#333"
             border.color: Qt.lighter(color, 1.2)
-//NOTE dont know why i added this incase somthing is wrong with preview uncomment this
+
+            Popup{
+                id:popupConfirm
+                x:rt.width/2-250
+                y:login.height/2-200
+                Rectangle{
+                    width:500
+                    height:200
+                    ColumnLayout{
+                        anchors.centerIn: parent
+                        Text {
+                            text: qsTr("Are you sure to remove "+name+" Connection")
+                        }
+                        RowLayout{
+                            Button{
+                                text:"yes"
+                                onClicked: {
+                                    network_list.removeIndex(index);
+                                }
+                            }
+                            Button{
+                                text:"no"
+                                onClicked: popupConfirm.close();
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            Rectangle{
+                id:removeButton
+                anchors.right: parent.right
+                anchors.top:parent.top
+                anchors.margins: 20
+                height:30
+                width: 30
+                MouseArea{
+                    anchors.fill: parent
+                    Image {
+                        anchors.fill: parent
+                        id: deleter
+                        source: "qrc:/../icons/remove.png";
+                    }
+                    onClicked: {
+                        popupConfirm.open();
+                        console.log("okay");}
+                }
+            }
+
+            //NOTE dont know why i added this incase somthing is wrong with preview uncomment this
             //            onHeightChanged: {
-//               // preview.height=height;
-//            }
+            //               // preview.height=height;
+            //            }
 
             MouseArea {
                 z:0
-                anchors.fill: rt
+                anchors.right: removeButton.left
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
                 onClicked: {
-                    preview.setIndex();
-                    if((network_list.task("stop",index)==="stopped")||(network_list.task("state",index)==="stopped")){
-                    wrapper.state = "expanded"
+                    if(!toggle){
+                        if((network_list.task("stop",index)==="stopped")||(network_list.task("state",index)==="stopped")){
+                            wrapper.state = "expanded"
+                            toggle=!toggle;
+                        }
+                    }
+                    else{
+                        wrapper.state = ""
+                        toggle=!toggle;
+                        if(!network_list.setXmlData(index)){
+                            err.errormessage=host.err()
+                            err.open();
+                        }
                     }
                 }
             }
@@ -76,7 +139,7 @@ Component {
                         }
                         onClicked: {if(network_list.task("start",index)==="started"){
                                 wrapper.state = "started";
-                               // console.log(domain_list.task("xml",index));
+                                // console.log(domain_list.task("xml",index));
                             }
                             else
                                 errorm();
@@ -91,8 +154,8 @@ Component {
                             text: qsTr("#")
                         }
                         onClicked:{ if(network_list.task("stop",index)==="stopped"){
-                                       wrapper.state = "stopped";
-                                   }
+                                wrapper.state = "stopped";
+                            }
                             else
                                 errorm();
                         }
@@ -101,7 +164,7 @@ Component {
             }
         }
 
-    //for the details with last running display image of the vm
+        //for the details with last running display image of the vm
 
         NetworkPreview{
             id: preview
@@ -111,12 +174,10 @@ Component {
             anchors.top: parent.top
             anchors.rightMargin: 2
             anchors.topMargin: 2
-    }
+        }
 
 
-//<unimplimented
 
-//planned>
         Item {//details of the vm and to edit vm
             id: factsView
 
@@ -151,37 +212,20 @@ Component {
                 }
             }
         }
-//<planned
-        Rectangle {
-            id: closeButton
+        //<planned
 
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.rightMargin: 2
-            anchors.topMargin: 2
-
-            width: rt.height
-            height: rt.height-3
-
-            color: "#157efb"
-            border.color: Qt.lighter(color, 1.1)
-
-            opacity: 0
-            Text {
-                anchors.centerIn: parent
-                text: qsTr("X")
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {wrapper.state = ""
-                    if(!network_list.setXmlData(index)){
-                        err.errormessage=host.err()
-                        err.open();
-                    }
-                }
-            }
+        //slots
+        ListView.onAdd: {
+            if((index===listView.count-1)&&listView.lock)
+                state="expanded";
+            listView.lock=false;
         }
+
+        onStateChanged: {
+            if(state==="expanded")
+                preview.setIndex();
+        }
+        //
 
         states: [
             State {
@@ -191,7 +235,6 @@ Component {
                 PropertyChanges { target: wrapper; height: listView.height }
                 PropertyChanges { target: preview; width: listView.width; height: parent.height-80; anchors.rightMargin: 0; anchors.topMargin: rt.height }
                 PropertyChanges { target: factsView; opacity: 1 }
-                PropertyChanges { target: closeButton; opacity: 1 }
                 PropertyChanges { target: wrapper.ListView.view; contentY: wrapper.y; interactive: false }
             },
             State {

@@ -23,13 +23,13 @@ struct Forward{
 struct Bridge{
     bool exist;
     QString name;
-    QString stp=NULL;
-    QString delay=NULL;
+    QString stp="on";
+    QString delay="0";
 };
 struct Qos{
-    QString average=NULL;
-    QString peak=NULL;
-    QString burst=NULL;
+    QString average="50";
+    QString peak="50";
+    QString burst="50";
 };
 struct bw{
     bool exist;
@@ -49,9 +49,9 @@ struct Dhcp{
 struct IP4
 {
     bool exist=false;
-    QString family=NULL;
+    QString family="ip4";
     QString address;
-    QString netmask=NULL;
+    QString netmask="255.255.255.0";
     bool hasDhcp=false;
     Dhcp dhcp;
     IP4(){
@@ -61,7 +61,7 @@ struct IP4
 struct IP6
 {
     bool exist=false;
-    QString family=NULL;
+    QString family="ip6";
     QString address;
     QString prefix=NULL;
     bool hasDhcp=false;

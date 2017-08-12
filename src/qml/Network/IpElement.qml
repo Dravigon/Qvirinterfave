@@ -374,7 +374,7 @@ Rectangle {
                             Row{
                                 Text {
                                     id: ip6_netmask
-                                    text: qsTr("Netmask: ")
+                                    text: qsTr("Prefix: ")
                                     font.pixelSize: 20
                                 }
                                 TextField{

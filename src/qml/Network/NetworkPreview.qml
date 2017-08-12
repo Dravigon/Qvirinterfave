@@ -18,7 +18,7 @@ Rectangle{
         id:addButton
         width: 0
         height:50
-        visible:!ip4DhcpExist||!ip4DhcpHasHost
+        visible:(!forwardExist||!bridgeExist||!bandwidthExist||(!ip4Exist||!ip6Exist))
         anchors.margins: 20
         Image {
             id: add
@@ -33,7 +33,7 @@ Rectangle{
     }
     Button{
         id:removeButton
-        visible:ip4DhcpExist||ip4DhcpHasHost
+        visible:forwardExist||bridgeExist||bandwidthExist||(ip4Exist||ip6Exist)
         anchors.top: parent.top
         anchors.right: parent.right
         width: 0
@@ -173,13 +173,6 @@ Rectangle{
                     onClicked: {
                         bandwidthExist=true;
                         netTab.addTab("Bandwidth",bandwidthTab)
-                    }
-                }
-                Button{
-                    visible: !(ip4Exist||ip6Exist)
-                    text:"Ip"
-                    onClicked: {
-                        netTab.addTab("Ip",ipTab)
                     }
                 }
                 Button{

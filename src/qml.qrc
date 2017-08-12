@@ -26,5 +26,6 @@
         <file>../icons/add.png</file>
         <file>../icons/remove.png</file>
         <file>qml/Network/IpValidator.qml</file>
+        <file>DefaultXml/NetworkXml.xml</file>
     </qresource>
 </RCC>

@@ -1,5 +1,6 @@
 #include "networkmodel.h"
 #include <QBuffer>
+#include <QFile>
 
 
 Network::Network(const int &id, const virNetworkPtr &dom)
@@ -8,21 +9,21 @@ Network::Network(const int &id, const virNetworkPtr &dom)
     char *xml;
     m_name=QString(virNetworkGetName(m_net));
     if((xml=virNetworkGetXMLDesc(dom,VIR_NETWORK_XML_INACTIVE))!=NULL){
-    QByteArray xml_buffer;
+        QByteArray xml_buffer;
 
-//    qDebug()<<xml;
-    //for testing purposes
-   // QString x;
-    //x="<network>\n  <name>local6</name>\n  <bridge name='virbr1'/>\n  <forward mode='route' dev='eth1'/>\n  <ip address='192.168.122.1' netmask='255.255.255.0'>\n    <dhcp>\n      <range start='192.168.122.2' end='192.168.122.254'/>\n    </dhcp>\n  </ip>\n  <ip family='ipv6' address='2001:db8:ca2:2::1' prefix='64'>\n    <dhcp>\n      <host name='paul' ip='2001:db8:ca2:2:3::1'/>\n      <host id='0:1:0:1:18:aa:62:fe:0:16:3e:44:55:66' ip='2001:db8:ca2:2:3::2'/>\n      <host id='0:3:0:1:0:16:3e:11:22:33' name='ralph' ip='2001:db8:ca2:2:3::3'/>\n      <host id='0:4:7e:7d:f0:7d:a8:bc:c5:d2:13:32:11:ed:16:ea:84:63' name='badbob' ip='2001:db8:ca2:2:3::4'/>\n    </dhcp>\n  </ip>\n</network>\n";
-     //   xml_buffer.append(x);
-    xml_buffer.append(xml);
-    delete [] xml;
-    QBuffer buffer(&xml_buffer);
-    buffer.open(QIODevice::ReadWrite);
+        //    qDebug()<<xml;
+        //for testing purposes
+        // QString x;
+        //x="<network>\n  <name>local6</name>\n  <bridge name='virbr1'/>\n  <forward mode='route' dev='eth1'/>\n  <ip address='192.168.122.1' netmask='255.255.255.0'>\n    <dhcp>\n      <range start='192.168.122.2' end='192.168.122.254'/>\n    </dhcp>\n  </ip>\n  <ip family='ipv6' address='2001:db8:ca2:2::1' prefix='64'>\n    <dhcp>\n      <host name='paul' ip='2001:db8:ca2:2:3::1'/>\n      <host id='0:1:0:1:18:aa:62:fe:0:16:3e:44:55:66' ip='2001:db8:ca2:2:3::2'/>\n      <host id='0:3:0:1:0:16:3e:11:22:33' name='ralph' ip='2001:db8:ca2:2:3::3'/>\n      <host id='0:4:7e:7d:f0:7d:a8:bc:c5:d2:13:32:11:ed:16:ea:84:63' name='badbob' ip='2001:db8:ca2:2:3::4'/>\n    </dhcp>\n  </ip>\n</network>\n";
+        //   xml_buffer.append(x);
+        xml_buffer.append(xml);
+        delete [] xml;
+        QBuffer buffer(&xml_buffer);
+        buffer.open(QIODevice::ReadWrite);
 
-    netxml.setXml(&buffer);
-    if(netxml.read())
-        editable=true;
+        netxml.setXml(&buffer);
+        if(netxml.read())
+            editable=true;
     }
 }
 
@@ -48,14 +49,42 @@ NetworkModel::NetworkModel(User *user)
     usr=user;
 }
 
-void NetworkModel::addNetworks()
-{
+void NetworkModel::addNetworks(){
+
     virNetworkPtr *networks=NULL;
-
-
     virConnectPtr conn=usr->getConn();
     QString username=usr->username();
+    int ret;
+    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE|
+            VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+    if(conn!=NULL){
+        ret = virConnectListAllNetworks(conn, &networks, flags);
+        if (ret < 0)
+            qDebug()<<"error";
 
+        int i=0;
+        while(networks[i]){
+            if((i+1)>rowCount()){
+                beginInsertRows(QModelIndex(), rowCount(), rowCount());
+                m_network.append(*new Network(i,networks[i]));
+                endInsertRows();
+            }
+            i++;
+        }
+        if(!m_network.isEmpty()&&(i!=m_network.size())&&(m_network.size()!=0)){
+            removeNetworks();
+            if(i!=0)
+            addNetworks();
+        }
+    }
+    if(networks!=NULL)
+        delete [] networks;
+}
+
+void NetworkModel::removeNetworks(){
+    virNetworkPtr *networks=NULL;
+    virConnectPtr conn=usr->getConn();
+    QString username=usr->username();
     int ret;
     unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE|
             VIR_CONNECT_LIST_NETWORKS_INACTIVE;
@@ -65,13 +94,28 @@ void NetworkModel::addNetworks()
             qDebug()<<"error";
         int i=0;
         while(networks[i]){
- //           qDebug()<<i<<"network "<<virNetworkGetName(networks[i])<<"0.2"<<"\n row count="<<rowCount();
-            if((i+1)>rowCount()){
-                       beginInsertRows(QModelIndex(), rowCount(), rowCount());
-                m_network.append(*new Network(i,networks[i]));
-                endInsertRows();
+            int flag=0;
+            for(int j=0;j<m_network.size();j++){
+                if(networks[i]!=m_network.at(j).m_net){
+                    flag++;
+                }
+                else{
+                    flag=0;
+                    break;
+                }
+            }
+            if(flag>0){
+                beginRemoveRows(QModelIndex(), i, i);
+                m_network.removeAt(i);
+                endRemoveRows();
+                i=i-1;
             }
             i++;
+        }
+        if((i!=m_network.size())&&(m_network.size()!=0)){
+            beginRemoveRows(QModelIndex(), i, i);
+            m_network.removeAt(i);
+            endRemoveRows();
         }
     }
     if(networks!=NULL)
@@ -79,9 +123,28 @@ void NetworkModel::addNetworks()
 }
 
 void NetworkModel::refresh(){
-
     addNetworks();
 }
+
+void NetworkModel::addNewNetwork(QString name)
+{
+    networkxml netXml;
+    QFile *stream=new QFile(":/DefaultXml/NetworkXml.xml");
+    netXml.setXml(stream);
+    netXml.name=name;
+
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    virNetworkPtr virNet;
+    virNet=virNetworkDefineXML(usr->getConn(),netXml.write().toStdString().c_str());
+    Network newNet(rowCount(),virNet);
+    m_network.append(newNet);
+    endInsertRows();
+
+    delete stream;
+
+}
+
+
 
 int NetworkModel::rowCount(const QModelIndex & parent) const {
     Q_UNUSED(parent);
@@ -175,25 +238,25 @@ QVariant NetworkModel::data(const QModelIndex & index, int role) const {
         return network.netxml.ip6.dhcp.hasHost;
     else if(role == Ip6DhcpHostModelRole)
         return QVariant::fromValue(network.netxml.ip6.dhcp.host);//testing
-//    else if(role == Ip4DhcpIdRole)
-//        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).id;
-//    else if(role == Ip4DhcpNameRole)
-//        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).name;
-//    else if(role == Ip4DhcpMacRole)
-//        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).mac;
-//    else if(role == Ip4DhcpIpRole)
-//        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).ip;
+    //    else if(role == Ip4DhcpIdRole)
+    //        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).id;
+    //    else if(role == Ip4DhcpNameRole)
+    //        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).name;
+    //    else if(role == Ip4DhcpMacRole)
+    //        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).mac;
+    //    else if(role == Ip4DhcpIpRole)
+    //        return network.netxml.ip.at(m_IpIndex).dhcp.host.at(m_DhcpIndex).ip;
     return QVariant();
 }
 
 bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-//       qDebug()<<"\ncalled set data before and index recived "<<index.row()<<"\ncount is "<<m_network.count()<<"value recieved"<<value.toString()<<" role is "<<role;
+    //       qDebug()<<"\ncalled set data before and index recived "<<index.row()<<"\ncount is "<<m_network.count()<<"value recieved"<<value.toString()<<" role is "<<role;
     if (index.row() < 0 || index.row() > m_network.count())
         return false;
-//    qDebug()<<"\ncalled set data \n";
-//    qDebug()<<"role no of model is:"<<ForwardModeRole;
-     Network network = m_network[index.row()];
+    //    qDebug()<<"\ncalled set data \n";
+    //    qDebug()<<"role no of model is:"<<ForwardModeRole;
+    Network network = m_network[index.row()];
     if (role == IdRole)
         return network.id();
     else if (role == NameRole)
@@ -201,7 +264,7 @@ bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int 
     else if (role == ForwardExistRole)
         network.netxml.isforwardExist=value.toBool();
     else if (role == ForwardModeRole){
-//        qDebug()<<"\ncalled set mode \n";
+        //        qDebug()<<"\ncalled set mode \n";
         network.netxml.forward.mode=value.toString();
     }
     else if (role == ForwardDevRole)
@@ -209,71 +272,71 @@ bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int 
     else if ( role == NatDefinedRole)
         network.netxml.forward.natExist=value.toBool();
     else if (role == NatStartRole)
-         network.netxml.forward.nat.start=value.toString();
+        network.netxml.forward.nat.start=value.toString();
     else if (role ==NatEndRole)
-         network.netxml.forward.nat.end=value.toString();
+        network.netxml.forward.nat.end=value.toString();
     else if (role == BridgeExistRole)
-         network.netxml.bridge.exist=value.toBool();
+        network.netxml.bridge.exist=value.toBool();
     else if (role == BridgeNameRole)
-         network.netxml.bridge.name=value.toString();
+        network.netxml.bridge.name=value.toString();
     else if (role== BridgeStpRole)
-         network.netxml.bridge.stp=value.toString();
+        network.netxml.bridge.stp=value.toString();
     else if (role == BridgeDelayRole)
-          network.netxml.bridge.delay=value.toString();
+        network.netxml.bridge.delay=value.toString();
     else if ( role == BandwidthExistRole)
-          network.netxml.bandwidth.exist=value.toBool();
+        network.netxml.bandwidth.exist=value.toBool();
 
     else if (role == BandWidthInboundAverageRole)
-         network.netxml.bandwidth.inbound.average=value.toString();
+        network.netxml.bandwidth.inbound.average=value.toString();
     else if (role == BandWidthInboundPeakRole)
-         network.netxml.bandwidth.inbound.peak=value.toString();
+        network.netxml.bandwidth.inbound.peak=value.toString();
     else if (role == BandwidthInboundBurstRole)
-         network.netxml.bandwidth.inbound.burst=value.toString();
+        network.netxml.bandwidth.inbound.burst=value.toString();
     else if (role == BandWidthOutboundAverageRole)
-         network.netxml.bandwidth.outbound.average=value.toString();
+        network.netxml.bandwidth.outbound.average=value.toString();
     else if (role == BandWidthOutboundPeakRole)
-         network.netxml.bandwidth.outbound.peak=value.toString();
+        network.netxml.bandwidth.outbound.peak=value.toString();
     else if (role == BandwidthOutboundBurstRole)
-         network.netxml.bandwidth.outbound.burst=value.toString();
+        network.netxml.bandwidth.outbound.burst=value.toString();
     else if(role == Ip4ExistRole)
-         network.netxml.ip4.exist=value.toBool();
+        network.netxml.ip4.exist=value.toBool();
     else if(role == Ip4AddressRole)
-         network.netxml.ip4.address=value.toString();
+        network.netxml.ip4.address=value.toString();
     else if(role == Ip4NetmaskRole)
-         network.netxml.ip4.netmask=value.toString();
+        network.netxml.ip4.netmask=value.toString();
     else if(role == Ip4DhcpExistRole)
-         network.netxml.ip4.hasDhcp=value.toBool();
+        network.netxml.ip4.hasDhcp=value.toBool();
     else if(role == Ip4DhcpRangeExistRole)
-         network.netxml.ip4.dhcp.range.exist=value.toBool();
+        network.netxml.ip4.dhcp.range.exist=value.toBool();
     else if(role == Ip4DhcpRangeStartRole)
-          network.netxml.ip4.dhcp.range.start=value.toString();
+        network.netxml.ip4.dhcp.range.start=value.toString();
     else if(role == Ip4DhcpRangeEndRole)
-          network.netxml.ip4.dhcp.range.end=value.toString();
+        network.netxml.ip4.dhcp.range.end=value.toString();
     else if(role == Ip4DhcpHasHostRole)
-         network.netxml.ip4.dhcp.hasHost=value.toBool();
+        network.netxml.ip4.dhcp.hasHost=value.toBool();
     else if(role == Ip4DhcpHostModelRole)
         //http://www.bogotobogo.com/Qt/Qt5_QVariant_meta_object_system_MetaType.php
         //refer that for more info
         network.netxml.ip4.dhcp.host=value.value<HostModel*>();
 
     else if( role == Ip6ExistRole)
-         network.netxml.ip6.exist=value.toBool();
+        network.netxml.ip6.exist=value.toBool();
     else if(role == Ip6FamilyRole)
-         network.netxml.ip6.family=value.toString();
+        network.netxml.ip6.family=value.toString();
     else if(role == Ip6AddressRole)
-         network.netxml.ip6.address=value.toString();
+        network.netxml.ip6.address=value.toString();
     else if(role == Ip6PrefixRole)
-         network.netxml.ip6.prefix=value.toString();
+        network.netxml.ip6.prefix=value.toString();
     else if(role == Ip6DhcpExistRole)
-         network.netxml.ip6.hasDhcp=value.toBool();
+        network.netxml.ip6.hasDhcp=value.toBool();
     else if(role == Ip6DhcpRangeExistRole)
-         network.netxml.ip6.dhcp.range.exist=value.toBool();
+        network.netxml.ip6.dhcp.range.exist=value.toBool();
     else if(role == Ip6DhcpRangeStartRole)
-          network.netxml.ip6.dhcp.range.start=value.toString();
+        network.netxml.ip6.dhcp.range.start=value.toString();
     else if(role == Ip6DhcpRangeEndRole)
-          network.netxml.ip6.dhcp.range.end=value.toString();
+        network.netxml.ip6.dhcp.range.end=value.toString();
     else if(role == Ip6DhcpHasHostRole)
-         network.netxml.ip6.dhcp.hasHost=value.toBool();
+        network.netxml.ip6.dhcp.hasHost=value.toBool();
     else if(role == Ip6DhcpHostModelRole)
         //http://www.bogotobogo.com/Qt/Qt5_QVariant_meta_object_system_MetaType.php
         //refer that for more info
@@ -282,7 +345,7 @@ bool NetworkModel::setData(const QModelIndex &index, const QVariant &value, int 
 
     //this statement sets the data
     m_network[index.row()]=network;
-   // qDebug()<<"well name is"<<m_network[index.row()].netxml.forward.mode<<" name in temp is "<<network.netxml.forward.mode;
+    // qDebug()<<"well name is"<<m_network[index.row()].netxml.forward.mode<<" name in temp is "<<network.netxml.forward.mode;
     emit dataChanged(index, index);
     return true;
 }
@@ -297,7 +360,7 @@ QString NetworkModel::task(QString task, int index)
         }
     }
     else if(task=="stop"){
-//        qDebug()<<"OMG!!!!! "<<virNetworkGetName(m_network.at(index).m_net);
+        //        qDebug()<<"OMG!!!!! "<<virNetworkGetName(m_network.at(index).m_net);
         if((virNetworkIsActive(m_network.at(index).m_net))){
             virNetworkDestroy(m_network.at(index).m_net);
             ret="stopped";
@@ -308,7 +371,7 @@ QString NetworkModel::task(QString task, int index)
             ret="started";
         }
         else
-           ret="stopped";
+            ret="stopped";
     }
 
     ////return doTask(task,index,m_network.at(index));
@@ -329,7 +392,7 @@ QHash<int, QByteArray> NetworkModel::roleNames() const {
     roles[IdRole] = "id";
     roles[NameRole] = "name";
     roles[ForwardExistRole]="forwardExist";
-   roles[ForwardModeRole]="forwardMode";
+    roles[ForwardModeRole]="forwardMode";
     roles[ForwardDevRole]="forwardDev";
     roles[NatDefinedRole]="natDefined";
     roles[NatStartRole]="natStart";
