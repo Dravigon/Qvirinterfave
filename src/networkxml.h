@@ -2,6 +2,7 @@
 #define NETWORKXML_H
 
 #include <QDebug>
+#include <QBuffer>
 #include <QString>
 #include <QVariantList>
 #include <QIODevice>
@@ -22,13 +23,13 @@ struct Forward{
 struct Bridge{
     bool exist;
     QString name;
-    QString stp=NULL;
-    QString delay=NULL;
+    QString stp="on";
+    QString delay="0";
 };
 struct Qos{
-    QString average=NULL;
-    QString peak=NULL;
-    QString burst=NULL;
+    QString average="50";
+    QString peak="50";
+    QString burst="50";
 };
 struct bw{
     bool exist;
@@ -42,16 +43,16 @@ struct Dhcp{
         QString start;
         QString end;
     }range;
-    bool hasHost;
+    bool hasHost=false;
     HostModel *host=new HostModel();
 };
 struct IP4
 {
     bool exist=false;
-    QString family=NULL;
+    QString family="ip4";
     QString address;
-    QString netmask=NULL;
-    bool hasDhcp;
+    QString netmask="255.255.255.0";
+    bool hasDhcp=false;
     Dhcp dhcp;
     IP4(){
 
@@ -60,10 +61,10 @@ struct IP4
 struct IP6
 {
     bool exist=false;
-    QString family=NULL;
+    QString family="ip6";
     QString address;
     QString prefix=NULL;
-    bool hasDhcp;
+    bool hasDhcp=false;
     Dhcp dhcp;
     IP6(){
 
@@ -82,7 +83,7 @@ class networkxml
 {
 public:
     QString name;
-    bool isforwardExist;
+    bool isforwardExist=false;
     Forward forward;
     Bridge bridge;
     bw bandwidth;
@@ -90,9 +91,6 @@ public:
     IP6 ip6;
     QList<Route> route;
     QIODevice *device;
-public:
-
-
     networkxml(networkxml const &temp){
         name=temp.name;
         isforwardExist=temp.isforwardExist;
@@ -114,7 +112,7 @@ public:
     void setXml(QIODevice *dev);
     networkxml(QIODevice *dev);
     int read();
-    int write();
+    QString write();
 };
 
 #endif // NETWORKXML_H

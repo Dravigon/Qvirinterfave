@@ -15,7 +15,7 @@ Rectangle{
         Rectangle{
             width: forward.width
             height:forward.height/8
-            color: "blue"
+
             Row{
                 Rectangle{
                     anchors.verticalCenter: parent.verticalCenter
@@ -34,8 +34,15 @@ Rectangle{
                             id: forward_mode_text
                             text: forwardMode
                             onTextChanged:{
+                                if(text.toLowerCase()==="nat"){
+                                    nat_box.visible=true;
+                                }
+                                else
+                                    nat_box.visible=false;
+
+                                network_list.set_data(index,forward_mode_text.text.toLowerCase(),"forwardMode")
                                 //anyone who can find error in the below statement is a qml god
-                                //console.log(forward_mode_text.text+ "index "+index+"but actual text "+forwardMode+"return on setdata "+network_list.set_data(index,forward_mode_text.text,"forwardMode"))
+                                //console.log(forward_mode_text.text.toLowerCase()+ "index "+index+"but actual text "+forwardMode+"return on setdata "+network_list.set_data(index,forward_mode_text.text.toLowerCase(),"forwardMode"))
                             }
                         }
                     }
@@ -57,15 +64,19 @@ Rectangle{
                         TextField{
                             id: forward_dev_text
                             text: forwardDev
+                            onTextChanged: {
+                                network_list.set_data(index,forward_dev_text.text.toLowerCase(),"forwardDev")
+                            }
                         }
                     }
                 }
             }
         }
         Rectangle{
+            id:nat_box
+            visible: forward_mode_text.text==="nat"?true:false
             width: forward.width
             height:forward_mode_text.text==="nat"?forward.height/8:0
-            color: "yellow"
 
             Row{
                 anchors.verticalCenter: parent.verticalCenter
@@ -93,7 +104,13 @@ Rectangle{
                                 font.pixelSize: 20
                             }
                             TextField{
+                                id: nat_port_start_id_text
                                 text: natStart
+                                validator: IntValidator { bottom:0; top: contoller.getMaxPort()}
+
+                                onTextChanged: {
+                                    network_list.set_data(index,nat_port_start_id_text.text,"natStart")
+                                }
                             }
                         }
                         Column{
@@ -103,7 +120,13 @@ Rectangle{
                                 font.pixelSize: 20
                             }
                             TextField{
+                                id: nat_port_end_id_text
                                 text: natEnd
+                                validator: IntValidator { bottom:0; top: contoller.getMaxPort()}
+
+                                onTextChanged: {
+                                    network_list.set_data(index,nat_port_end_id_text.text,"natEnd")
+                                }
                             }
                         }
                     }

@@ -18,6 +18,7 @@ void HostModel::addHost(const HOST &host)
     HostModel::beginInsertRows(QModelIndex(), rowCount(), rowCount());
     m_hosts << host;
     HostModel::endInsertRows();
+
 }
 
 int HostModel::rowCount(const QModelIndex & parent) const {

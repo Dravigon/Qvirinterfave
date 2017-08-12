@@ -10,7 +10,6 @@ void networkxml::setnet(networkxml temp)
     ip4=temp.ip4;
     ip6=temp.ip6;
     route=temp.route;
-
     device=temp.device;
 }
 
@@ -30,7 +29,8 @@ networkxml::networkxml(QIODevice *dev)
 
 }
 int networkxml::read(){
-    QXmlStreamReader stream1(device);
+    QIODevice *dev=device;
+    QXmlStreamReader stream1(dev);
     // qDebug()<<device->readAll();
     while (!stream1.atEnd()) {
         if(stream1.isEndElement()){
@@ -48,7 +48,7 @@ int networkxml::read(){
                 bridge.exist=true;
                 bridge.name=stream1.attributes().value("name").toString();
                 bridge.stp=stream1.attributes().value("stp").toString()!=""?stream1.attributes().value("stp").toString():"on";
-                bridge.delay=stream1.attributes().value("delay").toString()!=""?stream1.attributes().value("stp").toString():"0";
+                bridge.delay=stream1.attributes().value("delay").toString()!=""?stream1.attributes().value("delay").toString():"0";
             }
             else if(stream1.name()=="forward"){
                 isforwardExist=true;
@@ -159,9 +159,7 @@ int networkxml::read(){
                         }
                     }
                     ip6=temp1;
-                    qDebug()<<ip6.dhcp.host->data(0,"name");
-                    qDebug()<<ip6.dhcp.host->data(1,"name");
-                    qDebug()<<ip6.dhcp.host->data(2,"name");
+
                     qDebug()<<"size is:"<<ip6.dhcp.host->size();
                 }
                 else if((stream1.attributes().value("family").toString()=="ipv4")||(stream1.attributes().value("family").toString()=="")){
@@ -171,7 +169,7 @@ int networkxml::read(){
                     qDebug()<<"netmask"<<(temp.netmask=stream1.attributes().value("netmask").toString());
                     if(stream1.attributes().value("address").toString()!=""){
                         temp.address=stream1.attributes().value("address").toString();
-                        qDebug()<<"address"<<(temp.netmask=stream1.attributes().value("address").toString());
+                        qDebug()<<"address"<<stream1.attributes().value("address").toString();
                     }
                     stream1.readNextStartElement();
                     if(stream1.name()=="dhcp"){
@@ -243,16 +241,17 @@ int networkxml::read(){
         stream1.readNext();
 
     }
-    device->close();
+    dev->close();
     return 0;
 }
 
-int networkxml::write(){
+QString networkxml::write(){
 
-    device->open(QIODevice::ReadWrite);
-    QXmlStreamWriter stream(device);
+    QString xml;
+
+    QXmlStreamWriter stream(&xml);
     stream.setAutoFormatting(true);
-    stream.writeStartDocument();
+    //    stream.writeStartDocument();
 
     stream.writeStartElement("network");
     stream.writeTextElement("name",name);
@@ -268,11 +267,19 @@ int networkxml::write(){
     if(isforwardExist){
         stream.writeStartElement("forward");
         stream.writeAttribute("mode", forward.mode);
+        qDebug()<<"mode::"<< forward.mode;
+        if(forward.mode.toLower()=="nat"){
+            if((!forward.nat.start.isEmpty())&&(!forward.nat.end.isEmpty()))
+                forward.natExist=true;
+            else
+                forward.natExist=false;
+        }
         if(forward.dev!=NULL)
             stream.writeAttribute("dev", forward.dev);
         if(forward.natExist){
             stream.writeStartElement("nat");
             stream.writeEmptyElement("port");
+            qDebug()<<"\n \n Nat Start:"+forward.nat.start;
             stream.writeAttribute("start", forward.nat.start);
             stream.writeAttribute("end", forward.nat.end);
             stream.writeEndElement();
@@ -298,17 +305,14 @@ int networkxml::write(){
     qDebug()<<"i="<<i;
 
     if(ip4.exist){
-        //      IP4 Ip=*ip4;
-
         qDebug()<<ip4.hasDhcp;
         stream.writeStartElement("ip");
         if(ip4.family!=NULL)
-            stream.writeAttribute("family", ip4.family);
+            stream.writeAttribute("family", "ip4");
         stream.writeAttribute("address", ip4.address);
-        //            if(Ip.prefix!=NULL)
-        //                stream.writeAttribute("prefix", Ip.prefix);
+        qDebug()<<"Address:"<<ip4.address;
         if(ip4.netmask!=NULL)
-            stream.writeAttribute("netmask", ip4.netmask);
+            stream.writeAttribute("netmask",ip4.netmask);
         if(ip4.hasDhcp){
             stream.writeStartElement("dhcp");
             if(ip4.dhcp.range.exist){
@@ -316,7 +320,7 @@ int networkxml::write(){
                 stream.writeAttribute("start", ip4.dhcp.range.start);
                 stream.writeAttribute("end", ip4.dhcp.range.end);
             }
-            if (ip4.dhcp.hasHost) {
+            if (ip4.dhcp.hasHost&&(forward.mode.toLower()=="route")) {
                 int k=0;
                 while (ip4.dhcp.host->rowCount()>k) {
                     QString id,ip,name,mac;
@@ -339,7 +343,6 @@ int networkxml::write(){
 
             }
             stream.writeEndElement();
-            stream.writeEndElement();
         }
         else{
             qDebug()<<ip4.hasDhcp;
@@ -347,11 +350,10 @@ int networkxml::write(){
             if(ip4.family!=NULL)
                 stream.writeAttribute("family", ip4.family);
             stream.writeAttribute("address", ip4.address);
-            //            if(Ip.prefix!=NULL)
-            //                stream.writeAttribute("prefix", Ip.prefix);
             if(ip4.netmask!=NULL)
                 stream.writeAttribute("netmask", ip4.netmask);
         }
+        stream.writeEndElement();
     }
 
     if(ip6.exist){
@@ -373,7 +375,7 @@ int networkxml::write(){
                 stream.writeAttribute("start", ip6.dhcp.range.start);
                 stream.writeAttribute("end", ip6.dhcp.range.end);
             }
-            if (ip6.dhcp.hasHost) {
+            if (ip6.dhcp.hasHost&&(forward.mode.toLower()=="route")) {
                 int k=0;
 
                 while (ip6.dhcp.host->rowCount()>k) {
@@ -396,7 +398,7 @@ int networkxml::write(){
 
             }
             stream.writeEndElement();
-            stream.writeEndElement();
+
         }
         else{
             qDebug()<<ip6.hasDhcp;
@@ -409,6 +411,7 @@ int networkxml::write(){
             //            if(ip6.netmask!=NULL)
             //                stream.writeAttribute("netmask", ip6.netmask);
         }
+        stream.writeEndElement();
     }
 
 
@@ -432,7 +435,8 @@ int networkxml::write(){
 
 
     stream.writeEndElement();
-    stream.writeEndDocument();
-    device->close();
-    return 0;
+    //    stream.writeEndDocument();
+
+    qDebug()<<"this is war!!!!!"<<xml;
+    return xml;
 }

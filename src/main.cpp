@@ -10,6 +10,8 @@
 #include "domainmodel.h"//<--- user class included there
 #include "networkmodel.h"
 
+#include "contoller.h"
+
 #include  "sqlquerymodel.h"
 #include <QQmlDebuggingEnabler>
 
@@ -41,12 +43,15 @@ int main(int argc, char *argv[])
 
     NetworkModel net_list(&user);
     net_list.refresh();
+
+    Contoller contoller;
     //make the created objects available to qml as qml objects
     QQmlApplicationEngine engine;
 
             qRegisterMetaType<HostModel*>("HostModel*" );
     engine.rootContext()->setContextProperty("applicationDirPath", QGuiApplication::applicationDirPath());
     engine.rootContext()->setContextProperty("host",&user);
+    engine.rootContext()->setContextProperty("contoller",QVariant::fromValue(&contoller));
     engine.rootContext()->setContextProperty("domain_list",QVariant::fromValue(&dom_list));
     engine.rootContext()->setContextProperty("network_list",QVariant::fromValue(&net_list));
     engine.rootContext()->setContextProperty("address_list",QVariant::fromValue(someSqlModel));

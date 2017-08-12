@@ -89,7 +89,7 @@ Item {
                 height: actions.height/2-5
 
                 onClicked: {netlistClicked();
-                    network_list.refresh();
+
                 }
             }
             Button{
