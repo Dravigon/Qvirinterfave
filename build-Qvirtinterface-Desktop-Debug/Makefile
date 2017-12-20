@@ -51,7 +51,6 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../src/main.cpp \
-		../src/domainmodel.cpp \
 		../src/user.cpp \
 		../src/sqlquerymodel.cpp \
 		../src/contoller.cpp \
@@ -61,16 +60,20 @@ SOURCES       = ../src/main.cpp \
 		../src/Network/task_network.cpp \
 		../src/Network/dns.cpp \
 		../src/CustomLibrary/vstandarditemmodel.cpp \
-		../src/Network/networkattributes.cpp qrc_qml.cpp \
-		moc_domainmodel.cpp \
+		../src/Network/networkattributes.cpp \
+		../src/Domain/domainxml.cpp \
+		../src/Domain/domainmodel.cpp \
+		../src/Domain/domainattributes.cpp \
+		../src/Domain/Elements/os.cpp qrc_qml.cpp \
 		moc_user.cpp \
 		moc_sqlquerymodel.cpp \
 		moc_contoller.cpp \
 		moc_host.cpp \
 		moc_networkmodel.cpp \
-		moc_dns.cpp
+		moc_dns.cpp \
+		moc_domainmodel.cpp \
+		moc_os.cpp
 OBJECTS       = main.o \
-		domainmodel.o \
 		user.o \
 		sqlquerymodel.o \
 		contoller.o \
@@ -81,14 +84,19 @@ OBJECTS       = main.o \
 		dns.o \
 		vstandarditemmodel.o \
 		networkattributes.o \
+		domainxml.o \
+		domainmodel.o \
+		domainattributes.o \
+		os.o \
 		qrc_qml.o \
-		moc_domainmodel.o \
 		moc_user.o \
 		moc_sqlquerymodel.o \
 		moc_contoller.o \
 		moc_host.o \
 		moc_networkmodel.o \
-		moc_dns.o
+		moc_dns.o \
+		moc_domainmodel.o \
+		moc_os.o
 DIST          = ../src/requirments \
 		../LICENSE \
 		../README.md \
@@ -314,8 +322,7 @@ DIST          = ../src/requirments \
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
 		/usr/lib/qt/mkspecs/features/yacc.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
-		../src/Qvirtinterface.pro ../src/domainmodel.h \
-		../src/user.h \
+		../src/Qvirtinterface.pro ../src/user.h \
 		../src/sqlquerymodel.h \
 		../src/task.h \
 		../src/contoller.h \
@@ -324,8 +331,11 @@ DIST          = ../src/requirments \
 		../src/Network/networkxml.h \
 		../src/Network/dns.h \
 		../src/CustomLibrary/vstandarditemmodel.h \
-		../src/Network/networkattributes.h ../src/main.cpp \
-		../src/domainmodel.cpp \
+		../src/Network/networkattributes.h \
+		../src/Domain/domainxml.h \
+		../src/Domain/domainmodel.h \
+		../src/Domain/domainattributes.h \
+		../src/Domain/Elements/os.h ../src/main.cpp \
 		../src/user.cpp \
 		../src/sqlquerymodel.cpp \
 		../src/contoller.cpp \
@@ -335,7 +345,11 @@ DIST          = ../src/requirments \
 		../src/Network/task_network.cpp \
 		../src/Network/dns.cpp \
 		../src/CustomLibrary/vstandarditemmodel.cpp \
-		../src/Network/networkattributes.cpp
+		../src/Network/networkattributes.cpp \
+		../src/Domain/domainxml.cpp \
+		../src/Domain/domainmodel.cpp \
+		../src/Domain/domainattributes.cpp \
+		../src/Domain/Elements/os.cpp
 QMAKE_TARGET  = Qvirtinterface
 DESTDIR       = 
 TARGET        = Qvirtinterface
@@ -844,8 +858,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../src/qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/domainmodel.h ../src/user.h ../src/sqlquerymodel.h ../src/task.h ../src/contoller.h ../src/Network/host.h ../src/Network/networkmodel.h ../src/Network/networkxml.h ../src/Network/dns.h ../src/CustomLibrary/vstandarditemmodel.h ../src/Network/networkattributes.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/main.cpp ../src/domainmodel.cpp ../src/user.cpp ../src/sqlquerymodel.cpp ../src/contoller.cpp ../src/Network/host.cpp ../src/Network/networkmodel.cpp ../src/Network/networkxml.cpp ../src/Network/task_network.cpp ../src/Network/dns.cpp ../src/CustomLibrary/vstandarditemmodel.cpp ../src/Network/networkattributes.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/user.h ../src/sqlquerymodel.h ../src/task.h ../src/contoller.h ../src/Network/host.h ../src/Network/networkmodel.h ../src/Network/networkxml.h ../src/Network/dns.h ../src/CustomLibrary/vstandarditemmodel.h ../src/Network/networkattributes.h ../src/Domain/domainxml.h ../src/Domain/domainmodel.h ../src/Domain/domainattributes.h ../src/Domain/Elements/os.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/main.cpp ../src/user.cpp ../src/sqlquerymodel.cpp ../src/contoller.cpp ../src/Network/host.cpp ../src/Network/networkmodel.cpp ../src/Network/networkxml.cpp ../src/Network/task_network.cpp ../src/Network/dns.cpp ../src/CustomLibrary/vstandarditemmodel.cpp ../src/Network/networkattributes.cpp ../src/Domain/domainxml.cpp ../src/Domain/domainmodel.cpp ../src/Domain/domainattributes.cpp ../src/Domain/Elements/os.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -924,15 +938,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/qt/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /usr/lib/qt/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_domainmodel.cpp moc_user.cpp moc_sqlquerymodel.cpp moc_contoller.cpp moc_host.cpp moc_networkmodel.cpp moc_dns.cpp
+compiler_moc_header_make_all: moc_user.cpp moc_sqlquerymodel.cpp moc_contoller.cpp moc_host.cpp moc_networkmodel.cpp moc_dns.cpp moc_domainmodel.cpp moc_os.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_domainmodel.cpp moc_user.cpp moc_sqlquerymodel.cpp moc_contoller.cpp moc_host.cpp moc_networkmodel.cpp moc_dns.cpp
-moc_domainmodel.cpp: ../src/user.h \
-		../src/domainmodel.h \
-		moc_predefs.h \
-		/usr/bin/moc
-	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/dravigon/development/Qvirinterfave/src -I/usr/include/qt -I/usr/include/qt/Qt3DQuickExtras -I/usr/include/qt/Qt3DExtras -I/usr/include/qt/Qt3DRender -I/usr/include/qt/Qt3DQuick -I/usr/include/qt/Qt3DInput -I/usr/include/qt/Qt3DLogic -I/usr/include/qt/Qt3DCore -I/usr/include/qt/QtQuick -I/usr/include/qt/QtDesigner -I/usr/include/qt/QtUiPlugin -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtQml -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtSql -I/usr/include/qt/QtXml -I/usr/include/qt/QtCore -I. -I/usr/include/c++/7.2.0 -I/usr/include/c++/7.2.0/x86_64-pc-linux-gnu -I/usr/include/c++/7.2.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include-fixed -I/usr/include ../src/domainmodel.h -o moc_domainmodel.cpp
-
+	-$(DEL_FILE) moc_user.cpp moc_sqlquerymodel.cpp moc_contoller.cpp moc_host.cpp moc_networkmodel.cpp moc_dns.cpp moc_domainmodel.cpp moc_os.cpp
 moc_user.cpp: ../src/user.h \
 		moc_predefs.h \
 		/usr/bin/moc
@@ -970,6 +978,18 @@ moc_dns.cpp: ../src/CustomLibrary/vstandarditemmodel.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/dravigon/development/Qvirinterfave/src -I/usr/include/qt -I/usr/include/qt/Qt3DQuickExtras -I/usr/include/qt/Qt3DExtras -I/usr/include/qt/Qt3DRender -I/usr/include/qt/Qt3DQuick -I/usr/include/qt/Qt3DInput -I/usr/include/qt/Qt3DLogic -I/usr/include/qt/Qt3DCore -I/usr/include/qt/QtQuick -I/usr/include/qt/QtDesigner -I/usr/include/qt/QtUiPlugin -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtQml -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtSql -I/usr/include/qt/QtXml -I/usr/include/qt/QtCore -I. -I/usr/include/c++/7.2.0 -I/usr/include/c++/7.2.0/x86_64-pc-linux-gnu -I/usr/include/c++/7.2.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include-fixed -I/usr/include ../src/Network/dns.h -o moc_dns.cpp
 
+moc_domainmodel.cpp: ../src/user.h \
+		../src/Domain/domainmodel.h \
+		moc_predefs.h \
+		/usr/bin/moc
+	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/dravigon/development/Qvirinterfave/src -I/usr/include/qt -I/usr/include/qt/Qt3DQuickExtras -I/usr/include/qt/Qt3DExtras -I/usr/include/qt/Qt3DRender -I/usr/include/qt/Qt3DQuick -I/usr/include/qt/Qt3DInput -I/usr/include/qt/Qt3DLogic -I/usr/include/qt/Qt3DCore -I/usr/include/qt/QtQuick -I/usr/include/qt/QtDesigner -I/usr/include/qt/QtUiPlugin -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtQml -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtSql -I/usr/include/qt/QtXml -I/usr/include/qt/QtCore -I. -I/usr/include/c++/7.2.0 -I/usr/include/c++/7.2.0/x86_64-pc-linux-gnu -I/usr/include/c++/7.2.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include-fixed -I/usr/include ../src/Domain/domainmodel.h -o moc_domainmodel.cpp
+
+moc_os.cpp: ../src/CustomLibrary/vstandarditemmodel.h \
+		../src/Domain/Elements/os.h \
+		moc_predefs.h \
+		/usr/bin/moc
+	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/dravigon/development/Qvirinterfave/src -I/usr/include/qt -I/usr/include/qt/Qt3DQuickExtras -I/usr/include/qt/Qt3DExtras -I/usr/include/qt/Qt3DRender -I/usr/include/qt/Qt3DQuick -I/usr/include/qt/Qt3DInput -I/usr/include/qt/Qt3DLogic -I/usr/include/qt/Qt3DCore -I/usr/include/qt/QtQuick -I/usr/include/qt/QtDesigner -I/usr/include/qt/QtUiPlugin -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtQml -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtSql -I/usr/include/qt/QtXml -I/usr/include/qt/QtCore -I. -I/usr/include/c++/7.2.0 -I/usr/include/c++/7.2.0/x86_64-pc-linux-gnu -I/usr/include/c++/7.2.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include-fixed -I/usr/include ../src/Domain/Elements/os.h -o moc_os.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all:
@@ -984,7 +1004,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ####### Compile
 
-main.o: ../src/main.cpp ../src/domainmodel.h \
+main.o: ../src/main.cpp ../src/Domain/domainmodel.h \
 		../src/user.h \
 		../src/Network/networkmodel.h \
 		../src/Network/networkxml.h \
@@ -994,12 +1014,6 @@ main.o: ../src/main.cpp ../src/domainmodel.h \
 		../src/contoller.h \
 		../src/sqlquerymodel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../src/main.cpp
-
-domainmodel.o: ../src/domainmodel.cpp ../src/domainmodel.h \
-		../src/user.h \
-		../src/task.h \
-		../src/task.cpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o domainmodel.o ../src/domainmodel.cpp
 
 user.o: ../src/user.cpp ../src/user.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o user.o ../src/user.cpp
@@ -1043,11 +1057,26 @@ networkattributes.o: ../src/Network/networkattributes.cpp ../src/Network/network
 		../src/CustomLibrary/vstandarditemmodel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o networkattributes.o ../src/Network/networkattributes.cpp
 
+domainxml.o: ../src/Domain/domainxml.cpp ../src/Domain/domainxml.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o domainxml.o ../src/Domain/domainxml.cpp
+
+domainmodel.o: ../src/Domain/domainmodel.cpp ../src/Domain/domainmodel.h \
+		../src/user.h \
+		../src/task.h \
+		../src/task.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o domainmodel.o ../src/Domain/domainmodel.cpp
+
+domainattributes.o: ../src/Domain/domainattributes.cpp ../src/Domain/domainattributes.h \
+		../src/CustomLibrary/vstandarditemmodel.h \
+		../src/Domain/Elements/os.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o domainattributes.o ../src/Domain/domainattributes.cpp
+
+os.o: ../src/Domain/Elements/os.cpp ../src/Domain/Elements/os.h \
+		../src/CustomLibrary/vstandarditemmodel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o os.o ../src/Domain/Elements/os.cpp
+
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp
-
-moc_domainmodel.o: moc_domainmodel.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_domainmodel.o moc_domainmodel.cpp
 
 moc_user.o: moc_user.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_user.o moc_user.cpp
@@ -1066,6 +1095,12 @@ moc_networkmodel.o: moc_networkmodel.cpp
 
 moc_dns.o: moc_dns.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_dns.o moc_dns.cpp
+
+moc_domainmodel.o: moc_domainmodel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_domainmodel.o moc_domainmodel.cpp
+
+moc_os.o: moc_os.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_os.o moc_os.cpp
 
 ####### Install
 

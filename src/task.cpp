@@ -1,4 +1,4 @@
-#include <domainmodel.h>
+#include "./Domain/domainmodel.h"
 /*this file includes function which return a string on performing certain tasks on the vm(aka domain)
  * each task is such that it can be called from qml
  */

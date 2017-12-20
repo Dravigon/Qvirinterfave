@@ -4,7 +4,6 @@ QT += 3dcore 3drender 3dquick 3dinput 3dextras qml quick 3dquickextras sql desig
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    domainmodel.cpp \
     user.cpp \
     sqlquerymodel.cpp \
     task.cpp \
@@ -15,7 +14,11 @@ SOURCES += main.cpp \
     ./Network/task_network.cpp \
     Network/dns.cpp \
     CustomLibrary/vstandarditemmodel.cpp \
-    Network/networkattributes.cpp
+    Network/networkattributes.cpp \
+    Domain/domainxml.cpp \
+    Domain/domainmodel.cpp \
+    Domain/domainattributes.cpp \
+    Domain/Elements/os.cpp
 
 RESOURCES += qml.qrc \
 
@@ -46,7 +49,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    domainmodel.h \
     user.h \
     sqlquerymodel.h \
     task.h \
@@ -56,7 +58,11 @@ HEADERS += \
     ./Network/networkxml.h \
     Network/dns.h \
     CustomLibrary/vstandarditemmodel.h \
-    Network/networkattributes.h
+    Network/networkattributes.h \
+    Domain/domainxml.h \
+    Domain/domainmodel.h \
+    Domain/domainattributes.h \
+    Domain/Elements/os.h
 
 DISTFILES += \
     requirments \

@@ -148,6 +148,7 @@ public:
   Q_INVOKABLE int numberOfHost(){
     return host->rowCount();
   }
+  QString xml(QString ForwardMode);
   Range *getRange() const;
   void setRange(const Range&value);
   HostModel *getHost() const;

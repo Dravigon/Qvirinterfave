@@ -10,7 +10,7 @@
 #include <QQuickView>
 
 //classes
-#include "domainmodel.h"//<--- user class included there
+#include "Domain/domainmodel.h"//<--- user class included there
 #include "Network/networkmodel.h"
 
 #include "contoller.h"

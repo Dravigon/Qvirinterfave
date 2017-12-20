@@ -239,9 +239,44 @@ QString bw::xml(){
   return xml;
 }
 
+QString Dhcp::xml(QString ForwardMode){
+  QString xml="";
+  QXmlStreamWriter stream(&xml);
+  stream.writeStartElement("dhcp");
+  if(rangeExist()){
+      stream.writeEmptyElement("range");
+      stream.writeAttribute("start", getRange()->start);
+      stream.writeAttribute("end", getRange()->end);
+    }
+  if (hasHost&&(ForwardMode.toLower()=="route")) {
+      int k=0;
+      while (numberOfHost()>k) {
+          QString id,ip,name,mac;
+          id=(getHost()->data(getHost()->index(k,0),HostModel::IdRole)).toString();
+          ip=(getHost()->data(getHost()->index(k,0),HostModel::IpRole)).toString();
+          name=(getHost()->data(getHost()->index(k,0),HostModel::NameRole)).toString();
+          mac=(getHost()->data(getHost()->index(k,0),HostModel::MacRole)).toString();
+          // HOST *Host=new HOST(id,name,mac,ip);
+          stream.writeEmptyElement("host");
+          if(id!=nullptr)
+            stream.writeAttribute("id", id);
+          if(mac!=nullptr)
+            stream.writeAttribute("mac",mac);
+          if(name!=nullptr)
+            stream.writeAttribute("name", name);
+          if(ip!=nullptr)
+            stream.writeAttribute("ip",ip);
+          k++;
+        }
+
+    }
+  stream.writeEndElement();
+  return xml;
+}
+
 Range *Dhcp::getRange() const
 {
-    return range.data();
+  return range.data();
 }
 
 void Dhcp::setRange(const Range&value)
@@ -256,94 +291,94 @@ void Dhcp::setRange(const Range&value)
 
 HostModel *Dhcp::getHost() const
 {
-    return host;
+  return host;
 }
 
 void Dhcp::setHost(HostModel *value)
 {
-    host = value;
+  host = value;
 }
 
 bool Dhcp::getHasHost() const
 {
-    return hasHost;
+  return hasHost;
 }
 
 void Dhcp::setHasHost(bool value)
 {
-    hasHost = value;
+  hasHost = value;
 }
 
 
 
 QString IP4::getFamily() const
 {
-    return family;
+  return family;
 }
 
 void IP4::setFamily(const QString &value)
 {
-    family = value;
+  family = value;
 }
 
 QString IP4::getAddress() const
 {
-    return address;
+  return address;
 }
 
 void IP4::setAddress(const QString &value)
 {
-    address = value;
+  address = value;
 }
 
 QString IP4::getNetmask() const
 {
-    return netmask;
+  return netmask;
 }
 
 void IP4::setNetmask(const QString &value)
 {
-    netmask = value;
+  netmask = value;
 }
 
 bool IP4::getHasDhcp() const
 {
-    return hasDhcp;
+  return hasDhcp;
 }
 
 void IP4::setHasDhcp(bool value)
 {
-    hasDhcp = value;
+  hasDhcp = value;
 }
 
 Dhcp IP4::getDhcp() const
 {
-    return dhcp;
+  return dhcp;
 }
 
 void IP4::setDhcp(const Dhcp &value)
 {
-    dhcp = value;
+  dhcp = value;
 }
 
 bool IP4::getExist() const
 {
-    return exist;
+  return exist;
 }
 
 void IP4::setExist(bool value)
 {
-    exist = value;
+  exist = value;
 }
 
 QString IP6::getAddress() const
 {
-    return address;
+  return address;
 }
 
 void IP6::setAddress(const QString &value)
 {
-    address = value;
+  address = value;
 }
 
 QString IP6::getPrefix() const

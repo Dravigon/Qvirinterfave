@@ -309,107 +309,28 @@ QString networkxml::write(){
     qDebug()<<"i="<<i;
 
     if(ip4.getExist()){
-        qDebug()<<ip4.getHasDhcp();
         stream.writeStartElement("ip");
-//        if(ip4.family!=nullptr)
-//            stream.writeAttribute("family", "ip4");
         stream.writeAttribute("address", ip4.getAddress());
-        qDebug()<<"Address:"<<ip4.getAddress();
         if(ip4.getNetmask()!=nullptr)
             stream.writeAttribute("netmask",ip4.getNetmask());
         if(ip4.getHasDhcp()){
-            stream.writeStartElement("dhcp");
-            if(ip4.getDhcp().rangeExist()){
-                stream.writeEmptyElement("range");
-                stream.writeAttribute("start", ip4.getDhcp().getRange()->start);
-                stream.writeAttribute("end", ip4.getDhcp().getRange()->end);
-            }
-            if (ip4.getDhcp().hasHost&&(forward.getMode().toLower()=="route")) {
-                int k=0;
-                while (ip4.getDhcp().numberOfHost()>k) {
-                    QString id,ip,name,mac;
-                    id=(ip4.getDhcp().getHost()->data(ip4.getDhcp().getHost()->index(k,0),HostModel::IdRole)).toString();
-                    ip=(ip4.getDhcp().getHost()->data(ip4.getDhcp().getHost()->index(k,0),HostModel::IpRole)).toString();
-                    name=(ip4.getDhcp().getHost()->data(ip4.getDhcp().getHost()->index(k,0),HostModel::NameRole)).toString();
-                    mac=(ip4.getDhcp().getHost()->data(ip4.getDhcp().getHost()->index(k,0),HostModel::MacRole)).toString();
-                    // HOST *Host=new HOST(id,name,mac,ip);
-                    stream.writeEmptyElement("host");
-                    if(id!=nullptr)
-                        stream.writeAttribute("id", id);
-                    if(mac!=nullptr)
-                        stream.writeAttribute("mac",mac);
-                    if(name!=nullptr)
-                        stream.writeAttribute("name", name);
-                    if(ip!=nullptr)
-                        stream.writeAttribute("ip",ip);
-                    k++;
-                }
-
-            }
-            stream.writeEndElement();
+            stream.writeDTD(ip4.getDhcp().xml(forward.getMode()));
         }
-
         stream.writeEndElement();
     }
 
     if(ip6.getExist()){
-        //   IP6 Ip=ip6;
-
-        qDebug()<<ip6.getHasDhcp();
         stream.writeStartElement("ip");
         if(ip6.getFamily()!=nullptr)
             stream.writeAttribute("family", ip6.getFamily());
         stream.writeAttribute("address", ip6.getAddress());
         if(ip6.getPrefix()!=nullptr)
             stream.writeAttribute("prefix", ip6.getPrefix());
-        //            if(ip6.netmask!=nullptr)
-        //                stream.writeAttribute("netmask", ip6.netmask);
         if(ip6.getHasDhcp()){
-            stream.writeStartElement("dhcp");
-            if(ip6.getDhcp().rangeExist()){
-                stream.writeEmptyElement("range");
-                stream.writeAttribute("start", ip6.getDhcp().getRange()->start);
-                stream.writeAttribute("end", ip6.getDhcp().getRange()->end);
-            }
-            if (ip6.getDhcp().hasHost&&(forward.getMode().toLower()=="route")) {
-                int k=0;
-
-                while (ip6.getDhcp().numberOfHost()>k) {
-                    QString id,ip,name,mac;
-                    id=(ip6.getDhcp().getHost()->data(ip6.getDhcp().getHost()->index(k,0),HostModel::IdRole)).toString();
-                    ip=(ip6.getDhcp().getHost()->data(ip6.getDhcp().getHost()->index(k,0),HostModel::IpRole)).toString();
-                    name=(ip6.getDhcp().getHost()->data(ip6.getDhcp().getHost()->index(k,0),HostModel::NameRole)).toString();
-                    mac=(ip6.getDhcp().getHost()->data(ip6.getDhcp().getHost()->index(k,0),HostModel::MacRole)).toString();
-                    stream.writeEmptyElement("host");
-                    if(id!=nullptr)
-                        stream.writeAttribute("id", id);
-                    if(mac!=nullptr)
-                        stream.writeAttribute("mac",mac);
-                    if(name!=nullptr)
-                        stream.writeAttribute("name", name);
-                    if(ip!=nullptr)
-                        stream.writeAttribute("ip",ip);
-                    k++;
-                }
-
-            }
-            stream.writeEndElement();
-
-        }
-        else{
-            qDebug()<<ip6.getHasDhcp();
-            stream.writeEmptyElement("ip");
-            if(ip6.getFamily()!=nullptr)
-                stream.writeAttribute("family", ip6.getFamily());
-            stream.writeAttribute("address", ip6.getAddress());
-            if(ip6.getPrefix()!=nullptr)
-                stream.writeAttribute("prefix", ip6.getPrefix());
-            //            if(ip6.netmask!=nullptr)
-            //                stream.writeAttribute("netmask", ip6.netmask);
+            stream.writeDTD(ip6.getDhcp().xml(forward.getMode()));
         }
         stream.writeEndElement();
     }
-
 
 
     i=0;
