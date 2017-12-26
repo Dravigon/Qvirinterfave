@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     Domain/domainxml.cpp \
     Domain/domainmodel.cpp \
     Domain/domainattributes.cpp \
-    Domain/Elements/os.cpp
+    Domain/Elements/os.cpp \
+    CustomLibrary/vstringlist.cpp
 
 RESOURCES += qml.qrc \
 
@@ -62,7 +63,8 @@ HEADERS += \
     Domain/domainxml.h \
     Domain/domainmodel.h \
     Domain/domainattributes.h \
-    Domain/Elements/os.h
+    Domain/Elements/os.h \
+    CustomLibrary/vstringlist.h
 
 DISTFILES += \
     requirments \

@@ -39,6 +39,28 @@ class VCpus{
   QString current;
   QString value;
 };
+struct Memory{
+  QString tag;
+  QString Slots;
+  QString unit;
+  QString value;
+
+  QString xml(){
+    QString xml="";
+    QXmlStreamWriter stream(&xml);
+    stream.setAutoFormatting(true);
+    stream.writeStartElement(tag);
+    if(Slots.isEmpty()){
+        stream.writeAttribute("slots",Slots);
+      }
+    if(unit.isEmpty()){
+        stream.writeAttribute("unit",unit);
+      }
+    stream.writeCharacters(value);
+    stream.writeEndElement();
+    return xml;
+  }
+};
 class domainAttributes
 {
   QString name;
@@ -50,8 +72,16 @@ class domainAttributes
   QString vcpus;//get value from QML
   QString iothreads;
   //TODO impliment cputune feature when possible
-  QString memory;
-  QString currentMemory;
+  Memory memory={.tag="memory"};
+  Memory maxMemory={.tag="maxMemory"};
+  Memory currentMemory={.tag="currentMemory"};
+  //TODO implimentation of memory backing
+  //TODO implimentation of Memory Tuning
+  //TODO implimentation of NUMA Node tuning
+  //TODO Block I/O tuning
+  //TODO REsource Partition
+
+
 public:
   domainAttributes();
 };

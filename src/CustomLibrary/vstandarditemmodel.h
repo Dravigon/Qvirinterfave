@@ -6,6 +6,7 @@
 
 class VStandardItemModel:public QStandardItemModel
 {
+  Q_OBJECT
 public:
     VStandardItemModel();
     VStandardItemModel(QObject *parent);

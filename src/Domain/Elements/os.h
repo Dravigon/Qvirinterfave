@@ -2,6 +2,7 @@
 #define OS_H
 
 #include <QString>
+#include "CustomLibrary/vstringlist.h"
 #include "CustomLibrary/vstandarditemmodel.h"
 #include <QXmlStreamWriter>
 
@@ -40,16 +41,15 @@ class Os{
       return Template.isEmpty()&&value.isEmpty();
     }
   }nvram;
-  struct Boot{
-    QString dev;
-    QString xml(){
-      return "<boot dev='"+dev+"'/>";
-    }
-    bool isEmpty(){
-      return dev.isEmpty();
+  struct Boot:public vstringList{
+
+    QString xml(int i){
+      return "<boot dev='"+this->at(i)+"'/>";
     }
   };
-  QList<Boot> boot;
+  Boot *boot;
+
+
 
   //bootmenu
   struct Bootmenu{
@@ -105,7 +105,8 @@ class Os{
 
   struct Container{
     QString init;
-    QList<QString> initarg;
+    //TODO make init args somthing more like QStandart item
+    vstringList *initarg;
     QString initenvName;
     QString initenvValue;
     QString initdir;
@@ -128,9 +129,9 @@ class Os{
     writeXml(&stream,type);
     writeXml(&stream,loader);
     writeXml(&stream,nvram);
-    if(!boot.isEmpty()){
-        for(Boot temp:boot){
-            writeXml(&stream,temp);
+    if(!boot->isEmpty()){
+        for(int i=0;i<boot->size();i++){
+           stream.writeDTD(boot->xml(i));
           }
       }
     writeXml(&stream,smbios);
@@ -173,9 +174,9 @@ class Os{
     stream.writeCharacters(container.init);
     stream.writeEndElement();
 
-    for(QString intarg:container.initarg){
+    for(int i=0;i<container.initarg->size();i++){
         stream.writeStartElement("intarg");
-        stream.writeCharacters(intarg);
+        stream.writeCharacters(container.initarg->at(1));
         stream.writeEndElement();
       }
 
