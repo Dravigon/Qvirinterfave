@@ -19,7 +19,11 @@ SOURCES += main.cpp \
     Domain/domainmodel.cpp \
     Domain/domainattributes.cpp \
     Domain/Elements/os.cpp \
-    CustomLibrary/vstringlist.cpp
+    CustomLibrary/vstringlist.cpp \
+    Domain/Elements/cpu.cpp \
+    BackgroundProcesses/vmstatemonitoring.cpp \
+    BackgroundProcesses/networkstatemonitoring.cpp \
+    BackgroundProcesses/watchdog.cpp
 
 RESOURCES += qml.qrc \
 
@@ -64,7 +68,11 @@ HEADERS += \
     Domain/domainmodel.h \
     Domain/domainattributes.h \
     Domain/Elements/os.h \
-    CustomLibrary/vstringlist.h
+    CustomLibrary/vstringlist.h \
+    Domain/Elements/cpu.h \
+    BackgroundProcesses/vmstatemonitoring.h \
+    BackgroundProcesses/networkstatemonitoring.h \
+    BackgroundProcesses/watchdog.h
 
 DISTFILES += \
     requirments \

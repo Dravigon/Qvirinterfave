@@ -9,14 +9,6 @@ import QtQuick.Controls.Material 2.0
 Rectangle {
     signal errorm();
     signal added();
-    Timer {//for dynamically getting the State of the network
-        id:statetimer
-        interval: 2000; running: true; repeat: true
-        onTriggered:{
-            network_list.refresh();
-        }
-    }
-
     Popup{
         id:addNetwork
         closePolicy: Popup.NoAutoClose
@@ -91,6 +83,9 @@ Rectangle {
         delegate: detailsDelegate
 
         model: network_list
+        onVisibleChanged: {
+            network_list.refresh();
+        }
     }
 
 

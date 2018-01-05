@@ -222,8 +222,14 @@ Component {
         }
 
         onStateChanged: {
-            if(state==="expanded")
+            if(state==="expanded"){
+                network_list.lockResource()
                 preview.setIndex();
+            }
+            else{
+                network_list.unlockResource();
+            }
+
         }
         //
 
