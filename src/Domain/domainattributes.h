@@ -81,6 +81,15 @@ class domainAttributes
   //TODO power management
   //TODO hypervisor features
 
+  QString perf;//NOTE not gonna impliment until full support
+  //TODO performance monioring
+  /*                    *virDomainGetPerfEvents
+int	virDomainGetPerfEvents		(virDomainPtr domain,
+					 virTypedParameterPtr * params,
+					 int * nparams,
+					 unsigned int flags)
+Get all Linux perf events setting. Possible fields returned in @params are defined by VIR_PERF_EVENT_* macros and new fields will likely be introduced in the future.
+                    */
 
 
 public:

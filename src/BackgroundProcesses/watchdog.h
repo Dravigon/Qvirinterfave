@@ -3,7 +3,6 @@
 #include <QThread>
 #include "networkstatemonitoring.h"
 #include "vmstatemonitoring.h"
-#include "Network/networkmodel.h"
 
 class WatchDog:public QThread {
   Q_OBJECT

@@ -3,8 +3,6 @@
 
 #include<QString>
 #include <QAbstractListModel>
-#include<libvirt/libvirt.h>
-
 #include "../user.h"
 #include "networkxml.h"
 
@@ -100,8 +98,6 @@ public:
     Ip6DhcpRangeEndRole=  37,
     Ip6DhcpHasHostRole=  38,
     Ip6DhcpHostModelRole=39
-
-
   };
 
 

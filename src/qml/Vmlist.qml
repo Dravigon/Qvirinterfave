@@ -28,4 +28,12 @@ Item {
         id:detailsDelegate
     }
 
+    onVisibleChanged: {
+        //TODO limit all ui with these variables
+        var n=JSON.parse(host.hostCapabilities());
+        //retrieve values from JSON again
+        var aString = n.capabilities.host.uuid;
+        console.log(aString);
+    }
+
 }

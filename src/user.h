@@ -3,8 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
-#include <libvirt/libvirt.h>
-#include <libvirt/virterror.h>
+#include "CustomLibrary/customlibvirt.h"
 
 
 class User : public QObject
@@ -41,6 +40,7 @@ public:
   QString m_hostaddress;//to fix the selected host address for connection
 
   Q_INVOKABLE QString authenticate(QString type);//to autenticate the user
+  Q_INVOKABLE QString hostVmCapabilities();
   Q_INVOKABLE void close();
   Q_INVOKABLE QString err();
 

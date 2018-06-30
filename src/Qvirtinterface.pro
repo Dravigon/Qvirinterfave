@@ -23,7 +23,12 @@ SOURCES += main.cpp \
     Domain/Elements/cpu.cpp \
     BackgroundProcesses/vmstatemonitoring.cpp \
     BackgroundProcesses/networkstatemonitoring.cpp \
-    BackgroundProcesses/watchdog.cpp
+    BackgroundProcesses/watchdog.cpp \
+    storagepool.cpp \
+    StoragePool/storagepool.cpp \
+    StoragePool/storagepool.cpp \
+    StoragePool/storagepoolattributes.cpp
+
 
 RESOURCES += qml.qrc \
 
@@ -72,12 +77,11 @@ HEADERS += \
     Domain/Elements/cpu.h \
     BackgroundProcesses/vmstatemonitoring.h \
     BackgroundProcesses/networkstatemonitoring.h \
-    BackgroundProcesses/watchdog.h
+    BackgroundProcesses/watchdog.h \
+    storagepool.h \
+    StoragePool/storagepool.h \
+    StoragePool/storagepoolattributes.h
 
-DISTFILES += \
-    requirments \
-    ../LICENSE \
-    ../README.md
 
 SUBDIRS += QMLTermWidgets
 

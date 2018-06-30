@@ -38,33 +38,56 @@ QString Network::name() const
   return m_name;
 }
 
+bool Network::setXmlData() {
+    virConnectPtr temp = virNetworkGetConnect(m_net);
+    virNetworkPtr netTemp=m_net;
+    virNetworkUndefine(m_net);
+    //  qDebug()<<"WELL THIS IS"<<netxml.write().toStdString().c_str();
+    if(((m_net)=virNetworkDefineXML(temp,netxml.write().toStdString().c_str()))!=NULL){
+
+        if(virNetworkCreate(m_net)==0){
+            //        qDebug()<<"name:"<<virNetworkGetName(m_net);
+            if(virNetworkIsActive(m_net)){
+                virNetworkDestroy(m_net);
+            }
+            return true;
+        }
+        else{
+            virNetworkCreate(netTemp);
+            return false;
+        }
+    }
+    else
+        return false;
+}
+
 
 NetworkModel::NetworkModel(QObject *parent)
-  : QAbstractListModel(parent)
+    : QAbstractListModel(parent)
 {
 }
 
 NetworkModel::NetworkModel(User *user)
 {
-  usr=user;
+    usr=user;
 }
 
 void NetworkModel::addNetworks(){
-  if(!lock){
-      virNetworkPtr *networks=nullptr;
-      virConnectPtr conn=usr->getConn();
-      QString username=usr->username();
-      int ret;
-      unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE|
-          VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-      if(conn!=nullptr){
-          ret = virConnectListAllNetworks(conn, &networks, flags);
-          if (ret < 0)
-            qDebug()<<"error";
-          qDebug()<<"value of ret="<<ret;
-          int i=0;
-          while(networks[i]){
-              if((i+1)>rowCount()){
+    if(!lock){
+        virNetworkPtr *networks=nullptr;
+        virConnectPtr conn=usr->getConn();
+        QString username=usr->username();
+        int ret;
+        unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE|
+                VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+        if(conn!=nullptr){
+            ret = virConnectListAllNetworks(conn, &networks, flags);
+            if (ret < 0)
+                qDebug()<<"error";
+            qDebug()<<"value of ret="<<ret;
+            int i=0;
+            while(networks[i]){
+                if((i+1)>rowCount()){
                   qDebug()<<&"Triggered network "<<i<<" refresh";
                   beginInsertRows(QModelIndex(), rowCount(), rowCount());
                   m_network.append(*new Network(i,networks[i]));
@@ -148,19 +171,42 @@ void NetworkModel::addNewNetwork(QString name)
 
 }
 
+bool NetworkModel::setXmlData(int index){
+    //Network *n=new Network(m_network.at(index));
+    //  const  a = 3; // I promisse i won't change a
+    Network *ptr;
+    ptr = (Network*)( &m_network.at(index) );
+
+    bool ret= ptr->setXmlData();
+    //qDebug()<<"das fa:"<<m_network.at(index).netxml.bridge.delay;
+    return ret;
+}
+
+void NetworkModel::removeIndex(int i){
+
+    beginRemoveRows(QModelIndex(), i, i);
+    if((virNetworkIsActive(m_network.at(i).m_net))){
+        virNetworkDestroy(m_network.at(i).m_net);
+    }
+    virNetworkUndefine(m_network.at(i).m_net);
+    m_network.removeAt(i);
+    endRemoveRows();
+
+}
+
 
 
 int NetworkModel::rowCount(const QModelIndex & parent) const {
-  Q_UNUSED(parent);
-  return m_network.count();
+    Q_UNUSED(parent);
+    return m_network.count();
 }
 
 QVariant NetworkModel::data(const QModelIndex & index, int role) const {
-  if (index.row() < 0 || index.row() >= m_network.count())
-    return QVariant();
+    if (index.row() < 0 || index.row() >= m_network.count())
+        return QVariant();
 
-  const Network &network = m_network[index.row()];
-  if (role == IdRole)
+    const Network &network = m_network[index.row()];
+    if (role == IdRole)
     return network.id();
   else if (role == NameRole)
     return network.name();

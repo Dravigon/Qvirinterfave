@@ -1,4 +1,5 @@
 #include "user.h"
+#include "CustomLibrary/xml2json.hpp"
 
 QString name;
 QString pwd;
@@ -80,6 +81,16 @@ QString User::authenticate(QString zone){
   return ret_value;
 }
 
+QString User::hostVmCapabilities()
+{
+  std::string xml="";
+  if(m_conn)
+  xml=xml2json(virConnectGetCapabilities(m_conn));
+  return QString::fromLocal8Bit(xml.c_str());
+}
+
+
+
 void User::close()
 {
   if(m_conn!=NULL)
@@ -89,5 +100,6 @@ void User::close()
 QString User::err()
 {
     return virGetLastErrorMessage();
-
 }
+
+

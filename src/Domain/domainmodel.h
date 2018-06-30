@@ -5,7 +5,8 @@
 
 #include <QString>
 #include <QAbstractListModel>
-#include <libvirt/libvirt.h>
+
+#include "CustomLibrary/customlibvirt.h"
 #include <QObject>
 
 #include "user.h"

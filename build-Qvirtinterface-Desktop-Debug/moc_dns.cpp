@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'dns.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.10.0)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.10.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'dns.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.10.0. It"
+#error "This file was generated using the moc from 5.10.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -62,7 +62,7 @@ void Txt::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **
     Q_UNUSED(_a);
 }
 
-const QMetaObject Txt::staticMetaObject = {
+QT_INIT_METAOBJECT const QMetaObject Txt::staticMetaObject = {
     { &VStandardItemModel::staticMetaObject, qt_meta_stringdata_Txt.data,
       qt_meta_data_Txt,  qt_static_metacall, nullptr, nullptr}
 };
@@ -128,7 +128,7 @@ void Forwarder::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
     Q_UNUSED(_a);
 }
 
-const QMetaObject Forwarder::staticMetaObject = {
+QT_INIT_METAOBJECT const QMetaObject Forwarder::staticMetaObject = {
     { &VStandardItemModel::staticMetaObject, qt_meta_stringdata_Forwarder.data,
       qt_meta_data_Forwarder,  qt_static_metacall, nullptr, nullptr}
 };
@@ -194,7 +194,7 @@ void Dns::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **
     Q_UNUSED(_a);
 }
 
-const QMetaObject Dns::staticMetaObject = {
+QT_INIT_METAOBJECT const QMetaObject Dns::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_Dns.data,
       qt_meta_data_Dns,  qt_static_metacall, nullptr, nullptr}
 };
