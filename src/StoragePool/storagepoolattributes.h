@@ -34,6 +34,7 @@ class StoragePoolAttributes
         QString mode;
         QString label;
         QString xml();
+        bool isEmpty();
     };
 
     struct LuksEncryption{
@@ -52,6 +53,7 @@ class StoragePoolAttributes
         QString secretUsage;
         LuksEncryption luksencryption;
         QString xml();
+        bool isEmpty();
     };
     struct Target
     {

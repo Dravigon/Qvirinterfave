@@ -16,28 +16,7 @@ public:
   Network(const int &id, const virNetworkPtr &dom);
   int id() const;//for indexing
   QString name() const;//for Network name
-  bool setXmlData() {
-    virConnectPtr temp = virNetworkGetConnect(m_net);
-    virNetworkPtr netTemp=m_net;
-    virNetworkUndefine(m_net);
-    //  qDebug()<<"WELL THIS IS"<<netxml.write().toStdString().c_str();
-    if(((m_net)=virNetworkDefineXML(temp,netxml.write().toStdString().c_str()))!=NULL){
-
-        if(virNetworkCreate(m_net)==0){
-            //        qDebug()<<"name:"<<virNetworkGetName(m_net);
-            if(virNetworkIsActive(m_net)){
-                virNetworkDestroy(m_net);
-              }
-            return true;
-          }
-        else{
-            virNetworkCreate(netTemp);
-            return false;
-          }
-      }
-    else
-      return false;
-  }
+  bool setXmlData();
 
 private:
   int m_id;
@@ -136,27 +115,8 @@ public:
   void setIpIndex(int temp){
     m_IpIndex=temp;
   }
-  Q_INVOKABLE bool setXmlData(int index){
-    //Network *n=new Network(m_network.at(index));
-    //  const  a = 3; // I promisse i won't change a
-    Network *ptr;
-    ptr = (Network*)( &m_network.at(index) );
-
-    bool ret= ptr->setXmlData();
-    //qDebug()<<"das fa:"<<m_network.at(index).netxml.bridge.delay;
-    return ret;
-  }
-  Q_INVOKABLE void removeIndex(int i){
-
-        beginRemoveRows(QModelIndex(), i, i);
-        if((virNetworkIsActive(m_network.at(i).m_net))){
-            virNetworkDestroy(m_network.at(i).m_net);
-          }
-        virNetworkUndefine(m_network.at(i).m_net);
-        m_network.removeAt(i);
-        endRemoveRows();
-
-  }
+  Q_INVOKABLE bool setXmlData(int index);
+  Q_INVOKABLE void removeIndex(int i);
 
 
 protected:
